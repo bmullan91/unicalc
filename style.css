@@ -1,0 +1,120 @@
+#Container {
+  width: 900px;
+  margin: 0 auto;
+}
+
+#Score {
+  position: relative;
+  height: 30px;
+  margin: 0 15px 0 15px;
+
+
+background: #ff3232; /* Old browsers */
+/* IE9 SVG, needs conditional override of 'filter' to 'none' */
+background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmMzIzMiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM4ZmZmODkiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+background: -moz-linear-gradient(left,  #ff3232 0%, #8fff89 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, right top, color-stop(0%,#ff3232), color-stop(100%,#8fff89)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(left,  #ff3232 0%,#8fff89 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(left,  #ff3232 0%,#8fff89 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(left,  #ff3232 0%,#8fff89 100%); /* IE10+ */
+background: linear-gradient(to right,  #ff3232 0%,#8fff89 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', endColorstr='#8fff89',GradientType=1 ); /* IE6-8 */
+
+
+  
+}
+
+#Errors {
+  margin: 20px 15px 10px 15px;
+}
+
+#Errors div {
+  display: none;
+}
+
+.marker {
+  position: absolute;
+  left: 0px;
+  height: 30px;
+  width: 3px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+#Score .value {
+  position: absolute;
+  left:0;
+  margin-top: 30px;
+}
+
+#Levels {
+  margin-top: 30px;
+}
+
+.level {
+  float: left;
+  margin-right: 15px;
+  margin-left: 15px;
+  width: 390px;
+  padding: 15px;
+  margin-top: 20px;
+  background-color: grey;
+}
+
+
+
+.level button {
+  margin-top: 10px;
+}
+
+.level .info {
+  border-bottom: solid;
+  padding-bottom: 5px;
+}
+
+.level-weight {
+  float: right;
+}
+
+.level-weight input {
+  width: 20px;
+  margin-left: 15px;
+}
+
+.level .results {
+  border-top: solid;
+  margin-top: 10px;
+  padding-top: 5px;
+}
+
+.level .results .box {
+  margin-left: 10px;
+}
+
+/* modules stuff*/
+
+.module {
+  padding: 5px;
+  margin-top: 10px;
+  background-color: #ccc;
+}
+
+.module .name {
+  width: 50%;
+  display: inline-block;
+}
+
+.module .percentage {
+  margin: 0 20px
+}
+
+.module input {
+  width: 20px;
+}
+
+.module .name input {
+  width: 120px;
+}
+
+.pull-right {
+  float:right;
+}
