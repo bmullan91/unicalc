@@ -1,22 +1,31 @@
-;(function(doc) {
+;(function(dom) {
 
   var templates = {
     module: (function() {
-        var node = document.querySelector('.module').cloneNode(true);
+        var htmlStr = dom.querySelector('.module').innerHTML;
+
         return function() {
-          return node;
+          var doc = document.createElement('div');
+
+          doc.innerHTML = htmlStr;
+          doc.className = 'module';
+          return doc;
         };
       }()),
     level: (function() {
-
       var i = 1,
-          elem = document.querySelector(".level"),
-          node = elem.cloneNode(true);
+          htmlStr = document.querySelector(".level").innerHTML;
+
       return function() {
-        var level = "Level "+(++i);
-        node.querySelector(".level-title").innerHTML = level;
-        addHandlers(node.children[2]);
-        return node;
+        var level = "Level "+(++i),
+            doc = document.createElement('div'),
+            newHtml = htmlStr.replace("Level 1", level);
+
+        doc.className = "level";
+        doc.innerHTML = newHtml;
+
+        addHandlers(doc.children[2]);
+        return doc;
       }; 
     }())
   };
