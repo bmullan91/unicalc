@@ -1,22 +1,31 @@
-;(function(doc) {
+;(function(dom) {
 
   var templates = {
     module: (function() {
-        var node = document.querySelector('.module').cloneNode(true);
+        var htmlStr = dom.querySelector('.module').innerHTML;
+
         return function() {
-          return node;
+          var doc = dom.createElement('div');
+
+          doc.innerHTML = htmlStr;
+          doc.className = 'module';
+          return doc;
         };
       }()),
     level: (function() {
-
       var i = 1,
-          elem = document.querySelector(".level"),
-          node = elem.cloneNode(true);
+          htmlStr = dom.querySelector(".level").innerHTML;
+
       return function() {
-        var level = "Level "+(++i);
-        node.querySelector(".level-title").innerHTML = level;
-        addHandlers(node.children[2]);
-        return node;
+        var level = "Level "+(++i),
+            doc = dom.createElement('div'),
+            newHtml = htmlStr.replace("Level 1", level);
+
+        doc.className = "level";
+        doc.innerHTML = newHtml;
+
+        addHandlers(doc.children[2]);
+        return doc;
       }; 
     }())
   };
@@ -33,7 +42,7 @@
 
   }
 
-  addHandlers(document.querySelector('.level button'));
+  addHandlers(dom.querySelector('.level button'));
 
 
   $("#Add-Level").click(function() {
@@ -87,7 +96,7 @@
   function calculate(lvls) {
 
     var finalResults = [],
-        levelElms = document.querySelectorAll('.level');
+        levelElms = dom.querySelectorAll('.level');
 
     if(!isValid(lvls)) { return; }
     
@@ -135,10 +144,10 @@
     });
 
     if(totalWeight >= 0 && totalWeight <= 100) {
-      document.querySelector("#Errors .weights").style.display = "none";
+      dom.querySelector("#Errors .weights").style.display = "none";
       return true;
     } else {
-      document.querySelector("#Errors .weights").style.display = "block";
+      dom.querySelector("#Errors .weights").style.display = "block";
       return false;
     } 
   }

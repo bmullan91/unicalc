@@ -88,6 +88,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
 
 .level .results .box {
   margin-left: 10px;
+  display: inline-block;
 }
 
 /* modules stuff*/
