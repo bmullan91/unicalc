@@ -5,7 +5,7 @@
         var htmlStr = dom.querySelector('.module').innerHTML;
 
         return function() {
-          var doc = document.createElement('div');
+          var doc = dom.createElement('div');
 
           doc.innerHTML = htmlStr;
           doc.className = 'module';
@@ -14,11 +14,11 @@
       }()),
     level: (function() {
       var i = 1,
-          htmlStr = document.querySelector(".level").innerHTML;
+          htmlStr = dom.querySelector(".level").innerHTML;
 
       return function() {
         var level = "Level "+(++i),
-            doc = document.createElement('div'),
+            doc = dom.createElement('div'),
             newHtml = htmlStr.replace("Level 1", level);
 
         doc.className = "level";
@@ -42,7 +42,7 @@
 
   }
 
-  addHandlers(document.querySelector('.level button'));
+  addHandlers(dom.querySelector('.level button'));
 
 
   $("#Add-Level").click(function() {
@@ -96,7 +96,7 @@
   function calculate(lvls) {
 
     var finalResults = [],
-        levelElms = document.querySelectorAll('.level');
+        levelElms = dom.querySelectorAll('.level');
 
     if(!isValid(lvls)) { return; }
     
@@ -144,10 +144,10 @@
     });
 
     if(totalWeight >= 0 && totalWeight <= 100) {
-      document.querySelector("#Errors .weights").style.display = "none";
+      dom.querySelector("#Errors .weights").style.display = "none";
       return true;
     } else {
-      document.querySelector("#Errors .weights").style.display = "block";
+      dom.querySelector("#Errors .weights").style.display = "block";
       return false;
     } 
   }
