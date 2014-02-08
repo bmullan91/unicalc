@@ -1,5 +1,9 @@
 ;(function(dom) {
 
+  ///////////////////////////////////////////////
+  //                   vars                    //
+  ///////////////////////////////////////////////
+
   var templates = {
     module: (function() {
         var htmlStr = dom.querySelector('.module').innerHTML;
@@ -30,10 +34,22 @@
     }())
   };
 
+  ///////////////////////////////////////////////
+  //              Event Handlers               //
+  ///////////////////////////////////////////////
 
+  dom.getElementById("Add-Level").addEventListener('click', function() {
+    var html = templates.level();
+    dom.getElementById("Levels").appendChild(html);
+  });
+
+  dom.getElementById("Calculate").addEventListener('click', function() {
+    calculate(parseLevels());
+  });
+
+  //helper function
   function addHandlers(btn) {
     //add module functionality
-
     btn.addEventListener('click', function() {
       var node = this.parentElement.children[1];
       var modulesElm = templates.module();
@@ -44,54 +60,9 @@
 
   addHandlers(dom.querySelector('.level button'));
 
-
-  $("#Add-Level").click(function() {
-    var html = templates.level();
-    $("#Levels").append(html);
-  });
-
-  $("#calc").click(function() {
-
-    //grab all the levels and make it into a lovely array.
-    var lvlsArray = $('.level'),
-        levels = [];
-
-      for(var i = 0, l = lvlsArray.length; i < l; i++) {
-
-        var elem = lvlsArray[i],
-            level = { weight: 0, modules : [] };
-
-          level.weight = parseInt($(elem).find(".level-weight :input").val(), 10) || 0;
-
-          if(!level.weight) { continue; }
-
-          var modules = $(elem).find('.module');
-
-          for(var j = 0, k = modules.length; j < k; j++) {
-            var $module = $(modules[j]),
-                wght = parseInt($module.find('.weight :input').val(), 10) || 1,
-                pcnt = parseInt($module.find('.percent :input').val(), 10) || 0;
-
-            if(pcnt) {
-              level.modules.push({
-                weight: wght,
-                percentage: pcnt
-              });
-            }
-
-          }
-
-          if(level.modules.length > 0) {
-            levels.push(level);
-          }
-
-      }
-
-      calculate(levels);
-
-  });
-
-
+  ///////////////////////////////////////////////
+  //                Functions                  //
+  ///////////////////////////////////////////////
 
   function calculate(lvls) {
 
@@ -121,8 +92,49 @@
     updateScore(finalResult)
   }
 
-  function parseModules(modules) {
+  //DOM parser
+  function parseLevels() {
 
+    var lvlsArray = dom.querySelectorAll('.level'),
+        levels = [];
+
+    for(var i = 0, l = lvlsArray.length; i < l; i++) {
+
+      var elem = lvlsArray[i],
+          level = { weight: 0, modules : [] };
+
+        level.weight = parseInt(elem.querySelector('.level-weight input').value, 10) || 0;
+
+        if(!level.weight) { continue; }
+
+        var modules = elem.querySelectorAll('.module');
+
+        for(var j = 0, k = modules.length; j < k; j++) {
+          var module = modules[j],
+              wght = parseInt(module.querySelector('.weight input').value, 10) || 1,
+              pcnt = parseInt(module.querySelector('.percent input').value, 10) || 0;
+
+          if(pcnt) {
+            level.modules.push({
+              weight: wght,
+              percentage: pcnt
+            });
+          }
+
+        }
+
+        if(level.modules.length > 0) {
+          levels.push(level);
+        }
+
+    }
+
+    //return array
+    return levels;
+
+  }
+
+  function parseModules(modules) {
     var total = 0, totalWeight = 0;
 
     modules.forEach(function(mod) {
@@ -160,21 +172,16 @@
       avgElm.innerHTML = avg;
       weightElm.innerHTML = weighted;
   }
-
-
+  
   function updateScore(score) {
-
     score = Math.round(score * 100) / 100;
+    var scoreElm = dom.getElementById('Score'),
+        valueElm = scoreElm.querySelector('.value'),
+        leftPos = ((scoreElm.scrollWidth / 100) * score)
 
-    var $score = $("#Score"),
-        $marker = $score.find(".marker"),
-        $value = $score.find(".value");
-
-    var leftPos = (($score.width() / 100) * score);
-
-    $marker.css('left', leftPos-1.5);
-    $value.css('left', leftPos-10);
-    $value.html(score+"%");
+    scoreElm.querySelector('.marker').style.left =  leftPos-1.5 +'px';
+    valueElm.style.left = leftPos-10 +'px';
+    valueElm.innerHTML = score+'%';
 
   }
 
