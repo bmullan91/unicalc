@@ -111,7 +111,7 @@
 
         for(var j = 0, k = modules.length; j < k; j++) {
           var module = modules[j],
-              wght = parseInt(module.querySelector('.weight input').value, 10) || 1,
+              wght = parseInt(module.querySelector('.ratio input').value, 10) || 1,
               pcnt = parseInt(module.querySelector('.percentage input').value, 10) || 0;
 
           if(pcnt) {

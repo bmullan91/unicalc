@@ -63,6 +63,8 @@ input {
   width: 25px;
   text-align: center;
   vertical-align: middle;
+  -webkit-border-radius: 5px;
+  border-radius: 2px;
 }
 
 /* ==========================================================================
@@ -145,11 +147,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
 }
 
 .level button {
-  margin-top: 10px;
+  margin: 10px 0;
+  float: right;
 }
 
 .level .info {
   border-bottom: solid;
+  border-bottom-color: #7A7A7A; 
   padding-bottom: 5px;
 }
 
@@ -163,8 +167,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
 
 .level .results {
   border-top: solid;
+  border-top-color: #7A7A7A; 
   margin-top: 10px;
   padding-top: 5px;
+  clear: both;
 }
 
 .level .results .box {
@@ -186,7 +192,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
 }
 
 .module .name {
-  width: 60%;
   display: inline-block;
 }
 
@@ -194,7 +199,15 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
   margin-top: 10px;
   font-size: 0.8em;
   color: #A3A3A3;
-} 
+}
+
+.module .values {
+  margin-top: 10px;
+}
+
+.module .ratio {
+  margin-left: 10px;
+}
 
 .module input:last-child {
   margin-right: 0;
@@ -275,7 +288,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
 
 /* intermediate */
 @media only screen and (min-width: 480px) {
-
+.module .values {
+  float: right;
+  margin-top: 0px;
+}
 
 }
 
@@ -304,6 +320,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
     margin-top: 20px;
     margin-left: 10px;
     margin-right: 10px;
+  }
+
+  .module .name {
+    margin-right: 30px;
   }
 
 }
