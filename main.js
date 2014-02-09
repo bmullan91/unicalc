@@ -21,9 +21,9 @@
           htmlStr = dom.querySelector(".level").innerHTML;
 
       return function() {
-        var level = "Level "+(++i),
+        var level = "Year "+(++i),
             doc = dom.createElement('div'),
-            newHtml = htmlStr.replace("Level 1", level);
+            newHtml = htmlStr.replace("Year 1", level);
 
         doc.className = "level lvl";
         doc.innerHTML = newHtml;
