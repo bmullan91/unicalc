@@ -176,12 +176,10 @@
   function updateScore(score) {
     score = Math.round(score * 100) / 100;
     var scoreElm = dom.getElementById('Score'),
-        valueElm = scoreElm.querySelector('.value'),
-        leftPos = ((scoreElm.scrollWidth / 100) * score)
+        leftPos = ((scoreElm.scrollWidth / 100) * score);
 
     scoreElm.querySelector('.marker').style.left =  leftPos-1.5 +'px';
-    valueElm.style.left = leftPos-15 +'px';
-    valueElm.innerHTML = score+'%';
+    scoreElm.querySelector('.value').innerHTML = score+'%';
 
   }
 
