@@ -131,7 +131,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
 }
 
 .meter-text {
-  width: 98px;
+  width: 120px;
+  text-align: center;
   margin: 0 auto;
   margin-top: 2px;
   color: #fff;
@@ -218,6 +219,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
 
 .module .values {
   margin-top: 10px;
+  display: inline-table;
 }
 
 .module .ratio {
@@ -343,10 +345,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
     width: 400px;
     float: left;
     margin: 20px 10px 0px 10px;
-  }
-
-  .module .name {
-    margin-right: 30px;
   }
 
 }
