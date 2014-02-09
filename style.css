@@ -67,6 +67,19 @@ input {
   border-radius: 2px;
 }
 
+html, body {
+  height: 100%;
+}
+.wrapper {
+  min-height: 92%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -4em;
+}
+.footer, .push {
+  height: 2em;
+}
+
 /* ==========================================================================
    Mobile first
    ========================================================================== */
@@ -308,6 +321,22 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
 .top-row {
   margin-top: 7px;
   margin-bottom: 15px;
+}
+
+.attrib {
+  width: 230px;
+  text-align: center;
+  color: #555;
+  font-size: 0.8em;
+}
+
+.attrib a {
+  color: #428bca;
+  text-decoration: none;
+}
+
+.attrib a:hover {
+  color: #61BFDD;
 }
 
 /* ==========================================================================
