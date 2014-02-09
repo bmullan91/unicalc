@@ -301,16 +301,19 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
   border-color: #4cae4c;
 }
 
-.buttonwrapper {
-  position:relative;
-  float:left;
-  left:50%;
+.btn-red {
+  color: #fff;
+  background-color: #d9534f;
+  border-color: #d43f3a;
 }
 
-.add-lvl-btn {
-  position:relative;
-  float:left;
-  left:-50%;
+.btns {
+  width: 235px;
+  margin: 0 auto;
+}
+
+.btns button {
+  margin: 0 7px;
 }
 
 .title {
@@ -374,6 +377,14 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
     width: 400px;
     float: left;
     margin: 20px 10px 0px 10px;
+  }
+
+  .btns {
+    width: 270px;
+  }
+
+  .btns button {
+    margin: 0 15px;
   }
 
 }

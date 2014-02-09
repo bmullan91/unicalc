@@ -44,6 +44,7 @@
   });
 
   dom.getElementById("Calculate").addEventListener('click', function() {
+    window.scrollTo(0);
     calculate(parseLevels());
   });
 
