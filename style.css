@@ -123,27 +123,21 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
   background-color: rgba(255, 255, 255, 0.5);
 }
 
-.level {
-  margin: 0 10px;
-  padding: 15px;
-  margin-top: 20px;
-  background-color: #EBEBEB;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-}
-
 .level .info {
   font-size: 1.3em;
 }
 
-.new-level {
-  height: 36px;
+.lvl {
   margin: 0 10px;
   padding: 15px;
   margin-top: 20px;
   background-color: #EBEBEB;
   -webkit-border-radius: 5px;
   border-radius: 5px;
+}
+
+.new-level {
+  height: 36px;
 }
 
 .level button {
@@ -180,6 +174,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
   background-color: #FFFFEA;
   padding: 2px 5px;
 
+}
+
+.modules p {
+  margin: 10px 0px;
 }
 
 .module {
@@ -248,6 +246,17 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
   outline: none;
 }
 
+.btn-small {
+  padding: 2px 5px;
+  font-size: 11px;
+}
+
+.btn-grey {
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
+}
+
 .btn-blue {
   color: #fff;
   background-color: #428bca;
@@ -288,10 +297,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
 
 /* intermediate */
 @media only screen and (min-width: 480px) {
-.module .values {
-  float: right;
-  margin-top: 0px;
-}
+
+  .module .values {
+    float: right;
+    margin-top: 0px;
+  }
 
 }
 
@@ -303,23 +313,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
     padding: 0 15px;
   }
 
-  #Score {
-  }
-
-  .level {
+  .lvl {
     width: 400px;
     float: left;
-    margin-top: 20px;
-    margin-left: 10px;
-    margin-right: 10px;
-  }
-
-  .new-level {
-    width: 400px;
-    float: left;
-    margin-top: 20px;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin: 20px 10px 0px 10px;
   }
 
   .module .name {

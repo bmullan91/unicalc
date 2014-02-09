@@ -25,7 +25,7 @@
             doc = dom.createElement('div'),
             newHtml = htmlStr.replace("Level 1", level);
 
-        doc.className = "level";
+        doc.className = "level lvl";
         doc.innerHTML = newHtml;
 
         addHandlers(doc.children[2]);
