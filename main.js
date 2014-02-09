@@ -112,7 +112,7 @@
         for(var j = 0, k = modules.length; j < k; j++) {
           var module = modules[j],
               wght = parseInt(module.querySelector('.weight input').value, 10) || 1,
-              pcnt = parseInt(module.querySelector('.percent input').value, 10) || 0;
+              pcnt = parseInt(module.querySelector('.percentage input').value, 10) || 0;
 
           if(pcnt) {
             level.modules.push({
@@ -169,8 +169,8 @@
         avgElm = elem.querySelector(".avg"),
         weightElm = elem.querySelector(".weight");
 
-      avgElm.innerHTML = avg;
-      weightElm.innerHTML = weighted;
+      avgElm.innerHTML = avg+"%";
+      weightElm.innerHTML = weighted+"%";
   }
   
   function updateScore(score) {
@@ -180,7 +180,7 @@
         leftPos = ((scoreElm.scrollWidth / 100) * score)
 
     scoreElm.querySelector('.marker').style.left =  leftPos-1.5 +'px';
-    valueElm.style.left = leftPos-10 +'px';
+    valueElm.style.left = leftPos-15 +'px';
     valueElm.innerHTML = score+'%';
 
   }
