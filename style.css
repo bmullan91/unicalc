@@ -163,8 +163,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
 .level .results {
   border-top: solid;
   border-top-color: #7A7A7A; 
-  margin-top: 10px;
-  padding-top: 5px;
+  font-size: 0.8em;
+  padding-top: 10px;
   clear: both;
 }
 
@@ -175,6 +175,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
   background-color: #FFFFEA;
   padding: 2px 5px;
 
+}
+
+.modules {
+  font-size: 0.8em;
 }
 
 .modules p {
@@ -303,6 +307,15 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
     float: right;
     margin-top: 0px;
   }
+
+  .level .results {
+    font-size: 1em;
+  }
+
+  .level .modules {
+    font-size: 1em;
+  }
+
 
 }
 
