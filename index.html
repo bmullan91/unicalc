@@ -2,56 +2,81 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <link rel="author" href="https://plus.google.com/114143431263579636196/posts?hl=en">
-    <meta name="description" content="Simple weighted calculator, useful when working out your university classification">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>unicalc</title>
+  <link rel="author" href="https://plus.google.com/114143431263579636196/posts?hl=en">
+  <meta name="description" content="Simple weighted calculator, useful when working out your university classification">
+  <meta name="keywords" content="unicalc, weighted, calculator, uni, university, degree, classification">
+  <meta name="author" content="Brian Mullan">
+  <meta name="viewport" content="width=device-width">
+
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
   
-  <div id="Container">
+  <div id="Container" class="center">
 
-    <div id="Score">
-      <div class="marker"></div>
-      <div class="value">0%</div>
-    </div>
+    <div class="wrap">
+      <div class="header">
 
-    <div id="Errors">
-      <div class="weights">The total weight of all levels is greater than 100!</div>
+        <h1 class="title top-row pull-left">UniCalc</h1>
+        <button id="Calculate" class="btn btn-blue top-row pull-right">Calculate</button>
+
+        <div id="Score" class="clear-fix">
+          <div class="marker"></div>
+          <div class="value">0%</div>
+        </div>
+        <div id="Errors">
+          <div class="weights">The total weight of all levels is greater than 100!</div>
+        </div>
+
+      </div>
     </div>
     
     <div id='Levels'>
-      <div class="level">
+      <div class="level lvl">
         <div class="info">
           <span class="level-title">Level 1</span>
-          <span class="level-weight">Weight %:<input class=""></span>
+          <span class="level-weight">Weight:<input class="">%</span>
         </div>
         
         <div class="modules">
-          
+          <p>Module(s):</p>
+          <div class="details">
+            <span>
+              Name: not required
+            </span>
+            <span class="pull-right">
+              Ratio: default is 1
+            </span>
+          </div>
           <div class="module">
-            <div class="name">Module: <input></div>
-            <span class="weight pull-right">Weight: <input></span>
-            <span class="percent pull-right percentage">%: <input></span>
+            <div class="name">Name<input></div>
+            <div class="values">
+              <span class="percentage">%<input></span>
+              <span class="ratio">Ratio<input></span>
+            </div>
           </div>
           
         </div>
-        <button>Add</button>
+
+        <button class="btn btn-grey btn-small">Add Module</button>
         <div class="results">
           <span>Average:
-            <span class="avg box"></span>
+            <span class="avg box">0%</span>
           </span>
-          <span class="pull-right">Weight:
-            <span class="weight box"></span>
+          <span class="pull-right">Weighted:
+            <span class="weight box">0%</span>
           </span>
         </div>
         
       </div>
     </div>
     
-    <div>
-      <button id="Add-Level">Add another level</button>
-      <button id="Calculate">Calculate</button>
+    <div class="new-level lvl">
+      <div class="buttonwrapper">
+        <button id="Add-Level" class="add-lvl-btn btn btn-green">Add Level</button>
+      </div>
     </div>
         
   </div>
