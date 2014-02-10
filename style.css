@@ -96,7 +96,7 @@ html, body {
     padding: 5px 15px;
     position: absolute;
     z-index: 98;
-    width: 220px;
+    width: 135px;
 }
 
 .tooltip:hover:before{

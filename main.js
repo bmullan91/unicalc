@@ -4,35 +4,43 @@
   //                   vars                    //
   ///////////////////////////////////////////////
 
-  var templates = {
-    module: (function() {
-        var htmlStr = dom.querySelector('.module').innerHTML;
+  var htmlStrings = {
+        tooltip: '<span class="ratio tooltip" title="Half module: 0.5, Single module: 1, Double module: 2, etc">Ratio<input></span>',
+        noTooltip : '<span class="ratio">Ratio<input></span>'
+      }, 
+      templates = {
+        module: (function() {
+            var htmlStr = dom.querySelector('.module').innerHTML;
+            
+            htmlStr = htmlStr.replace(htmlStrings.tooltip, htmlStrings.noTooltip);
 
-        return function() {
-          var doc = dom.createElement('div');
+            return function() {
+              var doc = dom.createElement('div');
 
-          doc.innerHTML = htmlStr;
-          doc.className = 'module';
-          return doc;
-        };
-      }()),
-    level: (function() {
-      var i = 1,
-          htmlStr = dom.querySelector(".level").innerHTML;
+              doc.innerHTML = htmlStr;
+              doc.className = 'module';
+              return doc;
+            };
+          }()),
+        level: (function() {
+          var i = 1,
+              htmlStr = dom.querySelector(".level").innerHTML;
 
-      return function() {
-        var level = "Year "+(++i),
-            doc = dom.createElement('div'),
-            newHtml = htmlStr.replace("Year 1", level);
+          htmlStr = htmlStr.replace(htmlStrings.tooltip, htmlStrings.noTooltip);
 
-        doc.className = "level lvl";
-        doc.innerHTML = newHtml;
+          return function() {
+            var level = "Year "+(++i),
+                doc = dom.createElement('div'),
+                newHtml = htmlStr.replace("Year 1", level);
 
-        addHandlers(doc.children[2]);
-        return doc;
-      }; 
-    }())
-  };
+            doc.className = "level lvl";
+            doc.innerHTML = newHtml;
+
+            addHandlers(doc.children[2]);
+            return doc;
+          }; 
+        }())
+      };
 
   ///////////////////////////////////////////////
   //              Event Handlers               //
