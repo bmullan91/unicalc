@@ -259,7 +259,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
 
 .module .values {
   margin-top: 10px;
-  display: inline-table;
+  display: inline-block;
 }
 
 .module .ratio {
