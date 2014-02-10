@@ -104,7 +104,7 @@
       var elem = lvlsArray[i],
           level = { weight: 0, modules : [] };
 
-        level.weight = parseInt(elem.querySelector('.level-weight input').value, 10) || 0;
+        level.weight = parseFloat(elem.querySelector('.level-weight input').value, 10) || 0;
 
         if(!level.weight) { continue; }
 
@@ -112,8 +112,8 @@
 
         for(var j = 0, k = modules.length; j < k; j++) {
           var module = modules[j],
-              wght = parseInt(module.querySelector('.ratio input').value, 10) || 1,
-              pcnt = parseInt(module.querySelector('.percentage input').value, 10) || 0;
+              wght = parseFloat(module.querySelector('.ratio input').value, 10) || 1,
+              pcnt = parseFloat(module.querySelector('.percentage input').value, 10) || 0;
 
           if(pcnt) {
             level.modules.push({
