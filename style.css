@@ -190,7 +190,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
   border-radius: 5px;
 }
 
-.new-level {
+.lvl .new-level {
   height: 36px;
 }
 
@@ -403,7 +403,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
   .lvl {
     width: 400px;
     float: left;
-    margin: 20px 10px 0px 10px;
+    margin: 10px 10px 10px 10px;
   }
 
   .btns {
