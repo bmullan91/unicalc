@@ -25,6 +25,7 @@
         };
 
       }()),
+      
       //templates
       templates = {
         module: (function() {
@@ -74,7 +75,10 @@
     calculate(parseLevels());
   });
 
-  //helper function
+  /*
+    This handles attaching the click handler to the
+    'Add Module' button for each level.
+  */
   function addHandlers(btn) {
     //add module functionality
     btn.addEventListener('click', function() {
@@ -85,12 +89,44 @@
 
   }
 
+  //attach the handler to level 1
   addHandlers(dom.querySelector('.level button'));
 
   ///////////////////////////////////////////////
   //                Functions                  //
   ///////////////////////////////////////////////
 
+  /*
+    The core calculate function, which takes the 
+    levels array from parseLevels() function 
+    working out their weighted average and updating
+    their elements. Passing the final result to 
+    updateScore().
+
+    @param lvls {Array} An array of level objects
+    @example
+
+    [
+      {
+        weight: 20, //worth %
+        modules: [
+          {
+            weight: 1,
+            percentage: 50
+          },
+          {
+            weight: 2,
+            percentage: 75
+          }
+        ]
+
+      },
+      {
+        //another level..
+      }
+    ]
+
+  */
   function calculate(lvls) {
 
     var finalResults = [],
@@ -119,7 +155,66 @@
     updateScore(finalResult)
   }
 
-  //DOM parser
+  /*
+    Helper function used by calculate, deals specfically with the 
+    modules array for a given level returning the average 
+    of all modules, taking into account their individual 
+    weights.
+  */
+  function parseModules(modules) {
+    var total = 0, totalWeight = 0;
+
+    modules.forEach(function(mod) {
+      totalWeight += mod.weight;
+      total += (mod.percentage * mod.weight);
+    });
+
+    //return the average
+    return (Math.round((total / totalWeight) * 100) / 100);
+
+  }
+
+  /*
+    Helper function used by calculate, checks that
+    the total weights for all levels is less than
+    100.
+
+    TODO - error msg when weights are 0
+  */
+  function isValid(levels) {
+    var totalWeight = 0;
+
+    levels.forEach(function(level) {
+      totalWeight += level.weight;
+    });
+
+    if(totalWeight >= 0 && totalWeight <= 100) {
+      dom.querySelector("#Errors .weights").style.display = "none";
+      return true;
+    } else {
+      dom.querySelector("#Errors .weights").style.display = "block";
+      return false;
+    } 
+  }
+
+  /*
+    This function updates each level element with 
+    its computed average and corresponding weighted 
+    result.
+  */
+  function updateLvlResults(elem, avg, weighted) {
+    var elem = elem.querySelector(".results"),
+        avgElm = elem.querySelector(".avg"),
+        weightElm = elem.querySelector(".weight");
+
+      avgElm.innerHTML = avg+"%";
+      weightElm.innerHTML = weighted+"%";
+  }
+
+  /*
+  DOM parser, this builds the levels array
+  used by the calculate function.
+  */
   function parseLevels() {
 
     var lvlsArray = dom.querySelectorAll('.level'),
@@ -160,54 +255,6 @@
     return levels;
 
   }
-
-  function parseModules(modules) {
-    var total = 0, totalWeight = 0;
-
-    modules.forEach(function(mod) {
-      totalWeight += mod.weight;
-      total += (mod.percentage * mod.weight);
-    });
-
-    //return the average
-    return (Math.round((total / totalWeight) * 100) / 100);
-
-  }
-
-  function isValid(levels) {
-    //all the weights <= 100
-    var totalWeight = 0;
-
-    levels.forEach(function(level) {
-      totalWeight += level.weight;
-    });
-
-    if(totalWeight >= 0 && totalWeight <= 100) {
-      dom.querySelector("#Errors .weights").style.display = "none";
-      return true;
-    } else {
-      dom.querySelector("#Errors .weights").style.display = "block";
-      return false;
-    } 
-  }
-
-  function updateLvlResults(elem, avg, weighted) {
-    var elem = elem.querySelector(".results"),
-        avgElm = elem.querySelector(".avg"),
-        weightElm = elem.querySelector(".weight");
-
-      avgElm.innerHTML = avg+"%";
-      weightElm.innerHTML = weighted+"%";
-  }
   
-  // function updateScore(score) {
-  //   score = Math.round(score * 100) / 100;
-  //   var scoreElm = dom.getElementById('Score'),
-  //       leftPos = ((scoreElm.scrollWidth / 100) * score);
-
-  //   scoreElm.querySelector('.marker').style.left =  leftPos-1.5 +'px';
-  //   scoreElm.querySelector('.value').innerHTML = score+'%';
-
-  // }
 
 })(document);
