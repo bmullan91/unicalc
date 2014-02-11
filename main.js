@@ -121,9 +121,9 @@
         for(var j = 0, k = modules.length; j < k; j++) {
           var module = modules[j],
               wght = parseFloat(module.querySelector('.ratio input').value, 10) || 1,
-              pcnt = parseFloat(module.querySelector('.percentage input').value, 10) || 0;
+              pcnt = parseFloat(module.querySelector('.percentage input').value, 10);
 
-          if(pcnt) {
+          if(!isNaN(pcnt)) {
             level.modules.push({
               weight: wght,
               percentage: pcnt
