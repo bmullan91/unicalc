@@ -379,6 +379,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
   .module .values {
     float: right;
     margin-top: 0px;
+    display: inline-block;
   }
 
   .level .results {
