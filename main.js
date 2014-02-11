@@ -7,7 +7,25 @@
   var htmlStrings = {
         tooltip: '<span class="ratio tooltip" title="Half module: 0.5, Single module: 1, Double module: 2, etc">Ratio<input></span>',
         noTooltip : '<span class="ratio">Ratio<input></span>'
-      }, 
+      },
+
+      //Score-o-meter
+      updateScore = (function() {
+        var elem = dom.getElementById('Score'),
+            markerElm = elem.querySelector('.marker'),
+            valueElm = elem.querySelector('.value'),
+            width = elem.scrollWidth;
+
+        return function(score) {
+            score = Math.round(score * 100) / 100;
+            var leftPos = ((width / 100) * score);
+
+            markerElm.style.left =  leftPos-1.5 +'px';
+            valueElm.innerHTML = score+'%';
+        };
+
+      }()),
+      //templates
       templates = {
         module: (function() {
             var htmlStr = dom.querySelector('.module').innerHTML;
@@ -182,14 +200,14 @@
       weightElm.innerHTML = weighted+"%";
   }
   
-  function updateScore(score) {
-    score = Math.round(score * 100) / 100;
-    var scoreElm = dom.getElementById('Score'),
-        leftPos = ((scoreElm.scrollWidth / 100) * score);
+  // function updateScore(score) {
+  //   score = Math.round(score * 100) / 100;
+  //   var scoreElm = dom.getElementById('Score'),
+  //       leftPos = ((scoreElm.scrollWidth / 100) * score);
 
-    scoreElm.querySelector('.marker').style.left =  leftPos-1.5 +'px';
-    scoreElm.querySelector('.value').innerHTML = score+'%';
+  //   scoreElm.querySelector('.marker').style.left =  leftPos-1.5 +'px';
+  //   scoreElm.querySelector('.value').innerHTML = score+'%';
 
-  }
+  // }
 
 })(document);
