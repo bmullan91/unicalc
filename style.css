@@ -247,6 +247,15 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
   border-radius: 2px;
 }
 
+
+.module:before, .module:after {
+  content: "";
+  display: table;
+}
+.module:after {
+  clear: both;
+}
+
 .module .name {
   display: inline-block;
 }
