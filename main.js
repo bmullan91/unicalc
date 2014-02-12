@@ -1,4 +1,4 @@
-;(function(dom) {
+;(function(dom, win) {
 
   ///////////////////////////////////////////////
   //                   vars                    //
@@ -25,7 +25,32 @@
         };
 
       }()),
-      
+
+      LS = (function() {
+
+        if(!window.localStorage) { return null; }
+
+        var KEY = 'RESULTS_DATA',
+            cache = null;
+
+        return {
+
+          store: function(data) {
+            cache = data;
+            win.localStorage.setItem(KEY, JSON.stringify(data));
+            //TODO update UI
+          },
+
+          retrieve: function() {
+            if(cache) { return cache; }
+            return (cache = JSON.parse(win.localStorage.getItem(KEY))); //we can get away with this.
+          }
+
+        };
+
+
+      } ()),
+
       //templates
       templates = {
         module: (function() {
@@ -62,18 +87,40 @@
       };
 
   ///////////////////////////////////////////////
-  //              Event Handlers               //
+  //                init code                  //
   ///////////////////////////////////////////////
+  (function() {
 
-  dom.getElementById("Add-Level").addEventListener('click', function() {
-    var html = templates.level();
-    dom.getElementById("Levels").appendChild(html);
-  });
+    //Event Handlers
+    dom.getElementById('Save').addEventListener('click', function() {
+      LS.store(parseLevels());
+      //TODO update button to notify that the data has been saved.
+    });
 
-  dom.getElementById("Calculate").addEventListener('click', function() {
-    window.scrollTo(0);
-    calculate(parseLevels());
-  });
+    dom.getElementById('Add-Level').addEventListener('click', function() {
+      var html = templates.level();
+      dom.getElementById('Levels').appendChild(html);
+    });
+
+    dom.getElementById("Calculate").addEventListener('click', function() {
+      window.scrollTo(0);
+      var levels = parseLevels();
+      LS.store(levels);
+      calculate(levels);
+    });
+
+    //check if the user has stored results
+    if(LS) {
+
+      if(LS.retrieve()) {
+        dom.getElementById('Retrieve').style.display = "block";
+      } else {
+        dom.getElementById('Save').style.display = "block";
+      }
+
+    }
+
+  }());
 
   /*
     This handles attaching the click handler to the
@@ -257,4 +304,4 @@
   }
   
 
-})(document);
+})(document, window);
