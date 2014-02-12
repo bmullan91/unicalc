@@ -258,6 +258,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
 
 .module .name {
   display: inline-block;
+  float: left;
+}
+
+.module .name input {
+  text-align: left;
 }
 
 .modules .details {
