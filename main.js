@@ -111,7 +111,7 @@
       //change the button to 'Saved!' with a different colour
       var btn = DOM_ELMS.buttons.save;
 
-      btn.innerHTML = 'Saved!';
+      btn.innerHTML = 'Save Results';
       btn.classList.add('btn-green');
 
       setTimeout(function() {
