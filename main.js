@@ -72,7 +72,9 @@
 
           htmlStr = htmlStr.replace(htmlStrings.tooltip, htmlStrings.noTooltip);
 
-          return function() {
+          return function(year) {
+            if(year) { i = year; }
+
             var level = "Year "+(++i),
                 doc = dom.createElement('div'),
                 newHtml = htmlStr.replace("Year 1", level);
@@ -95,6 +97,12 @@
     dom.getElementById('Save').addEventListener('click', function() {
       LS.store(parseLevels());
       //TODO update button to notify that the data has been saved.
+    });
+
+    dom.getElementById('Retrieve').addEventListener('click', function() {
+      var levels = LS.retrieve();
+      restorePrev(levels);
+
     });
 
     dom.getElementById('Add-Level').addEventListener('click', function() {
@@ -142,6 +150,45 @@
   ///////////////////////////////////////////////
   //                Functions                  //
   ///////////////////////////////////////////////
+
+  function restorePrev(lvls) {
+
+    var existingLevelElms = dom.querySelectorAll('.level');
+
+    //TODO refactor
+    var levelsDomElm = dom.getElementById('Levels');
+
+    lvls.forEach(function(level, i) {
+
+      //first create a new level element
+      var levelElm = existingLevelElms[i] || templates.level();
+      //update its 'worth' input
+      levelElm.querySelector('.level-weight input').value = level.weight;
+      //create the module elements
+      //see if any exist..
+      var existingModuleElms = levelElm.querySelectorAll('.module');
+
+      level.modules.forEach(function(module, i) {
+
+        var moduleElm = existingModuleElms[i] || templates.module();
+        //update the name..
+        moduleElm.querySelector('.name input').value = module.name || "";
+        moduleElm.querySelector('.percentage input').value = module.percentage || "";
+        moduleElm.querySelector('.ratio input').value = module.weight || "";
+        
+        //append the new element to the level->modules
+        //cache modules element..
+        levelElm.querySelector('.modules').appendChild(moduleElm);
+
+      });
+
+      //insert level into the DOM
+      levelsDomElm.appendChild(levelElm);
+
+    });
+
+  }
+  
 
   /*
     The core calculate function, which takes the 
@@ -281,10 +328,12 @@
         for(var j = 0, k = modules.length; j < k; j++) {
           var module = modules[j],
               wght = parseFloat(module.querySelector('.ratio input').value, 10) || 1,
-              pcnt = parseFloat(module.querySelector('.percentage input').value, 10);
+              pcnt = parseFloat(module.querySelector('.percentage input').value, 10),
+              name = module.querySelector('.name input').value;
 
           if(!isNaN(pcnt)) {
             level.modules.push({
+              name: name,
               weight: wght,
               percentage: pcnt
             });
