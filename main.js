@@ -10,30 +10,33 @@
       },
       //cache reusable DOM elements
       DOM_ELMS = {
+        levelsContainer: dom.getElementById('Levels'),
         buttons: {
           save: dom.getElementById('Save'),
           retrieve: dom.getElementById('Retrieve'),
           addLevel: dom.getElementById('Add-Level'),
           calculate: dom.getElementById("Calculate")
-        }
+        },
+        scoreMeter:  (function() {
+          var container = dom.getElementById('Score');
+
+          return {
+            container: container,
+            marker: container.querySelector('.marker'),
+            value: container.querySelector('.value')
+          };
+
+        }()),
       },
 
       //Score-o-meter
-      updateScore = (function() {
-        var elem = dom.getElementById('Score'),
-            markerElm = elem.querySelector('.marker'),
-            valueElm = elem.querySelector('.value'),
-            width = elem.scrollWidth;
+      updateScore = function(score) {
+        score = Math.round(score * 100) / 100;
+        var leftPos = ((DOM_ELMS.scoreMeter.container.scrollWidth / 100) * score);
 
-        return function(score) {
-            score = Math.round(score * 100) / 100;
-            var leftPos = ((width / 100) * score);
-
-            markerElm.style.left =  leftPos-1.5 +'px';
-            valueElm.innerHTML = score+'%';
-        };
-
-      }()),
+        DOM_ELMS.scoreMeter.marker.style.left =  leftPos-1.5 +'px';
+        DOM_ELMS.scoreMeter.value.innerHTML = score+'%';
+      },
 
       LS = (function() {
 
@@ -103,7 +106,7 @@
     DOM_ELMS.buttons.save.addEventListener('click', function() {
       LS.store(parseLevels());
       //change the button to 'Saved!' with a different colour
-      var btn = dom.getElementById('Save');
+      var btn = DOM_ELMS.buttons.save;
 
       btn.innerHTML = 'Saved!';
       btn.classList.add('btn-green');
@@ -118,14 +121,13 @@
     DOM_ELMS.buttons.retrieve.addEventListener('click', function() {
       restorePrev(LS.retrieve());
       //update the button back to 'save'
-      dom.getElementById('Retrieve').style.display = "none";
-      dom.getElementById('Save').style.display = "block";
-
+      DOM_ELMS.buttons.retrieve.style.display = "none";
+      DOM_ELMS.buttons.save.style.display = "block";
     });
 
     DOM_ELMS.buttons.addLevel.addEventListener('click', function() {
       var html = templates.level();
-      dom.getElementById('Levels').appendChild(html);
+      DOM_ELMS.levelsContainer.appendChild(html);
     });
 
     DOM_ELMS.buttons.calculate.addEventListener('click', function() {
@@ -171,7 +173,7 @@
 
   function restorePrev(lvls) {
 
-    var levelsDomElm = dom.getElementById('Levels');
+    var levelsDomElm = DOM_ELMS.levelsContainer;
 
     lvls.forEach(function(level, i) {
 
