@@ -27,6 +27,13 @@
           };
 
         }()),
+        errors: (function() {
+          var container = dom.getElementById('Errors');
+          return {
+            weights: container.querySelector('.weights')
+          };
+
+        }())
       },
 
       //Score-o-meter
@@ -46,21 +53,17 @@
             cache = null;
 
         return {
-
           store: function(data) {
             cache = data;
             win.localStorage.setItem(KEY, JSON.stringify(data));
           },
-
           retrieve: function() {
             if(cache) { return cache; }
             return (cache = JSON.parse(win.localStorage.getItem(KEY))); //we can get away with this.
           }
-
         };
 
-
-      } ()),
+      }()),
 
       //templates
       templates = {
@@ -132,9 +135,7 @@
 
     DOM_ELMS.buttons.calculate.addEventListener('click', function() {
       window.scrollTo(0);
-      var levels = parseLevels();
-      LS.store(levels);
-      calculate(levels);
+      calculate(parseLevels());
     });
 
     //check if the user has stored results
@@ -171,6 +172,10 @@
   //                Functions                  //
   ///////////////////////////////////////////////
 
+  /*
+    This manages building and inserting the results 
+    information prevoiusly stored by a user.
+  */
   function restorePrev(lvls) {
 
     var levelsDomElm = DOM_ELMS.levelsContainer;
@@ -206,7 +211,6 @@
     });
 
   }
-  
 
   /*
     The core calculate function, which takes the 
@@ -301,10 +305,10 @@
     });
 
     if(totalWeight >= 0 && totalWeight <= 100) {
-      dom.querySelector("#Errors .weights").style.display = "none";
+      DOM_ELMS.errors.weights.style.display = "none";
       return true;
     } else {
-      dom.querySelector("#Errors .weights").style.display = "block";
+      DOM_ELMS.errors.weights.style.display = "block";
       return false;
     } 
   }
