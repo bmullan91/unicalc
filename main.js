@@ -80,9 +80,7 @@
 
           htmlStr = htmlStr.replace(htmlStrings.tooltip, htmlStrings.noTooltip);
 
-          return function(year) {
-            if(year) { i = year; }
-
+          return function() {
             var level = "Year "+(++i),
                 doc = dom.createElement('div'),
                 newHtml = htmlStr.replace("Year 1", level);
