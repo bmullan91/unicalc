@@ -8,6 +8,15 @@
         tooltip: '<span class="ratio tooltip" title="Half module: 0.5, Single module: 1, Double module: 2, etc">Ratio<input></span>',
         noTooltip : '<span class="ratio">Ratio<input></span>'
       },
+      //cache reusable DOM elements
+      DOM_ELMS = {
+        buttons: {
+          save: dom.getElementById('Save'),
+          retrieve: dom.getElementById('Retrieve'),
+          addLevel: dom.getElementById('Add-Level'),
+          calculate: dom.getElementById("Calculate")
+        }
+      },
 
       //Score-o-meter
       updateScore = (function() {
@@ -38,7 +47,6 @@
           store: function(data) {
             cache = data;
             win.localStorage.setItem(KEY, JSON.stringify(data));
-            //TODO update UI
           },
 
           retrieve: function() {
@@ -94,23 +102,35 @@
   (function() {
 
     //Event Handlers
-    dom.getElementById('Save').addEventListener('click', function() {
+    DOM_ELMS.buttons.save.addEventListener('click', function() {
       LS.store(parseLevels());
-      //TODO update button to notify that the data has been saved.
+      //change the button to 'Saved!' with a different colour
+      var btn = dom.getElementById('Save');
+
+      btn.innerHTML = 'Saved!';
+      btn.classList.add('btn-green');
+
+      setTimeout(function() {
+        btn.innerHTML = 'Save';
+        btn.classList.remove('btn-green');
+      }, 500);
+
     });
 
-    dom.getElementById('Retrieve').addEventListener('click', function() {
-      var levels = LS.retrieve();
-      restorePrev(levels);
+    DOM_ELMS.buttons.retrieve.addEventListener('click', function() {
+      restorePrev(LS.retrieve());
+      //update the button back to 'save'
+      dom.getElementById('Retrieve').style.display = "none";
+      dom.getElementById('Save').style.display = "block";
 
     });
 
-    dom.getElementById('Add-Level').addEventListener('click', function() {
+    DOM_ELMS.buttons.addLevel.addEventListener('click', function() {
       var html = templates.level();
       dom.getElementById('Levels').appendChild(html);
     });
 
-    dom.getElementById("Calculate").addEventListener('click', function() {
+    DOM_ELMS.buttons.calculate.addEventListener('click', function() {
       window.scrollTo(0);
       var levels = parseLevels();
       LS.store(levels);
@@ -121,9 +141,9 @@
     if(LS) {
 
       if(LS.retrieve()) {
-        dom.getElementById('Retrieve').style.display = "block";
+        DOM_ELMS.buttons.retrieve.style.display = "block";
       } else {
-        dom.getElementById('Save').style.display = "block";
+        DOM_ELMS.buttons.save.style.display = "block";
       }
 
     }
@@ -153,38 +173,36 @@
 
   function restorePrev(lvls) {
 
-    var existingLevelElms = dom.querySelectorAll('.level');
-
-    //TODO refactor
     var levelsDomElm = dom.getElementById('Levels');
 
     lvls.forEach(function(level, i) {
 
-      //first create a new level element
-      var levelElm = existingLevelElms[i] || templates.level();
-      //update its 'worth' input
-      levelElm.querySelector('.level-weight input').value = level.weight;
-      //create the module elements
-      //see if any exist..
-      var existingModuleElms = levelElm.querySelectorAll('.module');
+      //level element - create one if needed
+      var levelElm = levelsDomElm.children[i] || templates.level(),
+          modulesElm = levelElm.querySelector('.modules'),
+          existingModules = modulesElm.querySelectorAll('.module');
 
+      //1st update its 'worth' input
+      levelElm.querySelector('.level-weight input').value = level.weight;
+      
+      //2nd create each module element
       level.modules.forEach(function(module, i) {
 
-        var moduleElm = existingModuleElms[i] || templates.module();
-        //update the name..
+        var modulesIndex = 1,
+            moduleElm = existingModules[i] || templates.module();
+        
+        //3rd update each field
         moduleElm.querySelector('.name input').value = module.name || "";
         moduleElm.querySelector('.percentage input').value = module.percentage || "";
         moduleElm.querySelector('.ratio input').value = module.weight || "";
         
-        //append the new element to the level->modules
-        //cache modules element..
-        levelElm.querySelector('.modules').appendChild(moduleElm);
+        //finally append the module element
+        modulesElm.appendChild(moduleElm);
 
       });
 
       //insert level into the DOM
       levelsDomElm.appendChild(levelElm);
-
     });
 
   }
