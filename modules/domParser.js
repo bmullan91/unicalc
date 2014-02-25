@@ -1,5 +1,27 @@
 var templates = require('./templates'),
-    levelsContainer = document.getElementById('Levels');
+    levelsContainer = document.getElementById('Levels'),
+    parseModules = function(modules) {
+      var returnArr = [];
+
+      for(var i = 0, j = modules.length; i < j; i++) {
+        var module = modules[i],
+            wght = parseFloat(module.querySelector('.ratio input').value, 10) || 1,
+            pcnt = parseFloat(module.querySelector('.percentage input').value, 10),
+            name = module.querySelector('.name input').value;
+
+        if(!isNaN(pcnt)) {
+          returnArr.push({
+            name: name,
+            weight: wght,
+            percentage: pcnt
+          });
+        }
+
+      }
+
+      return returnArr;
+
+    };
 
 /*
 DOM parser, this builds the levels array
@@ -19,28 +41,13 @@ module.exports.parseLevels = function() {
 
       if(!level.weight) { continue; }
 
-      var modules = elem.querySelectorAll('.module');
+      //lets figure out if there is any actual module data
+      var lvlModules = parseModules(elem.querySelectorAll('.module')); 
 
-      for(var j = 0, k = modules.length; j < k; j++) {
-        var module = modules[j],
-            wght = parseFloat(module.querySelector('.ratio input').value, 10) || 1,
-            pcnt = parseFloat(module.querySelector('.percentage input').value, 10),
-            name = module.querySelector('.name input').value;
-
-        if(!isNaN(pcnt)) {
-          level.modules.push({
-            name: name,
-            weight: wght,
-            percentage: pcnt
-          });
-        }
-
-      }
-
-      if(level.modules.length > 0) {
+      if(lvlModules.length > 0) {
+        level.modules = lvlModules;
         levels.push(level);
       }
-
   }
 
   //return array

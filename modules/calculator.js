@@ -6,36 +6,23 @@ module.exports.calculate = function(lvls) {
 
   lvls = lvls || domParser.parseLevels();
 
-  var finalResults = [],
+  var finalResult = 0,
       levelElms = document.querySelectorAll('.level');
 
   if(!isValid(lvls)) { return; }
   
   lvls.forEach(function(lvl, i) {
-    
     //get its weight
-    var levelWeight = lvl.weight
-        moduleAvg = parseModules(lvl.modules),
-        weightedResult = (Math.round(((levelWeight / 100) * moduleAvg) * 100) / 100);
+    var moduleAvg = parseModules(lvl.modules),
+        weightedResult = (Math.round(((lvl.weight / 100) * moduleAvg) * 100) / 100);
     
-    finalResults.push(weightedResult);
     updateLvlResults(levelElms[i], moduleAvg, weightedResult);
-    
-  });
-
-  //TODO - refactor - remove remove extra loop
-  
-  var finalResult = 0;
-  finalResults.forEach(function(x) {
-    finalResult += x;
+    finalResult += weightedResult;
   });
   
   //fin.
   scoreMeter.update(finalResult);
 };
-
-//TODO - use the final result to update the score - updateScore();
-
 
 //Private stuff..
 
