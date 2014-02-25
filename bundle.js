@@ -11,36 +11,23 @@ module.exports.calculate = function(lvls) {
 
   lvls = lvls || domParser.parseLevels();
 
-  var finalResults = [],
+  var finalResult = 0,
       levelElms = document.querySelectorAll('.level');
 
   if(!isValid(lvls)) { return; }
   
   lvls.forEach(function(lvl, i) {
-    
     //get its weight
-    var levelWeight = lvl.weight
-        moduleAvg = parseModules(lvl.modules),
-        weightedResult = (Math.round(((levelWeight / 100) * moduleAvg) * 100) / 100);
+    var moduleAvg = parseModules(lvl.modules),
+        weightedResult = (Math.round(((lvl.weight / 100) * moduleAvg) * 100) / 100);
     
-    finalResults.push(weightedResult);
     updateLvlResults(levelElms[i], moduleAvg, weightedResult);
-    
-  });
-
-  //TODO - refactor - remove remove extra loop
-  
-  var finalResult = 0;
-  finalResults.forEach(function(x) {
-    finalResult += x;
+    finalResult += weightedResult;
   });
   
   //fin.
   scoreMeter.update(finalResult);
 };
-
-//TODO - use the final result to update the score - updateScore();
-
 
 //Private stuff..
 
@@ -108,7 +95,29 @@ function updateLvlResults(elem, avg, weighted) {
 
 },{"./domParser":3,"./scoreMeter":6}],3:[function(require,module,exports){
 var templates = require('./templates'),
-    levelsContainer = document.getElementById('Levels');
+    levelsContainer = document.getElementById('Levels'),
+    parseModules = function(modules) {
+      var returnArr = [];
+
+      for(var i = 0, j = modules.length; i < j; i++) {
+        var module = modules[i],
+            wght = parseFloat(module.querySelector('.ratio input').value, 10) || 1,
+            pcnt = parseFloat(module.querySelector('.percentage input').value, 10),
+            name = module.querySelector('.name input').value;
+
+        if(!isNaN(pcnt)) {
+          returnArr.push({
+            name: name,
+            weight: wght,
+            percentage: pcnt
+          });
+        }
+
+      }
+
+      return returnArr;
+
+    };
 
 /*
 DOM parser, this builds the levels array
@@ -128,28 +137,13 @@ module.exports.parseLevels = function() {
 
       if(!level.weight) { continue; }
 
-      var modules = elem.querySelectorAll('.module');
+      //lets figure out if there is any actual module data
+      var lvlModules = parseModules(elem.querySelectorAll('.module')); 
 
-      for(var j = 0, k = modules.length; j < k; j++) {
-        var module = modules[j],
-            wght = parseFloat(module.querySelector('.ratio input').value, 10) || 1,
-            pcnt = parseFloat(module.querySelector('.percentage input').value, 10),
-            name = module.querySelector('.name input').value;
-
-        if(!isNaN(pcnt)) {
-          level.modules.push({
-            name: name,
-            weight: wght,
-            percentage: pcnt
-          });
-        }
-
-      }
-
-      if(level.modules.length > 0) {
+      if(lvlModules.length > 0) {
+        level.modules = lvlModules;
         levels.push(level);
       }
-
   }
 
   //return array
@@ -236,16 +230,16 @@ var domParser = require('./domParser'),
     KEY = 'RESULTS_DATA',
     cache = null,
     DOM_ELMS = {
-    	saveBtn: document.getElementById('Save'),
-    	retrieveBtn: document.getElementById('Retrieve')
+      saveBtn: document.getElementById('Save'),
+      retrieveBtn: document.getElementById('Retrieve')
     },
     get = function() {
-    	if(cache) { return cache; }
-  		return (cache = JSON.parse(window.localStorage.getItem(KEY))); //we can get away with this.
+      if(cache) { return cache; }
+      return (cache = JSON.parse(window.localStorage.getItem(KEY))); //we can get away with this.
     },
     set = function(data) {
-    	cache = data;
-  		window.localStorage.setItem(KEY, JSON.stringify(data));
+      cache = data;
+      window.localStorage.setItem(KEY, JSON.stringify(data));
     },
     addEventHandlers = function() {
       //Event Handlers
@@ -276,21 +270,21 @@ var domParser = require('./domParser'),
 
     };
 
+//Expose the API
 module.exports = {
 
-	init: function() {
-	  if(window.localStorage) {
+  init: function() {
+    if(window.localStorage) {
       addEventHandlers();
-	    if(get()) {
-	      DOM_ELMS.retrieveBtn.style.display = "block";
-	    } else {
-	      DOM_ELMS.saveBtn.style.display = "block";
-	    }
-	  }
-	},
-	store: set,
-	retrieve: get
-
+      if(get()) {
+        DOM_ELMS.retrieveBtn.style.display = "block";
+      } else {
+        DOM_ELMS.saveBtn.style.display = "block";
+      }
+    }
+  },
+  store: set,
+  retrieve: get
 };
 
 },{"./calculator":2,"./domParser":3}],6:[function(require,module,exports){
