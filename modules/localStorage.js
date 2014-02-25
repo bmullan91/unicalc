@@ -3,16 +3,16 @@ var domParser = require('./domParser'),
     KEY = 'RESULTS_DATA',
     cache = null,
     DOM_ELMS = {
-    	saveBtn: document.getElementById('Save'),
-    	retrieveBtn: document.getElementById('Retrieve')
+      saveBtn: document.getElementById('Save'),
+      retrieveBtn: document.getElementById('Retrieve')
     },
     get = function() {
-    	if(cache) { return cache; }
-  		return (cache = JSON.parse(window.localStorage.getItem(KEY))); //we can get away with this.
+      if(cache) { return cache; }
+      return (cache = JSON.parse(window.localStorage.getItem(KEY))); //we can get away with this.
     },
     set = function(data) {
-    	cache = data;
-  		window.localStorage.setItem(KEY, JSON.stringify(data));
+      cache = data;
+      window.localStorage.setItem(KEY, JSON.stringify(data));
     },
     addEventHandlers = function() {
       //Event Handlers
@@ -43,19 +43,19 @@ var domParser = require('./domParser'),
 
     };
 
+//Expose the API
 module.exports = {
 
-	init: function() {
-	  if(window.localStorage) {
+  init: function() {
+    if(window.localStorage) {
       addEventHandlers();
-	    if(get()) {
-	      DOM_ELMS.retrieveBtn.style.display = "block";
-	    } else {
-	      DOM_ELMS.saveBtn.style.display = "block";
-	    }
-	  }
-	},
-	store: set,
-	retrieve: get
-
+      if(get()) {
+        DOM_ELMS.retrieveBtn.style.display = "block";
+      } else {
+        DOM_ELMS.saveBtn.style.display = "block";
+      }
+    }
+  },
+  store: set,
+  retrieve: get
 };
