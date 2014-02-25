@@ -1,12 +1,10 @@
-
 {
   "name": "unicalc",
-  "description": "...",
+  "description": "Simple weighted calculator, useful when working out your university classification",
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-browserify": "~1.3.0",
-    "grunt-contrib-concat": "~0.3.0"
+    "gulp-browserify": "~0.4.6",
+    "gulp": "~3.5.2"
   }
 }
