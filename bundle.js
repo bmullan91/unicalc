@@ -2,8 +2,14 @@
 require('./modules/events').init();
 require('./modules/localStorage').init();
 
-},{"./modules/events":5,"./modules/localStorage":6}],2:[function(require,module,exports){
+},{"./modules/events":4,"./modules/localStorage":5}],2:[function(require,module,exports){
+var domParser = require('./domParser'),
+    scoreMeter = require('./scoreMeter'),
+    weightsError = document.querySelector('#Errors .weights');
+
 module.exports.calculate = function(lvls) {
+
+  lvls = lvls || domParser.parseLevels();
 
   var finalResults = [],
       levelElms = document.querySelectorAll('.level');
@@ -30,10 +36,7 @@ module.exports.calculate = function(lvls) {
   });
   
   //fin.
-
-  return finalResult;
-
-  //updateScore(finalResult)
+  scoreMeter.update(finalResult);
 };
 
 //TODO - use the final result to update the score - updateScore();
@@ -56,10 +59,10 @@ function isValid(levels) {
   });
 
   if(totalWeight >= 0 && totalWeight <= 100) {
-    DOM_ELMS.errors.weights.style.display = "none";
+    weightsError.style.display = "none";
     return true;
   } else {
-    DOM_ELMS.errors.weights.style.display = "block";
+    weightsError.style.display = "block";
     return false;
   } 
 }
@@ -103,30 +106,10 @@ function updateLvlResults(elem, avg, weighted) {
 
 
 
-},{}],3:[function(require,module,exports){
-//Private stuff..
+},{"./domParser":3,"./scoreMeter":6}],3:[function(require,module,exports){
+var templates = require('./templates'),
+    levelsContainer = document.getElementById('Levels');
 
-var scoreMeterContainer = document.getElementById('Score'),
-		errorsContainer = document.getElementById('Errors');
-
-
-module.exports = {
-
-  levelsContainer: document.getElementById('Levels'),
-
-  buttons: {
-    save: document.getElementById('Save'),
-    retrieve: document.getElementById('Retrieve'),
-    addLevel: document.getElementById('Add-Level'),
-    calculate: document.getElementById("Calculate")
-  },
-  
-  errors: {
-    weights: errorsContainer.querySelector('.weights')
-  }
-
-};
-},{}],4:[function(require,module,exports){
 /*
 DOM parser, this builds the levels array
 used by the calculate function.
@@ -180,12 +163,10 @@ module.exports.parseLevels = function() {
   */
 module.exports.restorePrev = function(lvls) {
 
-    var levelsDomElm = DOM_ELMS.levelsContainer;
-
     lvls.forEach(function(level, i) {
 
       //level element - create one if needed
-      var levelElm = levelsDomElm.children[i] || templates.level(),
+      var levelElm = levelsContainer.children[i] || templates.level(),
           modulesElm = levelElm.querySelector('.modules'),
           existingModules = modulesElm.querySelectorAll('.module');
 
@@ -209,51 +190,24 @@ module.exports.restorePrev = function(lvls) {
       });
 
       //insert level into the DOM
-      levelsDomElm.appendChild(levelElm);
+      levelsContainer.appendChild(levelElm);
     });
 
   }
-},{}],5:[function(require,module,exports){
-var DOM_ELMS = require('./domCache'),
-		LS = require('./localStorage'),
-		calculator = require('./calculator'),
-		domParser = require('./domParser');
-
+},{"./templates":7}],4:[function(require,module,exports){
+var calculator = require('./calculator'),
+    templates = require('./templates');
 
 module.exports.init = function() {
-
-	//Event Handlers
-  LS.DOM_ELMS.saveBtn.addEventListener('click', function() {
-    LS.store(domParser.parseLevels());
-    //change the button to 'Saved!' with a different colour
-    var btn = LS.DOM_ELMS.saveBtn;
-
-    btn.innerHTML = 'Saved!';
-    btn.classList.add('btn-green');
-
-    setTimeout(function() {
-      btn.innerHTML = 'Save Results';
-      btn.classList.remove('btn-green');
-    }, 500);
-
-  });
-
-  LS.DOM_ELMS.retrieveBtn.addEventListener('click', function() {
-    domParser.restorePrev(LS.retrieve());
-    //update the button back to 'save'
-    LS.DOM_ELMS.retrieveBtn.style.display = "none";
-    LS.DOM_ELMS.saveBtn.style.display = "block";
-  });
-
-  DOM_ELMS.buttons.addLevel.addEventListener('click', function() {
+  document.getElementById('Add-Level').addEventListener('click', function() {
     var html = templates.level();
-    DOM_ELMS.levelsContainer.appendChild(html);
+    document.getElementById('Levels').appendChild(html);
   });
 
-  DOM_ELMS.buttons.calculate.addEventListener('click', function() {
+  //Should we move this into the calculator?
+  document.getElementById("Calculate").addEventListener('click', function() {
 		window.scrollTo(0);
-  	var result = calculator.calculate(domParser.parseLevels());
-  	require('./scoreMeter').update(result);
+  	calculator.calculate();
   });
 
   addHandler(document.querySelector('.level button'));
@@ -276,8 +230,10 @@ function addHandler(btn) {
 
 }
 
-},{"./calculator":2,"./domCache":3,"./domParser":4,"./localStorage":6,"./scoreMeter":7}],6:[function(require,module,exports){
-var KEY = 'RESULTS_DATA',
+},{"./calculator":2,"./templates":7}],5:[function(require,module,exports){
+var domParser = require('./domParser'),
+    calculator = require('./calculator'),
+    KEY = 'RESULTS_DATA',
     cache = null,
     DOM_ELMS = {
     	saveBtn: document.getElementById('Save'),
@@ -290,12 +246,41 @@ var KEY = 'RESULTS_DATA',
     set = function(data) {
     	cache = data;
   		window.localStorage.setItem(KEY, JSON.stringify(data));
+    },
+    addEventHandlers = function() {
+      //Event Handlers
+      DOM_ELMS.saveBtn.addEventListener('click', function() {
+        set(domParser.parseLevels());
+        //change the button to 'Saved!' with a different colour
+        var btn = DOM_ELMS.saveBtn;
+
+        btn.innerHTML = 'Saved!';
+        btn.classList.add('btn-green');
+
+        setTimeout(function() {
+          btn.innerHTML = 'Save Results';
+          btn.classList.remove('btn-green');
+        }, 500);
+
+      });
+
+      DOM_ELMS.retrieveBtn.addEventListener('click', function() {
+        var results = get();
+        domParser.restorePrev(results);
+        //recall calculate
+        calculator.calculate(results);
+        //update the button back to 'save'
+        DOM_ELMS.retrieveBtn.style.display = "none";
+        DOM_ELMS.saveBtn.style.display = "block";
+      });
+
     };
 
 module.exports = {
 
 	init: function() {
 	  if(window.localStorage) {
+      addEventHandlers();
 	    if(get()) {
 	      DOM_ELMS.retrieveBtn.style.display = "block";
 	    } else {
@@ -303,24 +288,61 @@ module.exports = {
 	    }
 	  }
 	},
-	DOM_ELMS: DOM_ELMS,
 	store: set,
 	retrieve: get
 
 };
 
-},{}],7:[function(require,module,exports){
+},{"./calculator":2,"./domParser":3}],6:[function(require,module,exports){
 var container = document.getElementById('Score'),
 		marker = container.querySelector('.marker'),
-    value =container.querySelector('.value');
+    value = container.querySelector('.value');
 
 module.exports.update = function(score) {
-
 	score = Math.round(score * 100) / 100;
-  var leftPos = ((DOM_ELMS.scoreMeter.container.scrollWidth / 100) * score);
+  var leftPos = ((container.scrollWidth / 100) * score);
 
-  DOM_ELMS.scoreMeter.marker.style.left =  leftPos-1.5 +'px';
-  DOM_ELMS.scoreMeter.value.innerHTML = score+'%';
-
+  marker.style.left =  leftPos-1.5 +'px';
+  value.innerHTML = score+'%';
 };
-},{}]},{},[1])
+},{}],7:[function(require,module,exports){
+var events = require('./events'),
+    htmlStrings = {
+      tooltip: '<span class="ratio tooltip" title="Half module: 0.5, Single module: 1, Double module: 2, etc">Weight<input></span>',
+      noTooltip : '<span class="ratio">Weight<input></span>'
+    };
+
+module.exports = {
+  module: (function() {
+      var htmlStr = document.querySelector('.module').innerHTML;
+      
+      htmlStr = htmlStr.replace(htmlStrings.tooltip, htmlStrings.noTooltip);
+
+      return function() {
+        var doc = document.createElement('div');
+        doc.innerHTML = htmlStr;
+        doc.className = 'module';
+        return doc;
+      };
+
+    }()),
+
+  level: (function() {
+    var i = 1,
+        htmlStr = document.querySelector(".level").innerHTML;
+
+    htmlStr = htmlStr.replace(htmlStrings.tooltip, htmlStrings.noTooltip);
+
+    return function() {
+      var level = "Year "+(++i),
+          doc = document.createElement('div'),
+          newHtml = htmlStr.replace("Year 1", level);
+
+      doc.className = "level lvl";
+      doc.innerHTML = newHtml;
+      events.addBtnHandler(doc.children[2]);
+      return doc;
+    }; 
+  }())
+};
+},{"./events":4}]},{},[1])

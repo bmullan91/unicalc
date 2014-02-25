@@ -1,3 +1,6 @@
+var templates = require('./templates'),
+    levelsContainer = document.getElementById('Levels');
+
 /*
 DOM parser, this builds the levels array
 used by the calculate function.
@@ -51,12 +54,10 @@ module.exports.parseLevels = function() {
   */
 module.exports.restorePrev = function(lvls) {
 
-    var levelsDomElm = DOM_ELMS.levelsContainer;
-
     lvls.forEach(function(level, i) {
 
       //level element - create one if needed
-      var levelElm = levelsDomElm.children[i] || templates.level(),
+      var levelElm = levelsContainer.children[i] || templates.level(),
           modulesElm = levelElm.querySelector('.modules'),
           existingModules = modulesElm.querySelectorAll('.module');
 
@@ -80,7 +81,7 @@ module.exports.restorePrev = function(lvls) {
       });
 
       //insert level into the DOM
-      levelsDomElm.appendChild(levelElm);
+      levelsContainer.appendChild(levelElm);
     });
 
   }

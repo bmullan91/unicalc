@@ -1,4 +1,6 @@
-var KEY = 'RESULTS_DATA',
+var domParser = require('./domParser'),
+    calculator = require('./calculator'),
+    KEY = 'RESULTS_DATA',
     cache = null,
     DOM_ELMS = {
     	saveBtn: document.getElementById('Save'),
@@ -14,10 +16,10 @@ var KEY = 'RESULTS_DATA',
     },
     addEventHandlers = function() {
       //Event Handlers
-      LS.DOM_ELMS.saveBtn.addEventListener('click', function() {
-        LS.store(domParser.parseLevels());
+      DOM_ELMS.saveBtn.addEventListener('click', function() {
+        set(domParser.parseLevels());
         //change the button to 'Saved!' with a different colour
-        var btn = LS.DOM_ELMS.saveBtn;
+        var btn = DOM_ELMS.saveBtn;
 
         btn.innerHTML = 'Saved!';
         btn.classList.add('btn-green');
@@ -29,11 +31,14 @@ var KEY = 'RESULTS_DATA',
 
       });
 
-      LS.DOM_ELMS.retrieveBtn.addEventListener('click', function() {
-        domParser.restorePrev(LS.retrieve());
+      DOM_ELMS.retrieveBtn.addEventListener('click', function() {
+        var results = get();
+        domParser.restorePrev(results);
+        //recall calculate
+        calculator.calculate(results);
         //update the button back to 'save'
-        LS.DOM_ELMS.retrieveBtn.style.display = "none";
-        LS.DOM_ELMS.saveBtn.style.display = "block";
+        DOM_ELMS.retrieveBtn.style.display = "none";
+        DOM_ELMS.saveBtn.style.display = "block";
       });
 
     };
@@ -42,9 +47,7 @@ module.exports = {
 
 	init: function() {
 	  if(window.localStorage) {
-      
       addEventHandlers();
-
 	    if(get()) {
 	      DOM_ELMS.retrieveBtn.style.display = "block";
 	    } else {
@@ -52,7 +55,6 @@ module.exports = {
 	    }
 	  }
 	},
-	DOM_ELMS: DOM_ELMS,
 	store: set,
 	retrieve: get
 

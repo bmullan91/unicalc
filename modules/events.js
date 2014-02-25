@@ -1,19 +1,16 @@
-var DOM_ELMS = require('./domCache'),
-		LS = require('./localStorage'),
-		calculator = require('./calculator'),
-		domParser = require('./domParser');
-
+var calculator = require('./calculator'),
+    templates = require('./templates');
 
 module.exports.init = function() {
-  DOM_ELMS.buttons.addLevel.addEventListener('click', function() {
+  document.getElementById('Add-Level').addEventListener('click', function() {
     var html = templates.level();
-    DOM_ELMS.levelsContainer.appendChild(html);
+    document.getElementById('Levels').appendChild(html);
   });
 
-  DOM_ELMS.buttons.calculate.addEventListener('click', function() {
+  //Should we move this into the calculator?
+  document.getElementById("Calculate").addEventListener('click', function() {
 		window.scrollTo(0);
-  	var result = calculator.calculate(domParser.parseLevels());
-  	require('./scoreMeter').update(result);
+  	calculator.calculate();
   });
 
   addHandler(document.querySelector('.level button'));

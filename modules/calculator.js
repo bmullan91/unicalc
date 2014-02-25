@@ -1,6 +1,10 @@
-module.exports.button = document.getElementById("Calculate");
+var domParser = require('./domParser'),
+    scoreMeter = require('./scoreMeter'),
+    weightsError = document.querySelector('#Errors .weights');
 
 module.exports.calculate = function(lvls) {
+
+  lvls = lvls || domParser.parseLevels();
 
   var finalResults = [],
       levelElms = document.querySelectorAll('.level');
@@ -27,10 +31,7 @@ module.exports.calculate = function(lvls) {
   });
   
   //fin.
-
-  return finalResult;
-
-  //updateScore(finalResult)
+  scoreMeter.update(finalResult);
 };
 
 //TODO - use the final result to update the score - updateScore();
@@ -53,10 +54,10 @@ function isValid(levels) {
   });
 
   if(totalWeight >= 0 && totalWeight <= 100) {
-    DOM_ELMS.errors.weights.style.display = "none";
+    weightsError.style.display = "none";
     return true;
   } else {
-    DOM_ELMS.errors.weights.style.display = "block";
+    weightsError.style.display = "block";
     return false;
   } 
 }

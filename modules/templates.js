@@ -1,7 +1,8 @@
-var htmlStrings = {
-  tooltip: '<span class="ratio tooltip" title="Half module: 0.5, Single module: 1, Double module: 2, etc">Ratio<input></span>',
-  noTooltip : '<span class="ratio">Ratio<input></span>'
-};
+var events = require('./events'),
+    htmlStrings = {
+      tooltip: '<span class="ratio tooltip" title="Half module: 0.5, Single module: 1, Double module: 2, etc">Weight<input></span>',
+      noTooltip : '<span class="ratio">Weight<input></span>'
+    };
 
 module.exports = {
   module: (function() {
@@ -31,7 +32,7 @@ module.exports = {
 
       doc.className = "level lvl";
       doc.innerHTML = newHtml;
-      addHandlers(doc.children[2]);
+      events.addBtnHandler(doc.children[2]);
       return doc;
     }; 
   }())
