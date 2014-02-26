@@ -1,4 +1,6 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+//main entry point for browserify
+
 require('./modules/events').init();
 require('./modules/localStorage').init();
 
@@ -11,7 +13,9 @@ var domParser    = require('./domParser'),
   The main purpose of a calculator is to calculate stuff, 
   this one is no different.
 
-  This validates the data - ensuring the weights total is <= 100
+  - This validates the data - ensuring the weights for all levels is valid
+  - Calculates each years average and weighted average, and updates the DOM with its results
+  - Tallys each levels result and updates the score-o-meter
 
 */
 module.exports.calculate = function(lvls) {
@@ -36,14 +40,13 @@ module.exports.calculate = function(lvls) {
   scoreMeter.update(finalResult);
 };
 
-//Private stuff..
+//////////////////////////////////////////
+//          Private stuff               //
+//////////////////////////////////////////
 
 /*
   Helper function used by calculate, checks that
-  the total weights for all levels is less than
-  100.
-
-  TODO - error msg when weights are 0
+  the total weights for all levels is >0 && <=100
 */
 function isValid(levels) {
   var totalWeight = 0;
@@ -294,9 +297,9 @@ module.exports = {
 
 },{"./calculator":2,"./domParser":3}],6:[function(require,module,exports){
 var container = document.getElementById('Score'),
-		marker = container.querySelector('.marker'),
-    value = container.querySelector('.value'),
-    width = container.scrollWidth;
+		marker    = container.querySelector('.marker'),
+    value     = container.querySelector('.value'),
+    width     = container.scrollWidth;
 
 module.exports.update = function(score) {
 	score = Math.round(score * 100) / 100;
