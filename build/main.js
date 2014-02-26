@@ -3,10 +3,17 @@ require('./modules/events').init();
 require('./modules/localStorage').init();
 
 },{"./modules/events":4,"./modules/localStorage":5}],2:[function(require,module,exports){
-var domParser = require('./domParser'),
-    scoreMeter = require('./scoreMeter'),
+var domParser    = require('./domParser'),
+    scoreMeter   = require('./scoreMeter'),
     weightsError = document.querySelector('#Errors .weights');
 
+/*
+  The main purpose of a calculator is to calculate stuff, 
+  this one is no different.
+
+  This validates the data - ensuring the weights total is <= 100
+
+*/
 module.exports.calculate = function(lvls) {
 
   lvls = lvls || domParser.parseLevels();
@@ -45,7 +52,7 @@ function isValid(levels) {
     totalWeight += level.weight;
   });
 
-  if(totalWeight >= 0 && totalWeight <= 100) {
+  if(totalWeight > 0 && totalWeight <= 100) {
     weightsError.style.display = "none";
     return true;
   } else {
@@ -187,7 +194,7 @@ module.exports.restorePrev = function(lvls) {
   }
 },{"./templates":7}],4:[function(require,module,exports){
 var calculator = require('./calculator'),
-    templates = require('./templates');
+    templates  = require('./templates');
 
 module.exports.init = function() {
   document.getElementById('Add-Level').addEventListener('click', function() {
@@ -222,7 +229,7 @@ function addHandler(btn) {
 }
 
 },{"./calculator":2,"./templates":7}],5:[function(require,module,exports){
-var domParser = require('./domParser'),
+var domParser  = require('./domParser'),
     calculator = require('./calculator'),
     KEY = 'RESULTS_DATA',
     cache = null,
@@ -230,6 +237,7 @@ var domParser = require('./domParser'),
       saveBtn: document.getElementById('Save'),
       retrieveBtn: document.getElementById('Retrieve')
     },
+
     get = function() {
       if(cache) { return cache; }
       return (cache = JSON.parse(window.localStorage.getItem(KEY))); //we can get away with this.
