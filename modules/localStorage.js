@@ -1,4 +1,4 @@
-var domParser = require('./domParser'),
+var domParser  = require('./domParser'),
     calculator = require('./calculator'),
     KEY = 'RESULTS_DATA',
     cache = null,
@@ -6,6 +6,7 @@ var domParser = require('./domParser'),
       saveBtn: document.getElementById('Save'),
       retrieveBtn: document.getElementById('Retrieve')
     },
+
     get = function() {
       if(cache) { return cache; }
       return (cache = JSON.parse(window.localStorage.getItem(KEY))); //we can get away with this.

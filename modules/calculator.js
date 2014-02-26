@@ -1,7 +1,16 @@
-var domParser = require('./domParser'),
-    scoreMeter = require('./scoreMeter'),
+var domParser    = require('./domParser'),
+    scoreMeter   = require('./scoreMeter'),
     weightsError = document.querySelector('#Errors .weights');
 
+/*
+  The main purpose of a calculator is to calculate stuff, 
+  this one is no different.
+
+  - This validates the data - ensuring the weights for all levels is valid
+  - Calculates each years average and weighted average, and updates the DOM with its results
+  - Tallys each levels result and updates the score-o-meter
+
+*/
 module.exports.calculate = function(lvls) {
 
   lvls = lvls || domParser.parseLevels();
@@ -24,14 +33,13 @@ module.exports.calculate = function(lvls) {
   scoreMeter.update(finalResult);
 };
 
-//Private stuff..
+//////////////////////////////////////////
+//          Private stuff               //
+//////////////////////////////////////////
 
 /*
   Helper function used by calculate, checks that
-  the total weights for all levels is less than
-  100.
-
-  TODO - error msg when weights are 0
+  the total weights for all levels is >0 && <=100
 */
 function isValid(levels) {
   var totalWeight = 0;
@@ -40,7 +48,7 @@ function isValid(levels) {
     totalWeight += level.weight;
   });
 
-  if(totalWeight >= 0 && totalWeight <= 100) {
+  if(totalWeight > 0 && totalWeight <= 100) {
     weightsError.style.display = "none";
     return true;
   } else {

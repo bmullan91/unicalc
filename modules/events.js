@@ -1,5 +1,5 @@
 var calculator = require('./calculator'),
-    templates = require('./templates');
+    templates  = require('./templates');
 
 module.exports.init = function() {
   document.getElementById('Add-Level').addEventListener('click', function() {

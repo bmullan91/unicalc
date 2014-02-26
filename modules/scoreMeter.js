@@ -1,7 +1,7 @@
 var container = document.getElementById('Score'),
-		marker = container.querySelector('.marker'),
-    value = container.querySelector('.value'),
-    width = container.scrollWidth;
+		marker    = container.querySelector('.marker'),
+    value     = container.querySelector('.value'),
+    width     = container.scrollWidth;
 
 module.exports.update = function(score) {
 	score = Math.round(score * 100) / 100;
