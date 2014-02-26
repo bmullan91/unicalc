@@ -73,9 +73,6 @@ function parseModules(modules) {
 
 }
 
-
-//TODO - should move
-
 /*
   This function updates each level element with 
   its computed average and corresponding weighted 
