@@ -9,7 +9,7 @@ module.exports.init = function() {
 
   //Should we move this into the calculator?
   document.getElementById("Calculate").addEventListener('click', function() {
-		window.scrollTo(0);
+		window.scrollTo(0, 0);
   	calculator.calculate();
   });
 
