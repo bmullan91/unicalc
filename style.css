@@ -92,11 +92,11 @@ html, body {
     bottom: 35px;
     color: #fff;
     content: attr(title);
-    left: 20%;
+    left: -10%;
     padding: 5px 15px;
     position: absolute;
     z-index: 98;
-    width: 135px;
+    width: 100px;
 }
 
 .tooltip:hover:before{
@@ -415,6 +415,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
     float: right;
     margin-top: 0px;
     display: inline-block;
+  }
+
+  .tooltip:hover:after {
+    width: 135px;
   }
 
   .module .values .percentage .label {
