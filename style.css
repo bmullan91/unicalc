@@ -244,7 +244,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
 
 .module {
   color: #FAFAFA;
-  padding: 7px;
+  padding: 7px 15px;
   margin-top: 10px;
   background-color: rgba(36, 104, 158, 0.75);
   -webkit-border-radius: 5px;
@@ -261,8 +261,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
 }
 
 .module .name {
-  display: inline-block;
-  float: left;
+  display: none;
 }
 
 .module .name input {
@@ -270,18 +269,27 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
 }
 
 .modules .details {
+  height: 10px;
   margin-top: 10px;
   font-size: 0.8em;
   color: #A3A3A3;
 }
 
-.module .values {
-  margin-top: 10px;
+.modules .details .details-name {
+  display: none;
+}
+
+/*.module .values {
   display: inline-block;
+}*/
+
+.module .values .percentage {
+  float: left;
 }
 
 .module .ratio {
   margin-left: 10px;
+  float: right;
 }
 
 .module input:last-child {
@@ -394,10 +402,23 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
 /* intermediate */
 @media only screen and (min-width: 480px) {
 
+  .modules .details .details-name {
+    display: block;
+  }
+
+  .module .name {
+    display: inline-block;
+    float: left;
+  }
+
   .module .values {
     float: right;
     margin-top: 0px;
     display: inline-block;
+  }
+
+  .module .values .percentage .label {
+    display: none;
   }
 
   .level .results {
