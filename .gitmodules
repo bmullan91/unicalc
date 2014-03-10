@@ -1,3 +1,0 @@
-[submodule "web_app"]
-	path = web_app
-	url = git://github.com/bmullan91/unicalc.git
