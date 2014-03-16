@@ -1,8 +1,7 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 //main entry point for browserify
-
-require('./modules/events').init();
 require('./modules/localStorage').init();
+require('./modules/events').init();
 
 },{"./modules/events":4,"./modules/localStorage":5}],2:[function(require,module,exports){
 var domParser    = require('./domParser'),
@@ -197,7 +196,11 @@ module.exports.restorePrev = function(lvls) {
   }
 },{"./templates":7}],4:[function(require,module,exports){
 var calculator = require('./calculator'),
-    templates  = require('./templates');
+    templates  = require('./templates'),
+    lsButtons  = {
+      save: document.getElementById('Save'),
+      retrieve: document.getElementById('Retrieve')
+    }
 
 module.exports.init = function() {
   document.getElementById('Add-Level').addEventListener('click', function() {
@@ -209,6 +212,9 @@ module.exports.init = function() {
   document.getElementById("Calculate").addEventListener('click', function() {
 		window.scrollTo(0, 0);
   	calculator.calculate();
+    //update the button back to 'save'
+    lsButtons.retrieve.style.display = "none";
+    lsButtons.save.style.display = "block";
   });
 
   addHandler(document.querySelector('.level button'));
@@ -301,11 +307,19 @@ var container = document.getElementById('Score'),
     value     = container.querySelector('.value'),
     width     = container.scrollWidth;
 
+function applyTransform(value) {
+  var props = ['-webkit-transform', '-moz-transform', '-ms-transform', '-o-transform', 'transform'];
+
+  props.forEach(function(prop) {
+    marker.style[prop] = 'translateX(' + value + 'px)';
+  });
+}
+
 module.exports.update = function(score) {
 	score = Math.round(score * 100) / 100;
   var leftPos = ((width / 100) * score);
 
-  marker.style.left =  leftPos-1.5 +'px';
+  applyTransform(leftPos-1.5);
   value.innerHTML = score+'%';
 };
 },{}],7:[function(require,module,exports){
