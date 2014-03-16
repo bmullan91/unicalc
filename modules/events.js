@@ -1,5 +1,9 @@
 var calculator = require('./calculator'),
-    templates  = require('./templates');
+    templates  = require('./templates'),
+    lsButtons  = {
+      save: document.getElementById('Save'),
+      retrieve: document.getElementById('Retrieve')
+    }
 
 module.exports.init = function() {
   document.getElementById('Add-Level').addEventListener('click', function() {
@@ -11,6 +15,9 @@ module.exports.init = function() {
   document.getElementById("Calculate").addEventListener('click', function() {
 		window.scrollTo(0, 0);
   	calculator.calculate();
+    //update the button back to 'save'
+    lsButtons.retrieve.style.display = "none";
+    lsButtons.save.style.display = "block";
   });
 
   addHandler(document.querySelector('.level button'));
