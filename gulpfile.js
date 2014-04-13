@@ -6,6 +6,10 @@ gulp.task('browserify', function() {
   gulp.src('./main.js')
       .pipe(browserify({}))
       .pipe(gulp.dest('./build'));
+
+  gulp.src('./test/tests.js')
+      .pipe(browserify({}))
+      .pipe(gulp.dest('./build'));
 });
 
 gulp.task('default', ['browserify']);
