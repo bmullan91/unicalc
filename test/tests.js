@@ -43,6 +43,11 @@
     doc.getElementById('Calculate').click();
   }
 
+  function clickSave() {
+    //test that it works..
+    doc.getElementById('Save').click();
+  }
+
   function clickAddYear() {
     //test it works
     doc.getElementById('Add-Level').click();
@@ -72,7 +77,7 @@
     }
 
     function afterAnimation (e) {
-      var expectedPos = (scoreMeter.scrollWidth / 100) * percentage;
+      var expectedPos = Math.floor((scoreMeter.scrollWidth / 100) * percentage); 
       var translateX = marker.style.webkitTransform;
       var acutalPos = Math.floor(translateX.split('(')[1].split('px')[0]); // "translateX(790.501px)" --> 790 
 
@@ -142,28 +147,9 @@
 
       it("Should show an error when invalid year weights are input", function (done) {
 
-        var yearOne = doc.querySelector(".level");
-        yearOne.querySelector('.level-weight input').value = 101;
+        inputTestData(testData.greaterThan100.years);
         clickCalculate();
         expectError();
-        //clear error
-        reloadPage(done);
-
-      });
-
-      it("Should show the same error when mutliple year's weights are greater than 100%", function (done) {
-
-        clickAddYear(); // todo test clicking add button
-        var years = doc.querySelectorAll(".level");
-        var yearOne = years[0];
-        var yearTwo = years[1];
-
-        yearOne.querySelector('.level-weight input').value = 100;
-        yearTwo.querySelector('.level-weight input').value = 1;
-
-        clickCalculate();
-        expectError();
-
         //clear error
         reloadPage(done);        
 
@@ -176,7 +162,6 @@
       it("Should calculate an average of 75%", function (done) {
 
         inputTestData(testData.oneYear.years);
-
         clickCalculate();
         expectScoreToBe(testData.oneYear.expectedResult, function () {
           reloadPage(done); 
@@ -187,13 +172,55 @@
       it("Should calculate an average of 0%", function (done) {
 
         inputTestData(testData.zeroModules.years);
-
         clickCalculate();
         expectScoreToBe(testData.zeroModules.expectedResult, function () {
           reloadPage(done); 
         });
 
       });
+
+      it("Should calculate an average of 50%", function (done) {
+
+        inputTestData(testData.lotsOfModules.years);
+        clickCalculate();
+        expectScoreToBe(testData.lotsOfModules.expectedResult, function () {
+          reloadPage(done); 
+        });
+
+      });
+
+      it("Should calculate an average of 70% - Complex example", function (done) {
+
+        inputTestData(testData.complex.years);
+        clickCalculate();
+        expectScoreToBe(testData.complex.expectedResult, function () {
+          reloadPage(done);
+        });
+
+      });
+
+    });
+
+    describe("Test saving & retreving results - localStorage", function () {
+
+      it("Should remember saved results and calculate the correct score again", function (done) {
+
+        inputTestData(testData.complex.years);
+        clickCalculate();
+        expectScoreToBe(testData.complex.expectedResult, function () {
+          clickSave();
+          reloadPage(function () {
+            //test that the button is now Retrieve
+            expect(doc.getElementById('Retrieve').style.display).to.equal("block");
+            done();
+          });
+
+        });
+
+      });
+
+      //test bug where we have previous saved results, but we want to over ride them..
+      //when we click calculate the button should change from used saved results to save.
 
     });
 
