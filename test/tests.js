@@ -1,7 +1,7 @@
 ;(function() {
 
   //Globals..
-  var testData = require('./testData');
+  var testData = require('./data');
   var iframe = document.getElementById('Iframe');
   var markerOffset = 2;
   var DOM_ELEMS, doc, win;
@@ -112,13 +112,8 @@
 
         //reload the page for next tests..
         reloadPage(done);
-
-
-
-        //test bug where we have previous saved results, but we want to over ride them..
-        //when we click calculate the button should change from used saved results to save.
-
       });
+      
     });
 
     it("Testing retreieve button bug..", function (done) {

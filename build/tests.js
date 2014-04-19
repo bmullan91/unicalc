@@ -1,8 +1,139 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+module.exports = {
+
+  greaterThan100: {
+    expectedResult: 0,
+    years: [
+      {
+        worth: 50,
+        modules: [
+          {
+            percentage: 75
+          }
+        ]
+      },
+      {
+        worth: 51,
+        modules: [
+          {
+            percentage: 67
+          }
+        ]
+      }
+    ]
+  },
+
+  simple: {
+    expectedResult: 75,
+    years: [{
+      worth: 100,
+      modules: [
+        {
+          weight: 1,
+          percentage: 75
+        }
+      ]
+    }]
+  },
+
+  zeroModules: {
+    expectedResult: 0,
+    years: [{
+      worth: 100,
+      modules: [{
+        weight: 100,
+        percentage: 0
+      }]
+    }]
+  },
+
+  complex: {
+    expectedResult: 70,
+    years: [
+      {
+        worth: 30,
+        modules: [
+          {
+            weight: 1, 
+            percentage: 53
+          },
+          {
+            weight: 2,
+            percentage: 67
+          },
+          {
+            weight: 3,
+            percentage: 80
+          }
+        ]
+      },
+      {
+        worth: 70,
+        modules: [
+          {
+            weight: 1,
+            percentage: 78
+          },
+          {
+            weight: 2,
+            percentage: 63
+          },
+          {
+            weight: 3,
+            percentage: 71
+          }
+        ]
+      }
+    ]
+  },
+
+  lotsOfModules: {
+    expectedResult: 50,
+    years:[{
+      worth: 100,
+      modules: [
+        {
+          percentage: 0,
+        },
+        {
+          percentage: 10
+        },
+        {
+          percentage: 20
+        },
+        {
+          percentage: 30,
+        },
+        {
+          percentage: 40
+        },
+        {
+          percentage: 50
+        },
+        {
+          percentage: 60
+        },
+        {
+          percentage: 70
+        },
+        {
+          percentage: 80
+        },
+        {
+          percentage: 90
+        },
+        {
+          percentage: 100
+        }
+      ]
+    }]
+  }
+};
+},{}],2:[function(require,module,exports){
 ;(function() {
 
   //Globals..
-  var testData = require('./testData');
+  var testData = require('./data');
   var iframe = document.getElementById('Iframe');
   var markerOffset = 2;
   var DOM_ELEMS, doc, win;
@@ -113,13 +244,8 @@
 
         //reload the page for next tests..
         reloadPage(done);
-
-
-
-        //test bug where we have previous saved results, but we want to over ride them..
-        //when we click calculate the button should change from used saved results to save.
-
       });
+      
     });
 
     it("Testing retreieve button bug..", function (done) {
@@ -282,135 +408,4 @@
 
 })();
 
-},{"./testData":2}],2:[function(require,module,exports){
-module.exports = {
-
-  greaterThan100: {
-    expectedResult: 0,
-    years: [
-      {
-        worth: 50,
-        modules: [
-          {
-            percentage: 75
-          }
-        ]
-      },
-      {
-        worth: 51,
-        modules: [
-          {
-            percentage: 67
-          }
-        ]
-      }
-    ]
-  },
-
-  simple: {
-    expectedResult: 75,
-    years: [{
-      worth: 100,
-      modules: [
-        {
-          weight: 1,
-          percentage: 75
-        }
-      ]
-    }]
-  },
-
-  zeroModules: {
-    expectedResult: 0,
-    years: [{
-      worth: 100,
-      modules: [{
-        weight: 100,
-        percentage: 0
-      }]
-    }]
-  },
-
-  complex: {
-    expectedResult: 70,
-    years: [
-      {
-        worth: 30,
-        modules: [
-          {
-            weight: 1, 
-            percentage: 53
-          },
-          {
-            weight: 2,
-            percentage: 67
-          },
-          {
-            weight: 3,
-            percentage: 80
-          }
-        ]
-      },
-      {
-        worth: 70,
-        modules: [
-          {
-            weight: 1,
-            percentage: 78
-          },
-          {
-            weight: 2,
-            percentage: 63
-          },
-          {
-            weight: 3,
-            percentage: 71
-          }
-        ]
-      }
-    ]
-  },
-
-  lotsOfModules: {
-    expectedResult: 50,
-    years:[{
-      worth: 100,
-      modules: [
-        {
-          percentage: 0,
-        },
-        {
-          percentage: 10
-        },
-        {
-          percentage: 20
-        },
-        {
-          percentage: 30,
-        },
-        {
-          percentage: 40
-        },
-        {
-          percentage: 50
-        },
-        {
-          percentage: 60
-        },
-        {
-          percentage: 70
-        },
-        {
-          percentage: 80
-        },
-        {
-          percentage: 90
-        },
-        {
-          percentage: 100
-        }
-      ]
-    }]
-  }
-};
-},{}]},{},[1])
+},{"./data":1}]},{},[2])
