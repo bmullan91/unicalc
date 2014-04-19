@@ -5,6 +5,11 @@
   "private": true,
   "devDependencies": {
     "gulp-browserify": "~0.4.6",
-    "gulp": "~3.5.2"
+    "gulp": "~3.5.2",
+    "mocha-phantomjs": "~3.3.2",
+    "chai": "~1.9.1"
+  },
+  "scripts": {
+    "test": "gulp; mocha-phantomjs test/test.runner.html"
   }
 }
