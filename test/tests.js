@@ -48,11 +48,35 @@
   describe("Buttons should work as expected..", function () {
 
     it("Clicking the add year btn should do its thing", function (done) {
-      //TODO
+      var initialCount = doc.querySelectorAll('.level').length;
+      DOM_ELEMS.btn.addYear.click(); 
+      expect(doc.querySelectorAll('.level').length).to.equal(initialCount+1);
+      done();
     });
 
     it("Clicking the add module btn should do its thing", function (done) {
-      //TODO
+      //check it works for the first year..
+      var firstYear = doc.querySelector('.level');
+      var firstBtn = firstYear.querySelector('button');
+      var firstYearCount = firstYear.querySelectorAll('.module').length;
+
+      firstBtn.click();
+      expect(firstYear.querySelectorAll('.module').length).to.equal(firstYearCount+1);
+
+      //add another year
+      //click its add module button should not affect another year..
+      DOM_ELEMS.btn.addYear.click();
+      var secondYear = doc.querySelectorAll('.level')[1];
+      var secondBtn = secondYear.querySelector('button'); 
+      var secondYearCount = secondYear.querySelectorAll('.module').length;
+
+      secondBtn.click();
+      //this stays the same..
+      expect(firstYear.querySelectorAll('.module').length).to.equal(firstYearCount+1);
+      //only the second year will add a module..
+      expect(secondYear.querySelectorAll('.module').length).to.equal(secondYearCount+1);
+      done();
+
     });
 
     it("Clicking the Save button should do its thing", function (done) {
