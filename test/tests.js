@@ -15,8 +15,6 @@
     //reset the onload - preventing an infinite loop when calling reloadPage()
     iframe.onload = null;
     attachDOM();
-    tests();
-
     if (window.mochaPhantomJS) { mochaPhantomJS.run(); }
     else { mocha.run(); }
   }
@@ -25,130 +23,170 @@
   //        Actual Tests           //
   ///////////////////////////////////
 
-  function tests() {
+  describe('Checks & Error handling', function () {
 
-    describe('Checks & Error handling', function () {
-
-      it("Should show an error when calculate is clicked before any input data", function (done) {
-        clickCalculate();
-        expectError();
-        //clear error
-        reloadPage(done);
-
-      });
-
-      it("Should show an error when invalid year weights are input", function (done) {
-
-        inputTestData(testData.greaterThan100.years);
-        clickCalculate();
-        expectError();
-        //clear error
-        reloadPage(done);        
-
-      });
+    it("Should show an error when calculate is clicked before any input data", function (done) {
+      DOM_ELEMS.btn.calculate.click();
+      expectError();
+      //clear error
+      reloadPage(done);
 
     });
 
-    describe("Buttons should work as expected..", function () {
+    it("Should show an error when invalid year weights are input", function (done) {
 
-      it("Clicking the Save button should do its thing", function (done) {
-        var btn = clickSave();
-        //test the button state changes, and reverts..
-        expect(btn.classList.contains('btn-green')).to.equal(true);
+      inputTestData(testData.greaterThan100.years);
+      DOM_ELEMS.btn.calculate.click();
+      expectError();
+      //clear error
+      reloadPage(done);        
 
-        setTimeout(function () {
-          expect(btn.classList.contains('btn-blue')).to.equal(true);
-          done();
-        }, 501);
-      });
+    });
 
-      it("Clicking the Retrieve button should do it's thing", function (done) {
-        //this test requires set up..
-        inputTestData(testData.complex.years);
-        clickSave();
-        reloadPage(function () {
-          //real tests can begin...
-          var retrievebtn = DOM_ELEMS.btn.retreieve;
-          var savebtn = DOM_ELEMS.btn.save;
-          expect(retrievebtn.style.display).to.equal("block");
-          expect(savebtn.style.display).to.equal("");
+  });
 
-          //clicking retreieve the button should intern call calculate
-          retrievebtn.click();
-          expectScoreToBe(testData.complex.expectedResult);
-          //button should revert to 'save'
-          expect(retrievebtn.style.display).to.equal("none");
-          expect(savebtn.style.display).to.equal("block");
+  describe("Buttons should work as expected..", function () {
 
-          //reload the page for next tests..
-          reloadPage(done);
+    it("Clicking the add year btn should do its thing", function (done) {
+      //TODO
+    });
 
+    it("Clicking the add module btn should do its thing", function (done) {
+      //TODO
+    });
 
+    it("Clicking the Save button should do its thing", function (done) {
+      var btn = DOM_ELEMS.btn.save;
+      btn.click();
+      //test the button state changes, and reverts..
+      expect(btn.classList.contains('btn-green')).to.equal(true);
 
-          //test bug where we have previous saved results, but we want to over ride them..
-          //when we click calculate the button should change from used saved results to save.
+      setTimeout(function () {
+        expect(btn.classList.contains('btn-blue')).to.equal(true);
+        done();
+      }, 501);
+    });
 
-        });
-      });
+    it("Clicking the Retrieve button should do it's thing", function (done) {
+      //this test requires set up..
+      inputTestData(testData.complex.years);
+      DOM_ELEMS.btn.save.click();
+      reloadPage(function () {
+        //real tests can begin...
+        var retrievebtn = DOM_ELEMS.btn.retreieve;
+        var savebtn = DOM_ELEMS.btn.save;
+        expect(retrievebtn.style.display).to.equal("block");
+        expect(savebtn.style.display).to.equal("");
 
-      it("Clicking the calculate button will give the correct result and animate the marker position", function (done) {
-        inputTestData(testData.complex.years);
-        clickCalculate();
-
+        //clicking retreieve the button should intern call calculate
+        retrievebtn.click();
         expectScoreToBe(testData.complex.expectedResult);
-        expectAnimation(testData.complex.expectedResult, function () {
-          reloadPage(done);
-        });
+        //button should revert to 'save'
+        expect(retrievebtn.style.display).to.equal("none");
+        expect(savebtn.style.display).to.equal("block");
+
+        //reload the page for next tests..
+        reloadPage(done);
+
+
+
+        //test bug where we have previous saved results, but we want to over ride them..
+        //when we click calculate the button should change from used saved results to save.
 
       });
+    });
 
+    it("Testing retreieve button bug..", function (done) {
+      //when there a saved results and new ones are input, the 'retreive'
+      //button should revert to 'save'
+
+      //there should be saved results from the previous test..
+      inputTestData(testData.greaterThan100.years);
+      DOM_ELEMS.btn.calculate.click();
+      expect(DOM_ELEMS.btn.retreieve.style.display).to.equal("none");
+      expect(DOM_ELEMS.btn.save.style.display).to.equal("block");
+
+      reloadPage(done);
 
     });
 
-    describe("Test core calculation logic some more..", function () {
-
-      it("Should calculate an average of 75%", function (done) {
-
-        inputTestData(testData.oneYear.years);
-        clickCalculate();
-        expectScoreToBe(testData.oneYear.expectedResult);
-        reloadPage(done);
-      });
-
-      it("Should calculate an average of 0%", function (done) {
-
-        inputTestData(testData.zeroModules.years);
-        clickCalculate();
-        expectScoreToBe(testData.zeroModules.expectedResult);
-        reloadPage(done); 
-
-      });
-
-      it("Should calculate an average of 50%", function (done) {
-
-        inputTestData(testData.lotsOfModules.years);
-        clickCalculate();
-        expectScoreToBe(testData.lotsOfModules.expectedResult);
-        reloadPage(done); 
-
-      });
-
-      it("Should calculate an average of 70% - Complex example", function (done) {
-
-        inputTestData(testData.complex.years);
-        clickCalculate();
-        expectScoreToBe(testData.complex.expectedResult);
-        reloadPage(done);
-
-      });
-
+    it("Clicking the calculate button will give the correct result and animate the marker position", function (done) {
+      inputTestData(testData.complex.years);
+      DOM_ELEMS.btn.calculate.click();
+      expectScoreToBe(testData.complex.expectedResult, reloadPage.bind(this, done));
     });
+
+
+  });
+
+  describe("Test core calculation logic some more..", function () {
+
+    it("Should calculate an average of 75%", function (done) {
+      inputTestData(testData.oneYear.years);
+      DOM_ELEMS.btn.calculate.click();
+      expectScoreToBe(testData.oneYear.expectedResult, reloadPage.bind(this, done));
+    });
+
+    it("Should calculate an average of 0%", function (done) {
+      inputTestData(testData.zeroModules.years);
+      DOM_ELEMS.btn.calculate.click();
+      expectScoreToBe(testData.zeroModules.expectedResult, reloadPage.bind(this, done));
+    });
+
+    it("Should calculate an average of 50%", function (done) {
+      inputTestData(testData.lotsOfModules.years);
+      DOM_ELEMS.btn.calculate.click();
+      expectScoreToBe(testData.lotsOfModules.expectedResult, reloadPage.bind(this, done));
+    });
+
+    it("Should calculate an average of 70%", function (done) {
+      inputTestData(testData.complex.years);
+      DOM_ELEMS.btn.calculate.click();
+      expectScoreToBe(testData.complex.expectedResult, reloadPage.bind(this, done));
+    });
+
+  });
+
+  ///////////////////////////////////
+  //         Assertions            //
+  ///////////////////////////////////
+
+  function expectError() {
+    expect(doc.querySelector('#Errors .weights').style.display).to.equal('block');
+  }
+
+  function expectAnimation(percentage, cb) {
+    if(percentage <=0) return cb();
+    var marker = DOM_ELEMS.marker;
+
+    function getMarkerPosition() {
+      var translateX = marker.style.webkitTransform;
+      return translateX ? translateX.split('(')[1].split('px')[0] : 0;// "translateX(790.501px)" --> 790 
+    }
+
+    marker.addEventListener('webkitTransitionEnd', function() {
+      var expectedPos = Math.floor((DOM_ELEMS.score.scrollWidth / 100) * percentage); 
+      var acutalPos = Math.floor(getMarkerPosition());
+
+      expect(expectedPos-markerOffset).to.equal(acutalPos);
+      return cb ? cb() : undefined; 
+    });
+  }
+
+  function expectScoreToBe(percentage, cb) {
+    expect(DOM_ELEMS.value.innerHTML).to.equal(percentage+"%");
+
+    if(cb) {
+      //test animation
+      expectAnimation(percentage, cb);
+    }
 
   }
 
   ///////////////////////////////////
   //         Helpers               //
   ///////////////////////////////////
+
   function attachDOM() {
     //after reloadPage, the dom etc is new..
     doc = iframe.contentDocument;
@@ -176,55 +214,6 @@
     win.location.reload();
   }
 
-  function getMarkerPosition() {
-    var translateX = DOM_ELEMS.marker.style.webkitTransform;
-    return translateX ? translateX.split('(')[1].split('px')[0] : 0;
-  }
-
-  function clickCalculate() {
-    DOM_ELEMS.btn.calculate.click();
-  }
-
-  function clickSave() {
-    DOM_ELEMS.btn.save.click();
-    return DOM_ELEMS.btn.save; //who depends on this being returned?
-  }
-
-  function clickRetrieve() {
-    DOM_ELEMS.btn.retreieve.click();
-    return DOM_ELEMS.btn.retreieve;
-  }
-
-  function clickAddYear() {
-    //test it works
-    DOM_ELEMS.btn.addYear.click();
-  }
-
-  function clickAddModule(levelElm) {
-    //test it works
-    levelElm.querySelector('button').click();
-  }
-
-  function expectError() {
-    expect(doc.querySelector('#Errors .weights').style.display).to.equal('block');
-  }
-
-  function expectAnimation(percentage, cb) {
-    if(percentage <=0) return;
-
-    DOM_ELEMS.marker.addEventListener('webkitTransitionEnd', function() {
-      var expectedPos = Math.floor((DOM_ELEMS.score.scrollWidth / 100) * percentage); 
-      var acutalPos = Math.floor(getMarkerPosition()); // "translateX(790.501px)" --> 790 
-
-      expect(expectedPos-markerOffset).to.equal(acutalPos);
-      return cb ? cb() : undefined; 
-    });
-  }
-
-  function expectScoreToBe(percentage) {
-    expect(DOM_ELEMS.value.innerHTML).to.equal(percentage+"%");
-  }
-
   function getLevelElems() {
     return doc.querySelectorAll('.level');
   }
@@ -242,7 +231,7 @@
 
       //check is there a level's div..
       if(!levelElem) { 
-        clickAddYear(); 
+        DOM_ELEMS.btn.addYear.click(); 
         levelElem = getLevelElems()[i];
       }
 
@@ -254,7 +243,7 @@
         var moduleElem = getModuleElems(levelElem)[j];
 
         if(!moduleElem) {
-          clickAddModule(levelElem);
+          levelElem.querySelector('button').click();
           moduleElem = getModuleElems(levelElem)[j];
         }
 

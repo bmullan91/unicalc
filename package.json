@@ -10,6 +10,6 @@
     "chai": "~1.9.1"
   },
   "scripts": {
-    "test": "gulp; mocha-phantomjs -R dot test/test.runner.html"
+    "test": "gulp; mocha-phantomjs test/test.runner.html"
   }
 }
