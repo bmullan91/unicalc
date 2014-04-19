@@ -5,9 +5,7 @@
   var testData = require('./testData');
   var iframe = document.getElementById('Iframe');
   var markerOffset = 2;
-  var DOM_ELEMS = {};
-  var doc = null;
-  var win = null;
+  var DOM_ELEMS, doc, win;
 
   mocha.ui('bdd');
   mocha.reporter('html');
@@ -153,7 +151,7 @@
   //         Helpers               //
   ///////////////////////////////////
   function attachDOM() {
-
+    //after reloadPage, the dom etc is new..
     doc = iframe.contentDocument;
     win = iframe.contentWindow;
 
@@ -239,7 +237,6 @@
   //See test data structure
   function inputTestData(years) {
 
-
     for(var i = 0, l = years.length; i < l; i++) {
       var levelElem = getLevelElems()[i];
       var year = years[i];
@@ -266,10 +263,8 @@
         moduleElem.querySelector('.ratio input').value = module.weight || 1;
       }
 
-
     }
   }
-
 
 })();
 
