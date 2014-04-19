@@ -22,6 +22,19 @@ module.exports = {
     ]
   },
 
+  simple: {
+    expectedResult: 75,
+    years: [{
+      worth: 100,
+      modules: [
+        {
+          weight: 1,
+          percentage: 75
+        }
+      ]
+    }]
+  },
+
   zeroModules: {
     expectedResult: 0,
     years: [{
@@ -110,20 +123,6 @@ module.exports = {
         },
         {
           percentage: 100
-        }
-      ]
-    }]
-  },
-
-  //TODO - rename
-  oneYear: {
-    expectedResult: 75,
-    years: [{
-      worth: 100,
-      modules: [
-        {
-          weight: 1,
-          percentage: 75
         }
       ]
     }]

@@ -75,6 +75,7 @@
       //this stays the same..
       expect(firstYear.querySelectorAll('.module').length).to.equal(firstYearCount+1);
       //only the second year will add a module..
+      
       expect(secondYear.querySelectorAll('.module').length).to.equal(secondYearCount+1);
       done();
 
@@ -147,9 +148,9 @@
   describe("Test core calculation logic some more..", function () {
 
     it("Should calculate an average of 75%", function (done) {
-      inputTestData(testData.oneYear.years);
+      inputTestData(testData.simple.years);
       DOM_ELEMS.btn.calculate.click();
-      expectScoreToBe(testData.oneYear.expectedResult, reloadPage.bind(this, done));
+      expectScoreToBe(testData.simple.expectedResult, reloadPage.bind(this, done));
     });
 
     it("Should calculate an average of 0%", function (done) {
@@ -306,6 +307,19 @@ module.exports = {
     ]
   },
 
+  simple: {
+    expectedResult: 75,
+    years: [{
+      worth: 100,
+      modules: [
+        {
+          weight: 1,
+          percentage: 75
+        }
+      ]
+    }]
+  },
+
   zeroModules: {
     expectedResult: 0,
     years: [{
@@ -394,20 +408,6 @@ module.exports = {
         },
         {
           percentage: 100
-        }
-      ]
-    }]
-  },
-
-  //TODO - rename
-  oneYear: {
-    expectedResult: 75,
-    years: [{
-      worth: 100,
-      modules: [
-        {
-          weight: 1,
-          percentage: 75
         }
       ]
     }]
