@@ -3,7 +3,7 @@ var gulp       = require('gulp'),
 
 gulp.task('browserify', function() {
   // Single entry point to browserify
-  gulp.src('./main.js')
+  gulp.src('./js/main.js')
       .pipe(browserify({}))
       .pipe(gulp.dest('./build'));
 
