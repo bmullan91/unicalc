@@ -12,17 +12,25 @@
     <meta name="author" content="Brian Mullan">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="./css/style.css">
+    <link rel="stylesheet" type="text/css" href="./css/icon-fonts/css/icon-fonts.css">
 </head>
 <body>
 
-<div id="Container" class="center wrapper">
+<div class="navbar" role="navigation">
+  <div class="container center wrapper">
+    <div class="wrap">
+        <p class="title pull-left">UniCalc</p>
+        <button id="Calculate" class="btn btn-blue pull-right">Calculate</button>
+        <button id="Save" class="btn btn-outline icon-floppy pull-right" title="The information is saved to your PC - unicalc stores nothing!">Save</button>
+
+        <button id="Retrieve" class="btn btn-outline icon-floppy pull-right">Open</button>
+    </div>
+  </div>
+</div>
+    
+<div class="container center wrapper">
     <div class="wrap">
         <div class="header">
-            <h1 class="title top-row pull-left">UniCalc</h1>
-            <button id="Save" class="btn btn-blue top-row pull-right"
-                    title="The information is saved to your PC - unicalc stores nothing!">Save Results
-            </button>
-            <button id="Retrieve" class="btn btn-blue top-row pull-right">Use Saved Results</button>
             <div id="Score" class="clear-fix">
                 <div class="meter-container">
                     <div class="meter-text">score-o-meter</div>
@@ -45,47 +53,56 @@
             </div>
 
             <div class="modules">
-                <p>Module(s):</p>
 
-                <div class="details">
+                <div class="modules-label">
+                    <div class="pull-left">Module(s):</div>
+                    <div class="details">
+                        <div class="details-name pull-left">Name: not required</div>
+                        <div class="pull-right">Weight: default is 1</div>
+                    </div>
+
+
+                </div>
+
+                <!-- <div class="details">
                     <div class="details-name pull-left">Name: not required</div>
                     <div class="pull-right">Weight: default is 1</div>
-                </div>
+                </div> -->
                 <div class="clear-fix"></div>
                 <div class="module">
                     <div class="name">Name<input></div>
                     <div class="values">
                         <span class="percentage">
-                            <span class="label">Percentage</span> %<input></span>
+                            <span class="label">Percentage</span> 
+                            <span class="icon">%</span>
+                            <input>
+                        </span>
                         <span class="ratio tooltip" title="Half module: 0.5, Single module: 1, Double module: 2, etc">Weight<input></span>
                     </div>
                 </div>
 
             </div>
 
-            <button class="btn btn-grey btn-small">Add Module</button>
+            <button class="btn btn-outline btn-small">Add Module</button>
+
             <div class="results">
-          <span>Average:
-            <span class="avg box">0%</span>
-          </span>
-          <span class="pull-right">Weighted:
-            <span class="weight box">0%</span>
-          </span>
+                <span>Average:
+                    <span class="avg box">0%</span>
+                </span>
+                <span class="pull-right">Weighted:
+                    <span class="weight box">0%</span>
+                </span>
             </div>
 
-        </div>
-    </div>
+        </div><!-- end level -->
+    </div><!-- end Levels -->
 
-    <div class="new-level lvl">
-        <div class="btns">
-            <button id="Add-Level" class="add-lvl-btn btn btn-green">Another Year</button>
-            <button id="Calculate" class="btn btn-red">Calculate</button>
-        </div>
+    <div id="Add-Level" class="new-level lvl">
+        <div class="center"><span class="icon-plus"></span>Another Year</div>
     </div>
-    <div class="push"></div>
 </div>
 
-<div class="attrib center clear-fix footer">
+<div class="attrib clear-fix footer">
     by <a href="https://twitter.com/bmullan91">Brian Mullan</a> · contribute on <a
         href="https://github.com/bmullan91/unicalc">GitHub</a>
 </div>

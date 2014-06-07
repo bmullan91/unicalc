@@ -11,9 +11,10 @@ textarea {
 }
 
 body {
+  margin: 0;
   font-size: 1em;
   line-height: 1.4;
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
   font-weight: 300;
 }
 
@@ -60,18 +61,19 @@ textarea {
 input {
   height: 18px;
   margin: 0 10px;
-  width: 25px;
+  width: 32px;
   text-align: center;
+  font-size: 16px;
   vertical-align: middle;
   -webkit-border-radius: 5px;
   border-radius: 2px;
 }
 
-html, body {
+/*html, body {
   height: 100%;
-}
+}*/
 .wrapper {
-  min-height: 92%;
+  /*min-height: 86%;*/
   height: auto !important;
   height: 100%;
   margin: 0 auto -4em;
@@ -111,12 +113,34 @@ html, body {
    Mobile first
    ========================================================================== */
 
+.navbar {
+  min-height: 40px;
+  margin-bottom: 15px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 100;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-bottom-color: #EBEBEB;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+}
+
+.navbar button {
+  margin: 8px 0 8px 10px;
+}
+
 .center {
   margin: 0 auto;
 }
 
 .wrap {
   margin: 0 10px;
+}
+
+.header {
+  margin-top: 70px;
 }
 
 #Score {
@@ -189,13 +213,38 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
 .lvl {
   margin: 30px 10px 10px 10px;
   padding: 15px;
-  background-color: #EBEBEB;
+  background-color: #FFF;
   -webkit-border-radius: 5px;
   border-radius: 5px;
+
+  border-color: #ddd;
+  border-width: 1px;
+  border-style: solid;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
 }
 
-.lvl .new-level {
-  height: 36px;
+.new-level:hover {
+  cursor: pointer;
+}
+
+#Add-Level div {
+  width: 120px
+}
+
+#Add-Level:hover {
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#Add-Level div span {
+  margin-right: 5px;
+}
+
+a.fill-div {
+    display: block;
+    height: 100%;
+    width: 100%;
+    text-decoration: none;
 }
 
 .level button {
@@ -206,6 +255,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
 .level .info {
   border-bottom: solid;
   border-bottom-color: #7A7A7A; 
+  border-width: 1px;
   padding-bottom: 5px;
 }
 
@@ -220,6 +270,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
 .level .results {
   border-top: solid;
   border-top-color: #7A7A7A; 
+  border-width: 1px;
   font-size: 0.8em;
   padding-top: 10px;
   clear: both;
@@ -235,7 +286,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
 }
 
 .modules {
-  font-size: 0.8em;
+  font-size: 16px;
 }
 
 .modules p {
@@ -243,10 +294,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
 }
 
 .module {
-  color: #FAFAFA;
-  padding: 7px 15px;
+  padding: 7px 10px;
   margin-top: 10px;
-  background-color: rgba(36, 104, 158, 0.75);
+  background-color: #E6E6E6;
   -webkit-border-radius: 5px;
   border-radius: 2px;
 }
@@ -268,20 +318,21 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
   text-align: left;
 }
 
+.modules-label {
+  margin-top: 10px;
+}
+
 .modules .details {
   height: 10px;
-  margin-top: 10px;
+  padding-top: 4px;
   font-size: 0.8em;
   color: #A3A3A3;
 }
 
 .modules .details .details-name {
   display: none;
+  margin-left: 4px;
 }
-
-/*.module .values {
-  display: inline-block;
-}*/
 
 .module .values .percentage {
   float: left;
@@ -297,7 +348,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
 }
 
 .module .name input {
-  width: 150px;
+  width: 140px;
 }
 
 .pull-right {
@@ -320,15 +371,22 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
   cursor: pointer;
   border: 1px solid transparent;
   white-space: nowrap;
-  padding: 6px 12px;
+  padding: 6px 10px;
   font-size: 14px;
   line-height: 1.428571429;
+  text-shadow: 0px 1px 1px rgba(114, 114, 114, 0.5);
+
+
   border-radius: 4px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   -o-user-select: none;
   outline: none;
+}
+
+.btn:hover {
+  text-shadow: 0px 1px 1px rgba(80, 80, 80, 1);
 }
 
 .btn-small {
@@ -360,6 +418,20 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
   border-color: #d43f3a;
 }
 
+.btn-outline {
+  text-shadow: none;
+  border-width: 1px;
+  border-color: #9C9C9C;
+  border-style: solid;
+  background-color: #FFF;
+  color: #363636;
+}
+
+.btn-outline:hover {
+  background-color: #F6F6F6;
+  text-shadow: none;
+}
+
 .btns {
   width: 235px;
   margin: 0 auto;
@@ -370,13 +442,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
 }
 
 .title {
-  margin: 0;
-  font-size: 1.5em;
-}
-
-.top-row {
-  margin-top: 7px;
-  margin-bottom: 15px;
+  margin: 12px 0 0 0;
+  font-size: 22px;
+  font-weight: 500;
+  color: #4E4E4E;
 }
 
 .attrib {
@@ -393,6 +462,17 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
 
 .attrib a:hover {
   color: #61BFDD;
+}
+
+.module .values .percentage .icon {
+  display: none;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  margin-bottom: 15px;
 }
 
 /* ==========================================================================
@@ -425,12 +505,16 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
     display: none;
   }
 
+  .module .values .percentage .icon {
+    display: inline;
+  }
+
   .level .results {
     font-size: 1em;
   }
 
   .level .modules {
-    font-size: 1em;
+    font-size: 16px;
   }
 
 
@@ -439,15 +523,22 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3232', end
 /* Desktop */
 @media only screen and (min-width: 960px) {
 
-  #Container {
+  .container {
     width: 900px;
     padding: 0 15px;
   }
 
   .lvl {
-    width: 400px;
-    float: left;
+    width: 430px;
     margin: 10px 10px 10px 10px;
+  }
+
+  .lvl:nth-child(odd) { 
+    float: left;  
+  }
+
+  .lvl:nth-child(even) { 
+    float: right; 
   }
 
   .btns {
