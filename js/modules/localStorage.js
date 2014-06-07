@@ -1,7 +1,7 @@
 var domParser  = require('./domParser'),
     calculator = require('./calculator'),
     KEY = 'RESULTS_DATA',
-    cache = null,
+    cache, api,
     DOM_ELMS = {
       saveBtn: document.getElementById('Save'),
       retrieveBtn: document.getElementById('Retrieve')
@@ -9,26 +9,35 @@ var domParser  = require('./domParser'),
 
     get = function() {
       if(cache) { return cache; }
-      return (cache = JSON.parse(window.localStorage.getItem(KEY))); //we can get away with this.
+
+      try {
+        var data = api.getItem(KEY);
+        return data ? (cache = JSON.parse(data)) : null;
+      } catch (e) {
+        console.log("ERROR localStorage.retrieve() "+ e);
+        return null;
+      }
+
     },
     set = function(data) {
       cache = data;
-      window.localStorage.setItem(KEY, JSON.stringify(data));
+      api.setItem(KEY, JSON.stringify(data));
     },
     addEventHandlers = function() {
       //Event Handlers
       DOM_ELMS.saveBtn.addEventListener('click', function() {
         set(domParser.parseLevels());
         //change the button to 'Saved!' with a different colour
-        var btn = DOM_ELMS.saveBtn;
+        var btn = DOM_ELMS.saveBtn,
+            previousHtml = btn.innerHTML;
 
         btn.innerHTML = 'Saved!';
-        btn.classList.add('btn-green');
+        btn.classList.add('icon-ok');
 
         setTimeout(function() {
-          btn.innerHTML = 'Save Results';
-          btn.classList.remove('btn-green');
-        }, 500);
+          btn.innerHTML = previousHtml;
+          btn.classList.remove('icon-ok');
+        }, 700);
 
       });
 
@@ -48,7 +57,14 @@ var domParser  = require('./domParser'),
 module.exports = {
 
   init: function() {
-    if(window.localStorage) {
+
+    try {
+      api = Android;
+    } catch(e) {
+      api = window.localStorage || null;
+    }
+
+    if(api) {
       addEventHandlers();
       if(get()) {
         DOM_ELMS.retrieveBtn.style.display = "block";
@@ -56,7 +72,12 @@ module.exports = {
         DOM_ELMS.saveBtn.style.display = "block";
       }
     }
+
   },
+
   store: set,
   retrieve: get
+
+
+  
 };
