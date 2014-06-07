@@ -10,6 +10,6 @@
     "chai": "~1.9.1"
   },
   "scripts": {
-    "test": "gulp; mocha-phantomjs test/index.html"
+    "test": "gulp; ./node_modules/mocha-phantomjs/bin/mocha-phantomjs test/index.html"
   }
 }
