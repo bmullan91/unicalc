@@ -11,8 +11,7 @@
     <meta name="keywords" content="unicalc, unicalc.io, weighted, calculator, uni, university, degree, classification">
     <meta name="author" content="Brian Mullan">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="./css/style.css">
-    <link rel="stylesheet" type="text/css" href="./css/icon-fonts/css/icon-fonts.css">
+    <link rel="stylesheet" type="text/css" href="./dist/min.css">
 </head>
 <body>
 
@@ -22,7 +21,6 @@
         <p class="title pull-left">UniCalc</p>
         <button id="Calculate" class="btn btn-blue pull-right">Calculate</button>
         <button id="Save" class="btn btn-outline icon-floppy pull-right" title="The information is saved to your PC - unicalc stores nothing!">Save</button>
-
         <button id="Retrieve" class="btn btn-outline icon-floppy pull-right">Open</button>
     </div>
   </div>
@@ -60,8 +58,6 @@
                         <div class="details-name pull-left">Name: not required</div>
                         <div class="pull-right">Weight: default is 1</div>
                     </div>
-
-
                 </div>
                 <div class="clear-fix"></div>
                 <div class="module">
@@ -77,9 +73,7 @@
                 </div>
 
             </div>
-
             <button class="btn btn-outline btn-small">Add Module</button>
-
             <div class="results">
                 <span>Average:
                     <span class="avg box">0%</span>
@@ -95,14 +89,12 @@
     <div id="Add-Level" class="new-level lvl">
         <div class="center"><span class="icon-plus"></span>Another Year</div>
     </div>
+    <div class="attrib footer">
+        by <a href="https://twitter.com/bmullan91">Brian Mullan</a> · contribute on <a
+            href="https://github.com/bmullan91/unicalc">GitHub</a>
+    </div>
 </div>
-
-<div class="attrib clear-fix footer">
-    by <a href="https://twitter.com/bmullan91">Brian Mullan</a> · contribute on <a
-        href="https://github.com/bmullan91/unicalc">GitHub</a>
-</div>
-
-<script src="./build/main.js"></script>
+<script src="./dist/main.js"></script>
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
