@@ -42,11 +42,22 @@ module.exports.calculate = function(lvls) {
   the total weights for all levels is >0 && <=100
 */
 function isValid(levels) {
-  var totalWeight = 0;
+  var totalWeight = 0,
+      valid = true;
 
   levels.forEach(function(level) {
     totalWeight += level.weight;
+
+    level.modules.forEach(function(module) {
+      if(module.percentage < 0 || module.percentage > 100) {
+        valid = false;
+        return;
+      }
+    });
+
   });
+
+  if(!valid) { return false; }
 
   if(totalWeight > 0 && totalWeight <= 100) {
     weightsError.style.display = "none";

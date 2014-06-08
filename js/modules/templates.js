@@ -20,13 +20,12 @@ module.exports = {
     }()),
 
   level: (function() {
-    var i = 1,
-        htmlStr = document.querySelector(".level").innerHTML;
-
+    var htmlStr = document.querySelector(".level").innerHTML;
     htmlStr = htmlStr.replace(htmlStrings.tooltip, htmlStrings.noTooltip);
 
     return function() {
-      var level = "Year "+(++i),
+      var YearNum = document.getElementById('Levels').children.length +1,
+          level = "Year " + YearNum,
           doc = document.createElement('div'),
           newHtml = htmlStr.replace("Year 1", level);
 

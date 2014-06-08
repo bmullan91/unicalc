@@ -61,10 +61,15 @@ module.exports.parseLevels = function() {
   */
 module.exports.restorePrev = function(lvls) {
 
+    //clear levels
+    for(var i = 0, l = levelsContainer.children.length; i < l; i++) {
+      levelsContainer.removeChild(levelsContainer.children[i]);
+    }
+
     lvls.forEach(function(level, i) {
 
       //level element - create one if needed
-      var levelElm = levelsContainer.children[i] || templates.level(),
+      var levelElm = templates.level(),
           modulesElm = levelElm.querySelector('.modules'),
           existingModules = modulesElm.querySelectorAll('.module');
 
