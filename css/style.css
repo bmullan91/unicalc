@@ -10,6 +10,10 @@ textarea {
     color: #222;
 }
 
+html, body {
+  height: 90%;
+}
+
 body {
   margin: 0;
   font-size: 1em;
@@ -70,17 +74,17 @@ input {
 }
 
 .wrapper {
-  height: auto !important;
-  height: 100%;
-  margin: 0 auto -4em;
+  position: relative;
+  min-height: 99%;
+  padding-bottom: 60px;
 }
 .footer, .push {
   height: 2em;
 }
 
 .tooltip {
-    display: inline-block;
-    position: relative;
+  display: inline-block;
+  position: relative;
 }
 
 .tooltip:hover:after {
@@ -463,7 +467,7 @@ a.fill-div {
 }
 
 .footer {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   width: 100%;
   margin-bottom: 15px;
