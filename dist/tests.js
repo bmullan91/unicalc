@@ -215,13 +215,8 @@ module.exports = {
     it("Clicking the Save button should do its thing", function (done) {
       var btn = DOM_ELEMS.btn.save;
       btn.click();
-      //test the button state changes, and reverts..
-      expect(btn.classList.contains('btn-green')).to.equal(true);
-
-      setTimeout(function () {
-        expect(btn.classList.contains('btn-blue')).to.equal(true);
-        done();
-      }, 501);
+      expect(localStorage.getItem("RESULTS_DATA")).to.be.a("string");
+      done();
     });
 
     it("Clicking the Retrieve button should do it's thing", function (done) {
@@ -356,6 +351,24 @@ module.exports = {
       value: doc.querySelector('#Score .marker .value')
     };
 
+    DOM_ELEMS.btn.addYear.click = function() {
+      clickElement(DOM_ELEMS.btn.addYear);
+    }
+
+  }
+
+  //click function is not on element in phantomjs
+  function clickElement(el) {
+    var ev = doc.createEvent("MouseEvent");
+    ev.initMouseEvent(
+      "click",
+      true /* bubble */, true /* cancelable */,
+      window, null,
+      0, 0, 0, 0, /* coordinates */
+      false, false, false, false, /* modifier keys */
+      0 /*left*/, null
+    );
+    el.dispatchEvent(ev);
   }
 
   function reloadPage(done) {
