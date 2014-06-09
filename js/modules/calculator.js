@@ -1,5 +1,4 @@
-var domParser    = require('./domParser'),
-    scoreMeter   = require('./scoreMeter'),
+var scoreMeter   = require('./scoreMeter'),
     weightsError = document.querySelector('#Errors .weights');
 
 /*
@@ -13,19 +12,19 @@ var domParser    = require('./domParser'),
 */
 module.exports.calculate = function(lvls) {
 
-  lvls = lvls || domParser.parseLevels();
+
+  //TODO remove updating each years average and weighting
+
 
   var finalResult = 0,
       levelElms = document.querySelectorAll('.level');
-
-  if(!isValid(lvls)) { return; }
   
   lvls.forEach(function(lvl, i) {
     //get its weight
     var moduleAvg = parseModules(lvl.modules),
         weightedResult = (Math.round(((lvl.weight / 100) * moduleAvg) * 100) / 100);
     
-    updateLvlResults(levelElms[i], moduleAvg, weightedResult);
+    //updateLvlResults(levelElms[i], moduleAvg, weightedResult); ****** TODO
     finalResult += weightedResult;
   });
   
@@ -36,37 +35,6 @@ module.exports.calculate = function(lvls) {
 //////////////////////////////////////////
 //          Private stuff               //
 //////////////////////////////////////////
-
-/*
-  Helper function used by calculate, checks that
-  the total weights for all levels is >0 && <=100
-*/
-function isValid(levels) {
-  var totalWeight = 0,
-      valid = true;
-
-  levels.forEach(function(level) {
-    totalWeight += level.weight;
-
-    level.modules.forEach(function(module) {
-      if(module.percentage < 0 || module.percentage > 100) {
-        valid = false;
-        return;
-      }
-    });
-
-  });
-
-  if(!valid) { return false; }
-
-  if(totalWeight > 0 && totalWeight <= 100) {
-    weightsError.style.display = "none";
-    return true;
-  } else {
-    weightsError.style.display = "block";
-    return false;
-  } 
-}
 
 /*
   Helper function used by calculate, deals specfically with the 

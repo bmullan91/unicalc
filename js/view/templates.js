@@ -1,5 +1,4 @@
-var events = require('./events'),
-    htmlStrings = {
+var htmlStrings = {
       tooltip: '<span class="ratio tooltip" title="Half module: 0.5, Single module: 1, Double module: 2, etc">Weight<input></span>',
       noTooltip : '<span class="ratio">Weight<input></span>'
     };
@@ -19,19 +18,18 @@ module.exports = {
 
     }()),
 
-  level: (function() {
-    var htmlStr = document.querySelector(".level").innerHTML;
+  year: (function() {
+    var htmlStr = document.querySelector(".year").innerHTML;
     htmlStr = htmlStr.replace(htmlStrings.tooltip, htmlStrings.noTooltip);
 
     return function() {
-      var YearNum = document.getElementById('Levels').children.length +1,
-          level = "Year " + YearNum,
+      var YearNum = document.getElementById('Years').children.length +1,
+          year = "Year " + YearNum,
           doc = document.createElement('div'),
-          newHtml = htmlStr.replace("Year 1", level);
+          newHtml = htmlStr.replace("Year 1", year);
 
-      doc.className = "level lvl";
+      doc.className = "year card";
       doc.innerHTML = newHtml;
-      events.addBtnHandler(doc.children[2]);
       return doc;
     }; 
   }())
