@@ -163,10 +163,6 @@ input {
   margin: 20px 15px 10px 15px;
 }
 
-#Errors div {
-  display: none;
-}
-
 #Save, #Retrieve {
   display: none;
 }
@@ -204,11 +200,11 @@ input {
   color: #fff;
 }
 
-.level .info {
+.year .info {
   font-size: 1.3em;
 }
 
-.lvl {
+.card {
   margin: 30px 10px 10px 10px;
   padding: 15px;
   background-color: #FFF;
@@ -222,50 +218,50 @@ input {
   box-sizing: border-box;
 }
 
-.new-level:hover {
+.new-year:hover {
   cursor: pointer;
 }
 
-#Add-Level div {
+#Add-Year div {
   width: 120px
 }
 
-#Add-Level:hover {
+#Add-Year:hover {
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-#Add-Level div span {
+#Add-Year div span {
   margin-right: 5px;
 }
 
 a.fill-div {
-    display: block;
-    height: 100%;
-    width: 100%;
-    text-decoration: none;
+  display: block;
+  height: 100%;
+  width: 100%;
+  text-decoration: none;
 }
 
-.level button {
+.year button {
   margin: 10px 0;
   float: right;
 }
 
-.level .info {
+.year .info {
   border-bottom: solid;
   border-bottom-color: #7A7A7A; 
   border-width: 1px;
   padding-bottom: 5px;
 }
 
-.level-weight {
+.year-weight {
   float: right;
 }
 
-.level-weight input {
+.year-weight input {
   margin-top: 0px;
 }
 
-.level .results {
+.year .results {
   border-top: solid;
   border-top-color: #7A7A7A; 
   border-width: 1px;
@@ -274,7 +270,7 @@ a.fill-div {
   clear: both;
 }
 
-.level .results .box {
+.year .results .box {
   margin-left: 2px;
   display: inline-block;
   text-align: center;
@@ -507,11 +503,11 @@ a.fill-div {
     display: inline;
   }
 
-  .level .results {
+  .year .results {
     font-size: 1em;
   }
 
-  .level .modules {
+  .year .modules {
     font-size: 16px;
   }
 
@@ -526,16 +522,16 @@ a.fill-div {
     padding: 0 15px;
   }
 
-  .lvl {
+  .card {
     width: 430px;
     margin: 10px 10px 10px 10px;
   }
 
-  .lvl:nth-child(odd) { 
+  .card:nth-child(odd) { 
     float: left;  
   }
 
-  .lvl:nth-child(even) { 
+  .card:nth-child(even) { 
     float: right; 
   }
 

@@ -21,7 +21,7 @@
         <p class="title pull-left">UniCalc</p>
         <button id="Calculate" class="btn btn-blue pull-right">Calculate</button>
         <button id="Save" class="btn btn-outline icon-floppy pull-right" title="The information is saved to your PC - unicalc stores nothing!">Save</button>
-        <button id="Retrieve" class="btn btn-outline icon-floppy pull-right">Open</button>
+        <button id="Open" class="btn btn-outline icon-floppy pull-right">Open</button>
     </div>
   </div>
 </div>
@@ -37,17 +37,15 @@
                     <div class="value">0%</div>
                 </div>
             </div>
-            <div id="Errors">
-                <div class="weights">Check each years <em>worth</em> percentages, something isn't quite right.</div>
-            </div>
+            <div id="Errors"></div>
         </div>
     </div>
 
-    <div id='Levels'>
-        <div class="level lvl">
+    <div id='Years'>
+        <div class="year card">
             <div class="info">
-                <span class="level-title">Year 1</span>
-                <span class="level-weight">Worth:<input class="">%</span>
+                <span class="year-title">Year 1</span>
+                <span class="year-weight">Worth:<input class="">%</span>
             </div>
 
             <div class="modules">
@@ -83,10 +81,10 @@
                 </span>
             </div>
 
-        </div><!-- end level -->
-    </div><!-- end Levels -->
+        </div><!-- end year -->
+    </div><!-- end Years -->
 
-    <div id="Add-Level" class="new-level lvl">
+    <div id="Add-Year" class="new-year card">
         <div class="center"><span class="icon-plus"></span>Another Year</div>
     </div>
     <div class="attrib footer">
