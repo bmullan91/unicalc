@@ -48,15 +48,15 @@
   describe("Buttons should work as expected..", function () {
 
     it("Clicking the add year btn should do its thing", function (done) {
-      var initialCount = doc.querySelectorAll('.level').length;
+      var initialCount = doc.querySelectorAll('.year').length;
       DOM_ELEMS.btn.addYear.click(); 
-      expect(doc.querySelectorAll('.level').length).to.equal(initialCount+1);
+      expect(doc.querySelectorAll('.year').length).to.equal(initialCount+1);
       done();
     });
 
     it("Clicking the add module btn should do its thing", function (done) {
       //check it works for the first year..
-      var firstYear = doc.querySelector('.level');
+      var firstYear = doc.querySelector('.year');
       var firstBtn = firstYear.querySelector('button');
       var firstYearCount = firstYear.querySelectorAll('.module').length;
 
@@ -66,7 +66,7 @@
       //add another year
       //click its add module button should not affect another year..
       DOM_ELEMS.btn.addYear.click();
-      var secondYear = doc.querySelectorAll('.level')[1];
+      var secondYear = doc.querySelectorAll('.year')[1];
       var secondBtn = secondYear.querySelector('button'); 
       var secondYearCount = secondYear.querySelectorAll('.module').length;
 
@@ -87,22 +87,22 @@
       done();
     });
 
-    it("Clicking the Retrieve button should do it's thing", function (done) {
+    it("Clicking the open button should do it's thing", function (done) {
       //this test requires set up..
       inputTestData(testData.complex.years);
       DOM_ELEMS.btn.save.click();
       reloadPage(function () {
         //real tests can begin...
-        var retrievebtn = DOM_ELEMS.btn.retreieve;
+        var openbtn = DOM_ELEMS.btn.open;
         var savebtn = DOM_ELEMS.btn.save;
-        expect(retrievebtn.style.display).to.equal("block");
-        expect(savebtn.style.display).to.equal("");
+        expect(openbtn.style.display).to.equal("block");
+        expect(savebtn.style.display).to.equal("none");
 
-        //clicking retreieve the button should intern call calculate
-        retrievebtn.click();
+        //clicking open the button should intern call calculate
+        openbtn.click();
         expectScoreToBe(testData.complex.expectedResult);
         //button should revert to 'save'
-        expect(retrievebtn.style.display).to.equal("none");
+        expect(openbtn.style.display).to.equal("none");
         expect(savebtn.style.display).to.equal("block");
 
         //reload the page for next tests..
@@ -111,14 +111,14 @@
       
     });
 
-    it("Testing retreieve button bug..", function (done) {
-      //when there a saved results and new ones are input, the 'retreive'
+    it("Testing open button bug..", function (done) {
+      //when there a saved results and new ones are input, the 'open'
       //button should revert to 'save'
 
       //there should be saved results from the previous test..
       inputTestData(testData.greaterThan100.years);
       DOM_ELEMS.btn.calculate.click();
-      expect(DOM_ELEMS.btn.retreieve.style.display).to.equal("none");
+      expect(DOM_ELEMS.btn.open.style.display).to.equal("none");
       expect(DOM_ELEMS.btn.save.style.display).to.equal("block");
 
       reloadPage(done);
@@ -167,7 +167,7 @@
   ///////////////////////////////////
 
   function expectError() {
-    expect(doc.querySelector('#Errors .weights').style.display).to.equal('block');
+    expect(doc.getElementById('Errors').children.length > 0).to.be.true;
   }
 
   function expectAnimation(percentage, cb) {
@@ -210,9 +210,9 @@
     DOM_ELEMS = {
       btn: {
         save: doc.getElementById('Save'),
-        retreieve: doc.getElementById('Retrieve'),
+        open: doc.getElementById('Open'),
         calculate: doc.getElementById('Calculate'),
-        addYear: doc.getElementById('Add-Level')
+        addYear: doc.getElementById('Add-Year')
       },
       score: doc.getElementById('Score'),
       marker: doc.querySelector('#Score .marker'),
@@ -247,37 +247,37 @@
     win.location.reload();
   }
 
-  function getLevelElems() {
-    return doc.querySelectorAll('.level');
+  function getYearElems() {
+    return doc.querySelectorAll('.year');
   }
 
-  function getModuleElems(levelElem) {
-    return levelElem.querySelectorAll('.module');
+  function getModuleElems(yearElem) {
+    return yearElem.querySelectorAll('.module');
   }
 
   //See test data structure
   function inputTestData(years) {
 
     for(var i = 0, l = years.length; i < l; i++) {
-      var levelElem = getLevelElems()[i];
+      var yearElem = getYearElems()[i];
       var year = years[i];
 
-      //check is there a level's div..
-      if(!levelElem) { 
+      //check is there a year's div..
+      if(!yearElem) { 
         DOM_ELEMS.btn.addYear.click(); 
-        levelElem = getLevelElems()[i];
+        yearElem = getYearElems()[i];
       }
 
-      levelElem.querySelector('.level-weight input').value = year.worth;
+      yearElem.querySelector('.year-weight input').value = year.worth;
 
       //now add each module data
       for(j = 0, k = year.modules.length; j < k; j++) {
         var module = year.modules[j];
-        var moduleElem = getModuleElems(levelElem)[j];
+        var moduleElem = getModuleElems(yearElem)[j];
 
         if(!moduleElem) {
-          levelElem.querySelector('button').click();
-          moduleElem = getModuleElems(levelElem)[j];
+          yearElem.querySelector('button').click();
+          moduleElem = getModuleElems(yearElem)[j];
         }
 
         moduleElem.querySelector('.percentage input').value = module.percentage;
