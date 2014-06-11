@@ -217,15 +217,13 @@ input {
   box-sizing: border-box;
 }
 
-.new-year:hover {
-  cursor: pointer;
-}
-
 #Add-Year div {
-  width: 120px
+  width: 120px;
+  text-align: center;
 }
 
 #Add-Year:hover {
+  cursor: pointer;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
