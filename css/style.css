@@ -76,7 +76,8 @@ input {
 .wrapper {
   position: relative;
   min-height: 99%;
-  padding-bottom: 60px;
+  padding-bottom: 50px !important
+  ;
 }
 .footer, .push {
   height: 2em;
@@ -436,7 +437,7 @@ a.fill-div {
 }
 
 .title {
-  margin: 12px 0 0 0;
+  margin: 10px 0 0 0;
   font-size: 22px;
   font-weight: 500;
   color: #4E4E4E;
@@ -466,7 +467,6 @@ a.fill-div {
   position: absolute;
   bottom: 0;
   width: 100%;
-  margin-bottom: 15px;
 }
 
 /* ==========================================================================
