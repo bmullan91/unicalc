@@ -6,6 +6,13 @@ var validator = require('./modules/validator');
 var LS = require('./modules/localStorage');
 
 (function init() {
+
+  try {
+    window.ANDROID = Android;
+  } catch(e) {
+    window.ANDROID = null;
+  }
+
   if(LS.isAvailable()) {
     if(LS.get()) {
       view.showOpenButton(); //will intern call the hide on save button

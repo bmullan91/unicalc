@@ -6,6 +6,7 @@ var yearComponents = [];
 var DOM_ELEMS = {
   yearsContainer: document.getElementById('Years'),
   errors: document.getElementById('Errors'),
+  footer: document.getElementById('Footer'),
   btns: {
     calculate: document.getElementById('Calculate'),
     save: document.getElementById('Save'),
@@ -23,6 +24,10 @@ function init() {
   //create and insert a year component..
   addYearClicked();
   addToolTip();
+
+  if(window.ANDROID) {
+    DOM_ELEMS.footer.style.display = "none";
+  }
 
   //register all click listeners
   DOM_ELEMS.btns.calculate.addEventListener('click', calculateClicked);

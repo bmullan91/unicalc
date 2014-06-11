@@ -1,16 +1,6 @@
 var KEY = 'RESULTS_DATA';
 var cache = null; 
-var api = null;
-
-(function init() {
-
-  try {
-    api = Android;
-  } catch(e) {
-    api = window.localStorage || null;
-  }
-
-})();
+var api = window.ANDROID || window.localStorage || null;;
 
 module.exports = {
 
