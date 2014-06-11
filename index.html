@@ -14,9 +14,8 @@
     <link rel="stylesheet" type="text/css" href="./dist/min.css">
 </head>
 <body>
-
 <div class="navbar" role="navigation">
-  <div class="container center wrapper">
+  <div class="center container">
     <div class="wrap">
         <p class="title pull-left">UniCalc</p>
         <button id="Calculate" class="btn btn-blue pull-right">Calculate</button>
@@ -25,8 +24,7 @@
     </div>
   </div>
 </div>
-    
-<div class="container center wrapper">
+<div class="center wrapper container">
     <div class="wrap">
         <div class="header">
             <div id="Score" class="clear-fix">
@@ -40,53 +38,11 @@
             <div id="Errors"></div>
         </div>
     </div>
-
-    <div id='Years'>
-        <div class="year card">
-            <div class="info">
-                <span class="year-title">Year 1</span>
-                <span class="year-weight">Worth:<input class="">%</span>
-            </div>
-
-            <div class="modules">
-
-                <div class="modules-label">
-                    <div class="pull-left">Module(s):</div>
-                    <div class="details">
-                        <div class="details-name pull-left">Name: not required</div>
-                        <div class="pull-right">Weight: default is 1</div>
-                    </div>
-                </div>
-                <div class="clear-fix"></div>
-                <div class="module">
-                    <div class="name">Name<input></div>
-                    <div class="values">
-                        <span class="percentage">
-                            <span class="label">Percentage</span> 
-                            <span class="icon">%</span>
-                            <input>
-                        </span>
-                        <span class="ratio tooltip" title="Half module: 0.5, Single module: 1, Double module: 2, etc">Weight<input></span>
-                    </div>
-                </div>
-
-            </div>
-            <button class="btn btn-outline btn-small">Add Module</button>
-            <div class="results">
-                <span>Average:
-                    <span class="avg box">0%</span>
-                </span>
-                <span class="pull-right">Weighted:
-                    <span class="weight box">0%</span>
-                </span>
-            </div>
-
-        </div><!-- end year -->
-    </div><!-- end Years -->
-
+    <div id='Years'></div>
     <div id="Add-Year" class="new-year card">
         <div class="center"><span class="icon-plus"></span>Another Year</div>
     </div>
+    <div class="clear-fix"></div>
     <div class="attrib footer">
         by <a href="https://twitter.com/bmullan91">Brian Mullan</a> · contribute on <a
             href="https://github.com/bmullan91/unicalc">GitHub</a>
@@ -101,8 +57,6 @@
 
     ga('create', 'UA-47891988-1', 'unicalc.io');
     ga('send', 'pageview');
-
-
 </script>
 </body>
 </html>
