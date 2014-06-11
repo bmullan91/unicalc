@@ -1,5 +1,24 @@
 ;(function() {
 
+  ///////////////////////////////////
+  // phantomjs polyfills
+  ///////////////////////////////////
+  //click function is not on element in phantomjs
+  function clickElement(el) {
+    var ev = doc.createEvent("MouseEvent");
+    ev.initMouseEvent(
+      "click",
+      true /* bubble */, true /* cancelable */,
+      window, null,
+      0, 0, 0, 0, /* coordinates */
+      false, false, false, false, /* modifier keys */
+      0 /*left*/, null
+    );
+    el.dispatchEvent(ev);
+  }
+
+  ////////////////////////////////////
+
   //Globals..
   var testData = require('./data');
   var iframe = document.getElementById('Iframe');
@@ -223,20 +242,6 @@
       clickElement(DOM_ELEMS.btn.addYear);
     }
 
-  }
-
-  //click function is not on element in phantomjs
-  function clickElement(el) {
-    var ev = doc.createEvent("MouseEvent");
-    ev.initMouseEvent(
-      "click",
-      true /* bubble */, true /* cancelable */,
-      window, null,
-      0, 0, 0, 0, /* coordinates */
-      false, false, false, false, /* modifier keys */
-      0 /*left*/, null
-    );
-    el.dispatchEvent(ev);
   }
 
   function reloadPage(done) {
