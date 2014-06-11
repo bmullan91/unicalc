@@ -1,12 +1,11 @@
-var gulp       = require('gulp'),
-    clean      = require('gulp-clean'),
-    concat     = require('gulp-concat'),
-    uglify     = require('gulp-uglify'), 
-    minifyCSS  = require('gulp-minify-css'),
-    browserify = require('gulp-browserify');
+var gulp = require('gulp');
+var clean = require('gulp-clean');
+var concat = require('gulp-concat');
+var uglify = require('gulp-uglify'); 
+var minifyCSS = require('gulp-minify-css');
+var browserify = require('gulp-browserify');
 
-
-
+//all other tasks must wait for this to be completed
 gulp.task('clean', function() {
   return gulp.src('./dist', {read: false})
     .pipe(clean({force: true}));
@@ -48,5 +47,4 @@ gulp.task('browserify', ['clean'], function() {
 });
 
 gulp.task('default', ['clean', 'move', 'browserify-uglify', 'minify-css']);
-
 gulp.task('debug', ['clean', 'move', 'browserify', 'minify-css'])
