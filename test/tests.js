@@ -93,13 +93,12 @@
       //this stays the same..
       expect(firstYear.querySelectorAll('.module').length).to.equal(firstYearCount+1);
       //only the second year will add a module..
-      
       expect(secondYear.querySelectorAll('.module').length).to.equal(secondYearCount+1);
       done();
-
     });
 
     it("Clicking the Save button should do its thing", function (done) {
+      inputTestData(testData.simple.years);
       var btn = DOM_ELEMS.btn.save;
       btn.click();
       expect(localStorage.getItem("RESULTS_DATA")).to.be.a("string");
@@ -133,7 +132,6 @@
     it("Testing open button bug..", function (done) {
       //when there a saved results and new ones are input, the 'open'
       //button should revert to 'save'
-
       //there should be saved results from the previous test..
       inputTestData(testData.greaterThan100.years);
       DOM_ELEMS.btn.calculate.click();
