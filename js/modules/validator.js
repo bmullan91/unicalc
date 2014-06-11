@@ -1,8 +1,7 @@
 module.exports = {
   validate: function(years) {
-
     if(!years.length) return false;
-
+    
     var totalWeight = 0;
 
     years.forEach(function(year) {

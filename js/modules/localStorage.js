@@ -1,6 +1,6 @@
 var KEY = 'RESULTS_DATA';
 var cache = null; 
-var api = window.ANDROID || window.localStorage || null;;
+var api = window.ANDROID || window.localStorage || null;
 
 module.exports = {
 
@@ -15,7 +15,7 @@ module.exports = {
       var data = api.getItem(KEY);
       return data ? (cache = JSON.parse(data)) : null;
     } catch (e) {
-      console.log("ERROR localStorage.retrieve() "+ e);
+      console.log("ERROR localStorage.getItem(KEY) "+ e);
       return null;
     }
   },
