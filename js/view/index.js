@@ -1,11 +1,11 @@
-//The only module which will touch the DOM
-var templates = require('./templates');
+var YearComponent = require('./year');
+var ModuleComponent = require('./module');
+var scoreMeter = require('./scoreMeter');
+
+var yearComponents = [];
 var DOM_ELEMS = {
   yearsContainer: document.getElementById('Years'),
   errors: document.getElementById('Errors'),
-  score: document.getElementById('Score'),
-  marker: document.querySelector('#Score .marker'),
-  value: document.querySelector('#Score .marker .value'),
   btns: {
     calculate: document.getElementById('Calculate'),
     save: document.getElementById('Save'),
@@ -20,14 +20,16 @@ var mediatorListeners = {
 };
 
 function init() {
+  //create and insert a year component..
+  addYearClicked();
+  addToolTip();
+
   //register all click listeners
   DOM_ELEMS.btns.calculate.addEventListener('click', calculateClicked);
   DOM_ELEMS.btns.save.addEventListener('click', saveClicked);
   DOM_ELEMS.btns.open.addEventListener('click', openClicked);
   //Add year listener
   DOM_ELEMS.btns.addYear.addEventListener('click', addYearClicked);
-  //add module listener
-  addModuleListener(DOM_ELEMS.yearsContainer.children[0]);
 }
 
 //////////////////////////////////////
@@ -37,9 +39,10 @@ function init() {
 function calculateClicked() {
   //mediator does its thing first
   if(mediatorListeners.calculate) mediatorListeners.calculate();
-  //do we nede to do anyting else?
+  //do we need to do anyting else?
   DOM_ELEMS.btns.open.style.display = "none";
   DOM_ELEMS.btns.save.style.display = "block";
+
 }
 
 function saveClicked() {
@@ -48,7 +51,7 @@ function saveClicked() {
 
   //mediator does its thing first
   if(mediatorListeners.save) mediatorListeners.save();
-  //do we nede to do anyting else?
+  //do we need to do anyting else?
   btn.innerHTML = 'Saved!';
   btn.classList.add('icon-ok');
 
@@ -61,22 +64,27 @@ function saveClicked() {
 function openClicked() {
   //mediator does its thing first
   if(mediatorListeners.open) mediatorListeners.open();
-  //do we nede to do anyting else?
+  //do we need to do anyting else?
   calculateClicked();
 }
 
 function addYearClicked() {
-  var yearElem = templates.year();
-  addModuleListener(yearElem);
-  document.getElementById('Years').appendChild(yearElem);
+  var currentNumOfYrs = DOM_ELEMS.yearsContainer.children.length;
+  var yearComponent = YearComponent.create(currentNumOfYrs+1);
+
+  yearComponents.push(yearComponent);
+  DOM_ELEMS.yearsContainer.appendChild(yearComponent.getElement());
 }
 
-function addModuleListener(yearElem) {
-  yearElem.querySelector('button').addEventListener('click', function() {
-    var node = this.parentElement.children[1];
-    var modulesElm = templates.module();
-    node.appendChild(modulesElm);
-  });
+function addToolTip() {
+  //This should only appear on the first module of the first year.
+  var firstYear = yearComponents[0];
+  if(firstYear) {
+    var mod = firstYear.getModules()[0];
+    if(mod) {
+      mod.applyTooltip();
+    }
+  }
 }
 
 //////////////////////////////////////
@@ -90,6 +98,7 @@ module.exports = {
   showSaveButton: showSaveButton,
   getInputData: getInputData,
   setInputData: setInputData,
+  prepForSave: prepForSave,
   clearErrors: clearErrors,
   showError: showError,
   updateScore: updateScore
@@ -106,94 +115,64 @@ function showSaveButton() {
 }
 
 function setButtonListener(button, fn) {
-  //button should be 'calculate', 'save' or 'open'
+  //button should be one of 'calculate', 'save' or 'open'
   mediatorListeners[button] = fn;
 }
 
+function prepForSave() {
+  var data = [];
+
+  yearComponents.forEach(function (yrCmp) {
+    var yearDetails = yrCmp.getSaveData();
+    if(yearDetails) data.push(yearDetails);
+  });
+
+  return data;
+}
+
 function getInputData() {
-  var yrsArray = document.querySelectorAll('.year'),
-      years = [];
+  var data = [];
 
-  for(var i = 0, l = yrsArray.length; i < l; i++) {
+  yearComponents.forEach(function (yearCmp) {
+    var avg = yearCmp.getAverage();
+    var weight = yearCmp.getWeight();
 
-    var elem = yrsArray[i],
-        year = { weight: 0, modules : [] };
-
-      year.weight = parseFloat(elem.querySelector('.year-weight input').value, 10) || 0;
-
-      if(!year.weight) { continue; }
-
-      //lets figure out if there is any actual module data
-      var yearModules = parseModules(elem.querySelectorAll('.module')); 
-
-      if(yearModules.length > 0) {
-        year.modules = yearModules;
-        years.push(year);
-      }
-  }
-
-  //return array
-  return years;
-
-  //helper fn
-  function parseModules(modules) {
-    var returnArr = [];
-
-    for(var i = 0, j = modules.length; i < j; i++) {
-      var module = modules[i],
-          wght = parseFloat(module.querySelector('.ratio input').value, 10) || 1,
-          pcnt = parseFloat(module.querySelector('.percentage input').value, 10),
-          name = module.querySelector('.name input').value;
-
-      if(!isNaN(pcnt)) {
-        returnArr.push({
-          name: name,
-          weight: wght,
-          percentage: pcnt
-        });
-      }
-
+    if(!isNaN(avg) && !isNaN(weight)) {
+      data.push({
+        average: avg,
+        weight: weight
+      });
     }
-    return returnArr;
-  }
-
-
+  });
+  /*
+    [{
+        average: XX%,
+        weight:   XX%
+      }]
+  */
+  return data;
 }
 
 function setInputData(years) {
   //clear years
-  for(var i = 0, l = DOM_ELEMS.yearsContainer.children.length; i < l; i++) {
-    DOM_ELEMS.yearsContainer.removeChild(DOM_ELEMS.yearsContainer.children[i]);
+  for(var i = 0, l = yearComponents.length; i < l; i++) {
+    DOM_ELEMS.yearsContainer.removeChild(yearComponents[i].getElement());
   }
 
+  yearComponents = [];
+
   years.forEach(function(year, i) {
+    if(!year) return;
 
-    //year element - create one if needed
-    var yearElem = templates.year(),
-        modulesElm = yearElem.querySelector('.modules'),
-        existingModules = modulesElm.querySelectorAll('.module');
+    var yrCmp = YearComponent.create(i+1, true);
+    yearComponents.push(yrCmp);
+    yrCmp.setWeight(year.weight);
 
-    //1st update its 'worth' input
-    yearElem.querySelector('.year-weight input').value = year.weight;
-    
-    //2nd create each module element
-    year.modules.forEach(function(module, i) {
-
-      var modulesIndex = 1,
-          moduleElm = existingModules[i] || templates.module();
-      
-      //3rd update each field
-      moduleElm.querySelector('.name input').value = module.name || "";
-      moduleElm.querySelector('.percentage input').value = module.percentage || "";
-      moduleElm.querySelector('.ratio input').value = module.weight || "";
-      
-      //finally append the module element
-      modulesElm.appendChild(moduleElm);
-
+    year.modules.forEach(function (mod) {
+      yrCmp.addModule(mod);
     });
 
-    //insert year into the DOM
-    DOM_ELEMS.yearsContainer.appendChild(yearElem);
+    DOM_ELEMS.yearsContainer.appendChild(yrCmp.getElement());
   });
 }
 
@@ -209,6 +188,13 @@ function showError(errorMsg) {
   DOM_ELEMS.errors.appendChild(doc);
 }
 
-function updateScore() {
-  //TODO
+
+function updateScore(results) {
+  yearComponents.forEach(function (yrCmp, i) {
+    var yr = results.years[i];
+    if(yr) {
+      yrCmp.setResults(yr.average, yr.contributes);
+    }
+  });
+  scoreMeter.update(results.overall);
 }
