@@ -79,9 +79,7 @@ input {
   padding-bottom: 50px !important
   ;
 }
-.footer, .push {
-  height: 2em;
-}
+
 
 .tooltip {
   display: inline-block;
@@ -443,30 +441,27 @@ a.fill-div {
   color: #4E4E4E;
 }
 
-.attrib {
-  width: 230px;
+.module .values .percentage .icon {
+  display: none;
+}
+
+#Footer {
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 20px;
+  width: 100%;
   text-align: center;
   color: #555;
   font-size: 0.8em;
 }
 
-.attrib a {
+#Footer a {
   color: #428bca;
   text-decoration: none;
 }
 
-.attrib a:hover {
+#Footer a:hover {
   color: #61BFDD;
-}
-
-.module .values .percentage .icon {
-  display: none;
-}
-
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
 }
 
 /* ==========================================================================
