@@ -6,7 +6,7 @@
   "devDependencies": {
     "gulp-browserify": "~0.4.6",
     "gulp": "~3.5.2",
-    "mocha-phantomjs": "~3.3.2",
+    "mocha-phantomjs": "~3.4.1",
     "chai": "~1.9.1",
     "gulp-uglify": "~0.3.0",
     "gulp-minify-css": "~0.3.4",
@@ -15,5 +15,8 @@
   },
   "scripts": {
     "test": "gulp; ./node_modules/mocha-phantomjs/bin/mocha-phantomjs test/index.html"
+  },
+  "dependencies": {
+    "hogan.js": "~3.0.1"
   }
 }
