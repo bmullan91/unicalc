@@ -10,7 +10,5 @@ module.exports = {
     });
 
     return (totalWeight > 0 && totalWeight <= 100);
-  
-
   }
 };
