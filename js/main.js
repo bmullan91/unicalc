@@ -15,7 +15,7 @@ var LS = require('./modules/localStorage');
 
   if(LS.isAvailable()) {
     if(LS.get()) {
-      view.showOpenButton(); //will intern call the hide on save button
+      view.showOpenButton();
     } else {
       view.showSaveButton();
     }
