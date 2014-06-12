@@ -42,6 +42,7 @@ function init() {
 //////////////////////////////////////
 
 function calculateClicked() {
+  window.scrollTo(0, 0);
   //mediator does its thing first
   if(mediatorListeners.calculate) mediatorListeners.calculate();
   //do we need to do anyting else?
