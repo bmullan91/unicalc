@@ -20,6 +20,7 @@
     "debug": "./node_modules/.bin/gulp debug; ./node_modules/.bin/http-server -s -c-1 -p 8000 & ./node_modules/.bin/opener http://localhost:8000/test/ &"
   },
   "dependencies": {
-    "hogan.js": "~3.0.1"
+    "hogan.js": "~3.0.1",
+    "simple-factory": "~1.0.0"
   }
 }
