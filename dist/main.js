@@ -1,1 +1,1391 @@
-!function t(e,n,r){function i(o,s){if(!n[o]){if(!e[o]){var u="function"==typeof require&&require;if(!s&&u)return u(o,!0);if(a)return a(o,!0);throw new Error("Cannot find module '"+o+"'")}var l=n[o]={exports:{}};e[o][0].call(l.exports,function(t){var n=e[o][1][t];return i(n?n:t)},l,l.exports,t,e,n,r)}return n[o].exports}for(var a="function"==typeof require&&require,o=0;o<r.length;o++)i(r[o]);return i}({1:[function(t){function e(){i.clearErrors();var t=i.getInputData();return o.validate(t)?void i.updateScore(a.calculate(t)):i.showError("Check each years <em>worth</em> percentages, something isn't quite right.")}function n(){var t=i.prepForSave();t.length&&s.set(t)}function r(){i.setInputData(s.get())}var i=(t("./modules/polyfills")(),t("./view")),a=t("./modules/calculator"),o=t("./modules/validator"),s=t("./modules/localStorage");!function(){try{window.ANDROID=Android}catch(t){window.ANDROID=null}s.isAvailable()&&(s.get()?i.showOpenButton():i.showSaveButton()),i.setButtonListener("calculate",e),i.setButtonListener("save",n),i.setButtonListener("open",r),i.init()}()},{"./modules/calculator":2,"./modules/localStorage":3,"./modules/polyfills":4,"./modules/validator":5,"./view":6}],2:[function(t,e){e.exports.calculate=function(t){var e=0,n=[];return t.forEach(function(t){var r=Math.round(t.weight/100*t.average*100)/100;n.push({average:t.average,contributes:r}),e+=r}),{overall:e,years:n}}},{}],3:[function(t,e){var n="RESULTS_DATA",r=null,i=window.ANDROID||window.localStorage||null;e.exports={isAvailable:function(){return null!==i},get:function(){if(r)return r;try{var t=i.getItem(n);return t?r=JSON.parse(t):null}catch(e){return console.log("ERROR localStorage.getItem(KEY) "+e),null}},set:function(t){r=t,i.setItem(n,JSON.stringify(t))}}},{}],4:[function(t,e){e.exports=function(){function t(t){var e=n[t];return r(a[e])}var e,n,r=function(t){return"function"==typeof t},i=[].slice,a=Function.prototype;n={"function-bind":"bind"},t("function-bind")||(e=function(t){var e=i.call(arguments,1),n=this,r=function(){},a=function(){return n.apply(this instanceof r?this:t||{},e.concat(i.call(arguments)))};return r.prototype=this.prototype||{},a.prototype=new r,a},a.bind=e)}},{}],5:[function(t,e){e.exports={validate:function(t){if(!t.length)return!1;var e=0;return t.forEach(function(t){e+=t.weight}),e>0&&100>=e}}},{}],6:[function(t,e){function n(){o(),s(),window.ANDROID&&(w.footer.style.display="none"),w.btns.calculate.addEventListener("click",r),w.btns.save.addEventListener("click",i),w.btns.open.addEventListener("click",a),w.btns.addYear.addEventListener("click",o)}function r(){window.scrollTo(0,0),S.calculate&&S.calculate(),w.btns.open.style.display="none",w.btns.save.style.display="block"}function i(){var t=w.btns.save,e=t.innerHTML;S.save&&S.save(),t.innerHTML="Saved!",t.classList.add("icon-ok"),setTimeout(function(){t.innerHTML=e,t.classList.remove("icon-ok")},700)}function a(){S.open&&S.open(),r()}function o(){var t=w.yearsContainer.children.length,e=m.create(t+1);b.push(e),w.yearsContainer.appendChild(e.getElement())}function s(){var t=b[0];if(t){var e=t.getModules()[0];e&&e.applyTooltip()}}function u(){w.btns.save.style.display="none",w.btns.open.style.display="block"}function l(){w.btns.open.style.display="none",w.btns.save.style.display="block"}function c(t,e){S[t]=e}function p(){var t=[];return b.forEach(function(e){var n=e.getSaveData();n&&t.push(n)}),t}function f(){var t=[];return b.forEach(function(e){var n=e.getAverage(),r=e.getWeight();isNaN(n)||isNaN(r)||t.push({average:n,weight:r})}),t}function h(t){for(var e=0,n=b.length;n>e;e++)w.yearsContainer.removeChild(b[e].getElement());b=[],t.forEach(function(t,e){if(t){var n=m.create(e+1,!0);b.push(n),n.setWeight(t.weight),t.modules.forEach(function(t){n.addModule(t)}),w.yearsContainer.appendChild(n.getElement())}})}function d(){for(var t=0,e=w.errors.children.length;e>t;t++)w.errors.removeChild(w.errors.children[t])}function g(t){var e=document.createElement("div");e.innerHTML=t,w.errors.appendChild(e)}function v(t){b.forEach(function(e,n){var r=t.years[n];r&&e.setResults(r.average,r.contributes)}),y.update(t.overall)}var m=t("./year"),y=(t("./module"),t("./scoreMeter")),b=[],w={yearsContainer:document.getElementById("Years"),errors:document.getElementById("Errors"),footer:document.getElementById("Footer"),btns:{calculate:document.getElementById("Calculate"),save:document.getElementById("Save"),open:document.getElementById("Open"),addYear:document.getElementById("Add-Year")}},S={calculate:null,save:null,open:null};e.exports={init:n,setButtonListener:c,showOpenButton:u,showSaveButton:l,getInputData:f,setInputData:h,prepForSave:p,clearErrors:d,showError:g,updateScore:v}},{"./module":7,"./scoreMeter":9,"./year":10}],7:[function(t,e){function n(t){t=t||{},this.element=r(),void 0!==t.name&&this.setName(t.name),void 0!==t.percentage&&this.setPercentage(t.percentage),void 0!==t.weight&&this.setWeight(t.weight)}function r(){var t=document.createElement("div");return t.innerHTML=a.render(),t.firstChild}var i=t("hogan.js"),a=i.compile(t("./template"));n.prototype.getElement=function(){return this.element},n.prototype.getName=function(){return this.element.querySelector(".name input").value},n.prototype.setName=function(t){this.element.querySelector(".name input").value=t},n.prototype.getWeight=function(){return parseFloat(this.element.querySelector(".ratio input").value,10)||1},n.prototype.setWeight=function(t){this.element.querySelector(".ratio input").value=t},n.prototype.getPercentage=function(){return parseFloat(this.element.querySelector(".percentage input").value,10)},n.prototype.setPercentage=function(t){this.element.querySelector(".percentage input").value=t},n.prototype.applyTooltip=function(){this.element.querySelector(".ratio").className+=" tooltip"},e.exports={create:function(t){return new n(t)}}},{"./template":8,"hogan.js":13}],8:[function(t,e){e.exports=["<div class='module'>","<div class='name'>Name<input></div>","<div class='values'>","<span class='percentage'>","<span class='label'>Percentage</span>","<span class='icon'>%</span>","<input>","</span>","<span class='ratio' title='Half module: 0.5, Single module: 1, Double module: 2, etc'>Weight<input></span>","</div>","</div>"].join("")},{}],9:[function(t,e){function n(t){var e=["-webkit-transform","-moz-transform","-ms-transform","-o-transform","transform"];e.forEach(function(e){i.style[e]="translateX("+t+"px)"})}var r=document.getElementById("Score"),i=r.querySelector(".marker"),a=r.querySelector(".value");e.exports.update=function(t){t=Math.round(100*t)/100;var e=r.scrollWidth/100*t;n(e-1.5),a.innerHTML=t+"%"}},{}],10:[function(t,e){function n(t,e){this.number=t,this.element=r(t),this.modules=[],e||this.addModule()}function r(t){var e=document.createElement("div");return e.innerHTML=a.render({year:t}),e.firstChild}var i=t("hogan.js"),a=i.compile(t("./template")),o=t("../module");n.prototype.getElement=function(){return this.element},n.prototype.getModules=function(){return this.modules},n.prototype.addButtonListener=function(){this.element.querySelector("button").addEventListener("click",this.addModule.bind(this))},n.prototype.addModule=function(t){var e=o.create(t);this.modules.push(e),this.element.querySelector(".modules").appendChild(e.getElement())},n.prototype.getAverage=function(){var t=0,e=0;return this.modules.forEach(function(n){var r=n.getPercentage();if(!isNaN(r)){var i=n.getWeight();e+=i,t+=r*i}}),Math.round(t/e*100)/100},n.prototype.getWeight=function(){return parseFloat(this.element.querySelector(".year-weight input").value,10)},n.prototype.setWeight=function(t){this.element.querySelector(".year-weight input").value=t},n.prototype.setResults=function(t,e){var n=this.element.querySelector(".results"),r=n.querySelector(".avg"),i=n.querySelector(".weight");r.innerHTML=t+"%",i.innerHTML=e+"%"},n.prototype.getSaveData=function(){var t=this.getWeight();if(!isNaN(t)){var e=[];return this.getModules().forEach(function(t){var n=t.getPercentage(),r=t.getWeight();isNaN(n)||isNaN(r)||e.push({name:t.getName(),percentage:n,weight:r})}),{weight:t,modules:e}}},e.exports={create:function(t,e){var r=new n(t,e);return r.addButtonListener(),r}}},{"../module":7,"./template":11,"hogan.js":13}],11:[function(t,e){e.exports=['<div class="year card">','<div class="info">','<span class="year-title">Year {{year}}</span>','<span class="year-weight">Worth %<input class=""></span>',"</div>",'<div class="modules">','<div class="modules-label">','<div class="pull-left">Module(s):</div>','<div class="details">','<div class="details-name pull-left">Name: not required</div>','<div class="pull-right">Weight: default is 1</div>',"</div>","</div>",'<div class="clear-fix"></div>',"</div>",'<button class="btn btn-outline btn-small">Add Module</button>','<div class="results">',"<span>Average:",'<span class="avg box">0%</span>',"</span>",'<span class="pull-right">Weighted:','<span class="weight box">0%</span>',"</span>","</div>","</div>"].join("")},{}],12:[function(t,e,n){!function(t){function e(t){"}"===t.n.substr(t.n.length-1)&&(t.n=t.n.substring(0,t.n.length-1))}function n(t){return t.trim?t.trim():t.replace(/^\s*|\s*$/g,"")}function r(t,e,n){if(e.charAt(n)!=t.charAt(0))return!1;for(var r=1,i=t.length;i>r;r++)if(e.charAt(n+r)!=t.charAt(r))return!1;return!0}function i(e,n,r,s){var u=[],l=null,c=null,p=null;for(c=r[r.length-1];e.length>0;){if(p=e.shift(),c&&"<"==c.tag&&!(p.tag in b))throw new Error("Illegal content in < super tag.");if(t.tags[p.tag]<=t.tags.$||a(p,s))r.push(p),p.nodes=i(e,p.tag,r,s);else{if("/"==p.tag){if(0===r.length)throw new Error("Closing tag without opener: /"+p.n);if(l=r.pop(),p.n!=l.n&&!o(p.n,l.n,s))throw new Error("Nesting error: "+l.n+" vs. "+p.n);return l.end=p.i,u}"\n"==p.tag&&(p.last=0==e.length||"\n"==e[0].tag)}u.push(p)}if(r.length>0)throw new Error("missing closing tag: "+r.pop().n);return u}function a(t,e){for(var n=0,r=e.length;r>n;n++)if(e[n].o==t.n)return t.tag="#",!0}function o(t,e,n){for(var r=0,i=n.length;i>r;r++)if(n[r].c==t&&n[r].o==e)return!0}function s(t){var e=[];for(var n in t)e.push('"'+l(n)+'": function(c,p,t,i) {'+t[n]+"}");return"{ "+e.join(",")+" }"}function u(t){var e=[];for(var n in t.partials)e.push('"'+l(n)+'":{name:"'+l(t.partials[n].name)+'", '+u(t.partials[n])+"}");return"partials: {"+e.join(",")+"}, subs: "+s(t.subs)}function l(t){return t.replace(y,"\\\\").replace(g,'\\"').replace(v,"\\n").replace(m,"\\r")}function c(t){return~t.indexOf(".")?"d":"f"}function p(t,e){var n="<"+(e.prefix||""),r=n+t.n+w++;return e.partials[r]={name:t.n,partials:{}},e.code+='t.b(t.rp("'+l(r)+'",c,p,"'+(t.indent||"")+'"));',r}function f(t,e){e.code+="t.b(t.t(t."+c(t.n)+'("'+l(t.n)+'",c,p,0)));'}function h(t){return"t.b("+t+");"}var d=/\S/,g=/\"/g,v=/\n/g,m=/\r/g,y=/\\/g;t.tags={"#":1,"^":2,"<":3,$:4,"/":5,"!":6,">":7,"=":8,_v:9,"{":10,"&":11,_t:12},t.scan=function(i,a){function o(){y.length>0&&(b.push({tag:"_t",text:new String(y)}),y="")}function s(){for(var e=!0,n=E;n<b.length;n++)if(e=t.tags[b[n].tag]<t.tags._v||"_t"==b[n].tag&&null===b[n].text.match(d),!e)return!1;return e}function u(t,e){if(o(),t&&s())for(var n,r=E;r<b.length;r++)b[r].text&&((n=b[r+1])&&">"==n.tag&&(n.indent=b[r].text.toString()),b.splice(r,1));else e||b.push({tag:"\n"});w=!1,E=b.length}function l(t,e){var r="="+k,i=t.indexOf(r,e),a=n(t.substring(t.indexOf("=",e)+1,i)).split(" ");return x=a[0],k=a[a.length-1],i+r.length-1}var c=i.length,p=0,f=1,h=2,g=p,v=null,m=null,y="",b=[],w=!1,S=0,E=0,x="{{",k="}}";for(a&&(a=a.split(" "),x=a[0],k=a[1]),S=0;c>S;S++)g==p?r(x,i,S)?(--S,o(),g=f):"\n"==i.charAt(S)?u(w):y+=i.charAt(S):g==f?(S+=x.length-1,m=t.tags[i.charAt(S+1)],v=m?i.charAt(S+1):"_v","="==v?(S=l(i,S),g=p):(m&&S++,g=h),w=S):r(k,i,S)?(b.push({tag:v,n:n(y),otag:x,ctag:k,i:"/"==v?w-x.length:S+k.length}),y="",S+=k.length-1,g=p,"{"==v&&("}}"==k?S++:e(b[b.length-1]))):y+=i.charAt(S);return u(w,!0),b};var b={_t:!0,"\n":!0,$:!0,"/":!0};t.stringify=function(e){return"{code: function (c,p,i) { "+t.wrapMain(e.code)+" },"+u(e)+"}"};var w=0;t.generate=function(e,n,r){w=0;var i={code:"",subs:{},partials:{}};return t.walk(e,i),r.asString?this.stringify(i,n,r):this.makeTemplate(i,n,r)},t.wrapMain=function(t){return'var t=this;t.b(i=i||"");'+t+"return t.fl();"},t.template=t.Template,t.makeTemplate=function(t,e,n){var r=this.makePartials(t);return r.code=new Function("c","p","i",this.wrapMain(t.code)),new this.template(r,e,this,n)},t.makePartials=function(t){var e,n={subs:{},partials:t.partials,name:t.name};for(e in n.partials)n.partials[e]=this.makePartials(n.partials[e]);for(e in t.subs)n.subs[e]=new Function("c","p","t","i",t.subs[e]);return n},t.codegen={"#":function(e,n){n.code+="if(t.s(t."+c(e.n)+'("'+l(e.n)+'",c,p,1),c,p,0,'+e.i+","+e.end+',"'+e.otag+" "+e.ctag+'")){t.rs(c,p,function(c,p,t){',t.walk(e.nodes,n),n.code+="});c.pop();}"},"^":function(e,n){n.code+="if(!t.s(t."+c(e.n)+'("'+l(e.n)+'",c,p,1),c,p,1,0,0,"")){',t.walk(e.nodes,n),n.code+="};"},">":p,"<":function(e,n){var r={partials:{},code:"",subs:{},inPartial:!0};t.walk(e.nodes,r);var i=n.partials[p(e,n)];i.subs=r.subs,i.partials=r.partials},$:function(e,n){var r={subs:{},code:"",partials:n.partials,prefix:e.n};t.walk(e.nodes,r),n.subs[e.n]=r.code,n.inPartial||(n.code+='t.sub("'+l(e.n)+'",c,p,i);')},"\n":function(t,e){e.code+=h('"\\n"'+(t.last?"":" + i"))},_v:function(t,e){e.code+="t.b(t.v(t."+c(t.n)+'("'+l(t.n)+'",c,p,0)));'},_t:function(t,e){e.code+=h('"'+l(t.text)+'"')},"{":f,"&":f},t.walk=function(e,n){for(var r,i=0,a=e.length;a>i;i++)r=t.codegen[e[i].tag],r&&r(e[i],n);return n},t.parse=function(t,e,n){return n=n||{},i(t,"",[],n.sectionTags||[])},t.cache={},t.cacheKey=function(t,e){return[t,!!e.asString,!!e.disableLambda,e.delimiters,!!e.modelGet].join("||")},t.compile=function(e,n){n=n||{};var r=t.cacheKey(e,n),i=this.cache[r];if(i){var a=i.partials;for(var o in a)delete a[o].instance;return i}return i=this.generate(this.parse(this.scan(e,n.delimiters),e,n),e,n),this.cache[r]=i}}("undefined"!=typeof n?n:Hogan)},{}],13:[function(t,e){var n=t("./compiler");n.Template=t("./template").Template,n.template=n.Template,e.exports=n},{"./compiler":12,"./template":14}],14:[function(t,e,n){var r={};!function(t){function e(t,e,n){var r;return e&&"object"==typeof e&&(null!=e[t]?r=e[t]:n&&e.get&&"function"==typeof e.get&&(r=e.get(t))),r}function n(t,e,n,r,i,a){function o(){}function s(){}o.prototype=t,s.prototype=t.subs;var u,l=new o;l.subs=new s,l.subsText={},l.buf="",r=r||{},l.stackSubs=r,l.subsText=a;for(u in e)r[u]||(r[u]=e[u]);for(u in r)l.subs[u]=r[u];i=i||{},l.stackPartials=i;for(u in n)i[u]||(i[u]=n[u]);for(u in i)l.partials[u]=i[u];return l}function r(t){return String(null===t||void 0===t?"":t)}function i(t){return t=r(t),c.test(t)?t.replace(a,"&amp;").replace(o,"&lt;").replace(s,"&gt;").replace(u,"&#39;").replace(l,"&quot;"):t}t.Template=function(t,e,n,r){t=t||{},this.r=t.code||this.r,this.c=n,this.options=r||{},this.text=e||"",this.partials=t.partials||{},this.subs=t.subs||{},this.buf=""},t.Template.prototype={r:function(){return""},v:i,t:r,render:function(t,e,n){return this.ri([t],e||{},n)},ri:function(t,e,n){return this.r(t,e,n)},ep:function(t,e){var r=this.partials[t],i=e[r.name];if(r.instance&&r.base==i)return r.instance;if("string"==typeof i){if(!this.c)throw new Error("No compiler available.");i=this.c.compile(i,this.options)}if(!i)return null;if(this.partials[t].base=i,r.subs){e.stackText||(e.stackText={});for(key in r.subs)e.stackText[key]||(e.stackText[key]=void 0!==this.activeSub&&e.stackText[this.activeSub]?e.stackText[this.activeSub]:this.text);i=n(i,r.subs,r.partials,this.stackSubs,this.stackPartials,e.stackText)}return this.partials[t].instance=i,i},rp:function(t,e,n,r){var i=this.ep(t,n);return i?i.ri(e,n,r):""},rs:function(t,e,n){var r=t[t.length-1];if(!p(r))return void n(t,e,this);for(var i=0;i<r.length;i++)t.push(r[i]),n(t,e,this),t.pop()},s:function(t,e,n,r,i,a,o){var s;return p(t)&&0===t.length?!1:("function"==typeof t&&(t=this.ms(t,e,n,r,i,a,o)),s=!!t,!r&&s&&e&&e.push("object"==typeof t?t:e[e.length-1]),s)},d:function(t,n,r,i){var a,o=t.split("."),s=this.f(o[0],n,r,i),u=this.options.modelGet,l=null;if("."===t&&p(n[n.length-2]))s=n[n.length-1];else for(var c=1;c<o.length;c++)a=e(o[c],s,u),null!=a?(l=s,s=a):s="";return i&&!s?!1:(i||"function"!=typeof s||(n.push(l),s=this.mv(s,n,r),n.pop()),s)},f:function(t,n,r,i){for(var a=!1,o=null,s=!1,u=this.options.modelGet,l=n.length-1;l>=0;l--)if(o=n[l],a=e(t,o,u),null!=a){s=!0;break}return s?(i||"function"!=typeof a||(a=this.mv(a,n,r)),a):i?!1:""},ls:function(t,e,n,i,a){var o=this.options.delimiters;return this.options.delimiters=a,this.b(this.ct(r(t.call(e,i)),e,n)),this.options.delimiters=o,!1},ct:function(t,e,n){if(this.options.disableLambda)throw new Error("Lambda features disabled.");return this.c.compile(t,this.options).render(e,n)},b:function(t){this.buf+=t},fl:function(){var t=this.buf;return this.buf="",t},ms:function(t,e,n,r,i,a,o){var s,u=e[e.length-1],l=t.call(u);return"function"==typeof l?r?!0:(s=this.activeSub&&this.subsText&&this.subsText[this.activeSub]?this.subsText[this.activeSub]:this.text,this.ls(l,u,n,s.substring(i,a),o)):l},mv:function(t,e,n){var i=e[e.length-1],a=t.call(i);return"function"==typeof a?this.ct(r(a.call(i)),i,n):a},sub:function(t,e,n,r){var i=this.subs[t];i&&(this.activeSub=t,i(e,n,this,r),this.activeSub=!1)}};var a=/&/g,o=/</g,s=/>/g,u=/\'/g,l=/\"/g,c=/[&<>\"\']/,p=Array.isArray||function(t){return"[object Array]"===Object.prototype.toString.call(t)}}("undefined"!=typeof n?n:r)},{}]},{},[1]);
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+//acts as a mediator - main entry point for browserify
+var polyfills = require('./modules/polyfills')();
+var view = require('./view');
+var calculator = require('./modules/calculator');
+var validator = require('./modules/validator');
+var LS = require('./modules/localStorage');
+
+(function init() {
+
+  try {
+    window.ANDROID = Android;
+  } catch(e) {
+    window.ANDROID = null;
+  }
+
+  if(LS.isAvailable()) {
+    if(LS.get()) {
+      view.showOpenButton();
+    } else {
+      view.showSaveButton();
+    }
+  }
+  //register click listeners
+  view.setButtonListener('calculate', calculateClicked);
+  view.setButtonListener('save', saveClicked);
+  view.setButtonListener('open', openClicked);
+  view.init();
+})();
+
+function calculateClicked() {
+  view.clearErrors();
+  var data = view.getInputData();
+  if(!validator.validate(data)) {
+    return view.showError("Check each years <em>worth</em> percentages, something isn't quite right.");
+  }
+  view.updateScore(calculator.calculate(data));
+}
+
+function saveClicked() {
+  var data = view.prepForSave();
+  if(data.length) LS.set(data);
+}
+
+function openClicked() {
+  view.setInputData(LS.get());
+}
+
+},{"./modules/calculator":2,"./modules/localStorage":3,"./modules/polyfills":4,"./modules/validator":5,"./view":6}],2:[function(require,module,exports){
+module.exports.calculate = function(years) {
+  var finalResult = 0;
+  var yearsResults = [];
+  
+  years.forEach(function(yr, i) {
+    var weightedResult = (Math.round(((yr.weight / 100) * yr.average) * 100) / 100);
+
+    yearsResults.push({
+      average: yr.average,
+      contributes: weightedResult
+    });
+    
+    finalResult += weightedResult;
+  });
+
+  return {
+    overall: finalResult,
+    years: yearsResults
+  };
+
+};
+
+},{}],3:[function(require,module,exports){
+var KEY = 'RESULTS_DATA';
+var cache = null; 
+var api = window.ANDROID || window.localStorage || null;
+
+module.exports = {
+
+  isAvailable: function() {
+    return api !== null;
+  },
+
+  get: function() {
+    if(cache) { return cache; }
+
+    try {
+      var data = api.getItem(KEY);
+      return data ? (cache = JSON.parse(data)) : null;
+    } catch (e) {
+      console.log("ERROR localStorage.getItem(KEY) "+ e);
+      return null;
+    }
+  },
+
+  set: function(data) {
+    cache = data;
+    api.setItem(KEY, JSON.stringify(data));
+  }
+  
+};
+
+},{}],4:[function(require,module,exports){
+module.exports = function() {
+  //https://github.com/ariya/phantomjs/issues/10522
+  var isFunction = function(o) {
+    return typeof o == 'function';
+  };
+
+
+  var bind,
+    slice = [].slice,
+    proto = Function.prototype,
+    featureMap;
+
+  featureMap = {
+    'function-bind': 'bind'
+  };
+
+  function has(feature) {
+    var prop = featureMap[feature];
+    return isFunction(proto[prop]);
+  }
+
+  // check for missing features
+  if (!has('function-bind')) {
+    // adapted from Mozilla Developer Network example at
+    // https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function/bind
+    bind = function bind(obj) {
+      var args = slice.call(arguments, 1),
+        self = this,
+        nop = function() {
+        },
+        bound = function() {
+          return self.apply(this instanceof nop ? this : (obj || {}), args.concat(slice.call(arguments)));
+        };
+      nop.prototype = this.prototype || {}; // Firefox cries sometimes if prototype is undefined
+      bound.prototype = new nop();
+      return bound;
+    };
+    proto.bind = bind;
+  }
+
+};
+},{}],5:[function(require,module,exports){
+module.exports = {
+  validate: function(years) {
+    if(!years.length) return false;
+    
+    var totalWeight = 0;
+
+    years.forEach(function(year) {
+      totalWeight += year.weight;
+    });
+
+    return (totalWeight > 0 && totalWeight <= 100);
+  }
+};
+},{}],6:[function(require,module,exports){
+var YearComponent = require('./year');
+var ModuleComponent = require('./module');
+var scoreMeter = require('./scoreMeter');
+
+var yearComponents = [];
+var DOM_ELEMS = {
+  yearsContainer: document.getElementById('Years'),
+  errors: document.getElementById('Errors'),
+  footer: document.getElementById('Footer'),
+  btns: {
+    calculate: document.getElementById('Calculate'),
+    save: document.getElementById('Save'),
+    open: document.getElementById('Open'),
+    addYear: document.getElementById('Add-Year')
+  }
+};
+var mediatorListeners = {
+  calculate: null,
+  save: null,
+  open: null
+};
+
+function init() {
+  //create and insert a year component..
+  addYearClicked();
+  addToolTip();
+
+  if(window.ANDROID) {
+    DOM_ELEMS.footer.style.display = "none";
+  }
+
+  //register all click listeners
+  DOM_ELEMS.btns.calculate.addEventListener('click', calculateClicked);
+  DOM_ELEMS.btns.save.addEventListener('click', saveClicked);
+  DOM_ELEMS.btns.open.addEventListener('click', openClicked);
+  //Add year listener
+  DOM_ELEMS.btns.addYear.addEventListener('click', addYearClicked);
+}
+
+//////////////////////////////////////
+//        Click handlers            //
+//////////////////////////////////////
+
+function calculateClicked() {
+  window.scrollTo(0, 0);
+  //mediator does its thing first
+  if(mediatorListeners.calculate) mediatorListeners.calculate();
+  //do we need to do anyting else?
+  DOM_ELEMS.btns.open.style.display = "none";
+  DOM_ELEMS.btns.save.style.display = "block";
+
+}
+
+function saveClicked() {
+  var btn = DOM_ELEMS.btns.save;
+  var previousHtml = btn.innerHTML;
+
+  //mediator does its thing first
+  if(mediatorListeners.save) mediatorListeners.save();
+  //do we need to do anyting else?
+  btn.innerHTML = 'Saved!';
+  btn.classList.add('icon-ok');
+
+  setTimeout(function() {
+    btn.innerHTML = previousHtml;
+    btn.classList.remove('icon-ok');
+  }, 700);
+}
+
+function openClicked() {
+  //mediator does its thing first
+  if(mediatorListeners.open) mediatorListeners.open();
+  //do we need to do anyting else?
+  calculateClicked();
+}
+
+function addYearClicked() {
+  var yearComponent = YearComponent.create({ number: DOM_ELEMS.yearsContainer.children.length +1 });
+  yearComponents.push(yearComponent);
+  yearComponent.addModule();
+  DOM_ELEMS.yearsContainer.appendChild(yearComponent.getElement());
+}
+
+function addToolTip() {
+  //This should only appear on the first module of the first year.
+  var firstYear = yearComponents[0];
+  if(firstYear) {
+    var mod = firstYear.getModules()[0];
+    if(mod) {
+      mod.applyTooltip();
+    }
+  }
+}
+
+//////////////////////////////////////
+//            View API              //
+//////////////////////////////////////
+
+module.exports = {
+  init: init,
+  setButtonListener: setButtonListener,
+  showOpenButton: showOpenButton,
+  showSaveButton: showSaveButton,
+  getInputData: getInputData,
+  setInputData: setInputData,
+  prepForSave: prepForSave,
+  clearErrors: clearErrors,
+  showError: showError,
+  updateScore: updateScore
+};
+
+function showOpenButton() {
+  DOM_ELEMS.btns.save.style.display = "none";
+  DOM_ELEMS.btns.open.style.display = "block";
+}
+
+function showSaveButton() {
+  DOM_ELEMS.btns.open.style.display = "none";
+  DOM_ELEMS.btns.save.style.display = "block";
+}
+
+function setButtonListener(button, fn) {
+  //button should be one of 'calculate', 'save' or 'open'
+  mediatorListeners[button] = fn;
+}
+
+function prepForSave() {
+  return yearComponents.map(function (yrCmp) {
+    return yrCmp.getSaveData();
+  }).filter(Boolean);
+}
+
+function getInputData() {
+  return yearComponents.map(function (yearCmp) {
+    var avg = yearCmp.getAverage();
+    var weight = yearCmp.getWeight();
+
+    if(!isNaN(avg) && !isNaN(weight)) {
+      return {
+        average: avg,
+        weight: weight
+      };
+    }
+  }).filter(Boolean);
+}
+
+function clearYearComponents() {
+  //clear years
+  for(var i = 0, l = yearComponents.length; i < l; i++) {
+    DOM_ELEMS.yearsContainer.removeChild(yearComponents[i].getElement());
+  }
+
+  yearComponents = [];
+}
+
+function setInputData(years) {
+  clearYearComponents();
+
+  yearComponents = years.map(YearComponent.create);
+
+  yearComponents.forEach(function(year) {
+    DOM_ELEMS.yearsContainer.appendChild(year.getElement());
+  });
+
+
+
+  // yearComponents = years.map(function(year, i) {
+  //   if(!year) return;
+  //   var yrCmp = YearComponent.create(i+1, true);
+  //   yrCmp.setWeight(year.weight);
+
+  //   year.modules.forEach(function (mod) {
+  //     yrCmp.addModule(mod);
+  //   });
+
+  //   DOM_ELEMS.yearsContainer.appendChild(yrCmp.getElement());
+
+  //   return yrCmp;
+
+  // });
+}
+
+function clearErrors() {
+  for(var i = 0, l = DOM_ELEMS.errors.children.length; i < l; i++) {
+    DOM_ELEMS.errors.removeChild(DOM_ELEMS.errors.children[i]);
+  }
+}
+
+function showError(errorMsg) {
+  var doc = document.createElement('div');
+  doc.innerHTML = errorMsg;
+  DOM_ELEMS.errors.appendChild(doc);
+}
+
+
+function updateScore(results) {
+  yearComponents.forEach(function (yrCmp, i) {
+    var yr = results.years[i];
+    if(yr) {
+      yrCmp.setResults(yr.average, yr.contributes);
+    }
+  });
+  scoreMeter.update(results.overall);
+}
+
+},{"./module":7,"./scoreMeter":9,"./year":10}],7:[function(require,module,exports){
+//ModuleComponent simple factory
+var hogan = require('hogan.js');
+var template = hogan.compile(require('./template'));
+
+//the class
+function ModuleComponent(config) {
+  config = config || {};
+  this.element = createElem();
+  if(config.name !== undefined) this.setName(config.name);
+  if(config.percentage !== undefined) this.setPercentage(config.percentage);
+  if(config.weight !== undefined) this.setWeight(config.weight);
+}
+
+ModuleComponent.prototype.getElement = function() {
+  return this.element;
+};
+
+ModuleComponent.prototype.getName = function() {
+  return this.element.querySelector('.name input').value;
+};
+
+ModuleComponent.prototype.setName = function(value) {
+  this.element.querySelector('.name input').value = value;
+};
+
+ModuleComponent.prototype.getWeight = function() {
+  return parseFloat(this.element.querySelector('.ratio input').value, 10) || 1
+};
+
+ModuleComponent.prototype.setWeight = function(value) {
+  this.element.querySelector('.ratio input').value = value;
+};
+
+ModuleComponent.prototype.getPercentage = function() {
+  return parseFloat(this.element.querySelector('.percentage input').value, 10);
+};
+
+ModuleComponent.prototype.setPercentage = function(value) {
+  this.element.querySelector('.percentage input').value = value;
+};
+
+ModuleComponent.prototype.applyTooltip = function() {
+  this.element.querySelector('.ratio').className += ' tooltip';
+};
+
+function createElem() {
+  var tempContainer = document.createElement('div');
+  tempContainer.innerHTML = template.render();
+  return tempContainer.firstChild;
+}
+
+module.exports = {
+  create: function(config) {
+    return new ModuleComponent(config);
+  }
+};
+
+},{"./template":8,"hogan.js":13}],8:[function(require,module,exports){
+module.exports = [
+  "<div class='module'>",
+    "<div class='name'>Name<input></div>",
+    "<div class='values'>",
+      "<span class='percentage'>",
+        "<span class='label'>Percentage</span>",
+        "<span class='icon'>%</span>",
+        "<input>",
+      "</span>",
+      "<span class='ratio' title='Half module: 0.5, Single module: 1, Double module: 2, etc'>Weight<input></span>",
+    "</div>",
+  "</div>"
+].join('');
+},{}],9:[function(require,module,exports){
+var container = document.getElementById('Score');
+var marker = container.querySelector('.marker');
+var value = container.querySelector('.value');
+
+function applyTransform(value) {
+  var props = ['-webkit-transform', '-moz-transform', '-ms-transform', '-o-transform', 'transform'];
+
+  props.forEach(function(prop) {
+    marker.style[prop] = 'translateX(' + value + 'px)';
+  });
+}
+
+module.exports.update = function(score) {
+	score = Math.round(score * 100) / 100;
+  var leftPos = ((container.scrollWidth / 100) * score);
+
+  applyTransform(leftPos-1.5);
+  value.innerHTML = score+'%';
+};
+},{}],10:[function(require,module,exports){
+//YearComponent simple factory
+var hogan = require('hogan.js');
+var template = hogan.compile(require('./template'));
+var ModuleComponent = require('../module');
+
+//the class
+function YearComponent(config) {
+  config = config || {};
+  this.number = config.number;
+  this.modules = [];
+  this.element = createElem(this.number);
+
+  if(config.weight) {
+    this.setWeight(config.weight);
+  }
+
+  if(config.modules) {
+    config.modules.forEach(this.addModule.bind(this));
+  }
+
+  this.addButtonListener();
+
+}
+
+YearComponent.prototype.getElement = function() {
+  return this.element;
+};
+
+YearComponent.prototype.getModules = function() {
+  return this.modules;
+};
+
+YearComponent.prototype.addButtonListener = function() {
+  this.element.querySelector('button').addEventListener('click', this.addModule.bind(this));
+};
+
+YearComponent.prototype.addModule = function(moduleConfig) {
+  var moduleComponent = ModuleComponent.create(moduleConfig);
+  this.modules.push(moduleComponent);
+  this.element.querySelector('.modules').appendChild(moduleComponent.getElement());
+};
+
+YearComponent.prototype.getAverage = function() {
+  var total = 0;
+  var totalWeight = 0;
+
+  this.modules.forEach(function(module) {
+    var pcent = module.getPercentage();
+
+    if(!isNaN(pcent)) {
+      var weight = module.getWeight();
+      totalWeight += weight;
+      total += (pcent * weight);
+    }
+
+  });
+  //return the average
+  return (Math.round((total / totalWeight) * 100) / 100);
+};
+
+YearComponent.prototype.getWeight = function() {
+  return parseFloat(this.element.querySelector('.year-weight input').value, 10);
+};
+
+YearComponent.prototype.setWeight = function(value) {
+  this.element.querySelector('.year-weight input').value = value;
+};
+
+YearComponent.prototype.setResults = function(average, weighted) {
+  var resultsElem = this.element.querySelector(".results");
+  var avgElm = resultsElem.querySelector(".avg");
+  var weightElm = resultsElem.querySelector(".weight");
+
+  avgElm.innerHTML = average+"%";
+  weightElm.innerHTML = weighted+"%";
+};
+
+YearComponent.prototype.getSaveData = function() {
+  var yearWeight = this.getWeight();
+  if(isNaN(yearWeight)) return;
+
+  var modules = this.getModules().map(function(mod) {
+    var pcent = mod.getPercentage();
+    var weight = mod.getWeight();
+
+    if(!isNaN(pcent) && !isNaN(weight)) {
+      return {
+        name: mod.getName(),
+        percentage: pcent,
+        weight: weight
+      };
+    }
+
+  });
+
+  return {
+    number: this.number,
+    weight: yearWeight,
+    modules: modules
+  };
+
+};
+
+function createElem(number) {
+  var tempContainer = document.createElement('div');
+  tempContainer.innerHTML = template.render({year: number});
+  return tempContainer.firstChild;
+}
+
+module.exports = {
+  create: function(config) {
+    var yearCmp = new YearComponent(config);
+    //phantomjs was playing up, delaying call until object is instantiated.
+    //TODO remove this..
+    //yearCmp.addButtonListener();
+    return yearCmp;
+  }
+};
+
+},{"../module":7,"./template":11,"hogan.js":13}],11:[function(require,module,exports){
+module.exports = [
+  '<div class="year card animated zoomIn">',
+    '<div class="info">',
+      '<span class="year-title">Year {{year}}</span>',
+      '<span class="year-weight">Worth %<input class=""></span>',
+    '</div>',
+    '<div class="modules">',
+      '<div class="modules-label">',
+        '<div class="pull-left">Module(s):</div>',
+        '<div class="details">',
+          '<div class="details-name pull-left">Name: not required</div>',
+          '<div class="pull-right">Weight: default is 1</div>',
+        '</div>',
+      '</div>',
+      '<div class="clear-fix"></div>',
+    '</div>',
+    '<button class="btn btn-outline btn-small">Add Module</button>',
+    '<div class="results">',
+      '<span>Average:',
+        '<span class="avg box">0%</span>',
+      '</span>',
+      '<span class="pull-right">Weighted:',
+        '<span class="weight box">0%</span>',
+      '</span>',
+    '</div>',
+  '</div>'
+].join('');
+},{}],12:[function(require,module,exports){
+/*
+ *  Copyright 2011 Twitter, Inc.
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+(function (Hogan) {
+  // Setup regex  assignments
+  // remove whitespace according to Mustache spec
+  var rIsWhitespace = /\S/,
+      rQuot = /\"/g,
+      rNewline =  /\n/g,
+      rCr = /\r/g,
+      rSlash = /\\/g;
+
+  Hogan.tags = {
+    '#': 1, '^': 2, '<': 3, '$': 4,
+    '/': 5, '!': 6, '>': 7, '=': 8, '_v': 9,
+    '{': 10, '&': 11, '_t': 12
+  };
+
+  Hogan.scan = function scan(text, delimiters) {
+    var len = text.length,
+        IN_TEXT = 0,
+        IN_TAG_TYPE = 1,
+        IN_TAG = 2,
+        state = IN_TEXT,
+        tagType = null,
+        tag = null,
+        buf = '',
+        tokens = [],
+        seenTag = false,
+        i = 0,
+        lineStart = 0,
+        otag = '{{',
+        ctag = '}}';
+
+    function addBuf() {
+      if (buf.length > 0) {
+        tokens.push({tag: '_t', text: new String(buf)});
+        buf = '';
+      }
+    }
+
+    function lineIsWhitespace() {
+      var isAllWhitespace = true;
+      for (var j = lineStart; j < tokens.length; j++) {
+        isAllWhitespace =
+          (Hogan.tags[tokens[j].tag] < Hogan.tags['_v']) ||
+          (tokens[j].tag == '_t' && tokens[j].text.match(rIsWhitespace) === null);
+        if (!isAllWhitespace) {
+          return false;
+        }
+      }
+
+      return isAllWhitespace;
+    }
+
+    function filterLine(haveSeenTag, noNewLine) {
+      addBuf();
+
+      if (haveSeenTag && lineIsWhitespace()) {
+        for (var j = lineStart, next; j < tokens.length; j++) {
+          if (tokens[j].text) {
+            if ((next = tokens[j+1]) && next.tag == '>') {
+              // set indent to token value
+              next.indent = tokens[j].text.toString()
+            }
+            tokens.splice(j, 1);
+          }
+        }
+      } else if (!noNewLine) {
+        tokens.push({tag:'\n'});
+      }
+
+      seenTag = false;
+      lineStart = tokens.length;
+    }
+
+    function changeDelimiters(text, index) {
+      var close = '=' + ctag,
+          closeIndex = text.indexOf(close, index),
+          delimiters = trim(
+            text.substring(text.indexOf('=', index) + 1, closeIndex)
+          ).split(' ');
+
+      otag = delimiters[0];
+      ctag = delimiters[delimiters.length - 1];
+
+      return closeIndex + close.length - 1;
+    }
+
+    if (delimiters) {
+      delimiters = delimiters.split(' ');
+      otag = delimiters[0];
+      ctag = delimiters[1];
+    }
+
+    for (i = 0; i < len; i++) {
+      if (state == IN_TEXT) {
+        if (tagChange(otag, text, i)) {
+          --i;
+          addBuf();
+          state = IN_TAG_TYPE;
+        } else {
+          if (text.charAt(i) == '\n') {
+            filterLine(seenTag);
+          } else {
+            buf += text.charAt(i);
+          }
+        }
+      } else if (state == IN_TAG_TYPE) {
+        i += otag.length - 1;
+        tag = Hogan.tags[text.charAt(i + 1)];
+        tagType = tag ? text.charAt(i + 1) : '_v';
+        if (tagType == '=') {
+          i = changeDelimiters(text, i);
+          state = IN_TEXT;
+        } else {
+          if (tag) {
+            i++;
+          }
+          state = IN_TAG;
+        }
+        seenTag = i;
+      } else {
+        if (tagChange(ctag, text, i)) {
+          tokens.push({tag: tagType, n: trim(buf), otag: otag, ctag: ctag,
+                       i: (tagType == '/') ? seenTag - otag.length : i + ctag.length});
+          buf = '';
+          i += ctag.length - 1;
+          state = IN_TEXT;
+          if (tagType == '{') {
+            if (ctag == '}}') {
+              i++;
+            } else {
+              cleanTripleStache(tokens[tokens.length - 1]);
+            }
+          }
+        } else {
+          buf += text.charAt(i);
+        }
+      }
+    }
+
+    filterLine(seenTag, true);
+
+    return tokens;
+  }
+
+  function cleanTripleStache(token) {
+    if (token.n.substr(token.n.length - 1) === '}') {
+      token.n = token.n.substring(0, token.n.length - 1);
+    }
+  }
+
+  function trim(s) {
+    if (s.trim) {
+      return s.trim();
+    }
+
+    return s.replace(/^\s*|\s*$/g, '');
+  }
+
+  function tagChange(tag, text, index) {
+    if (text.charAt(index) != tag.charAt(0)) {
+      return false;
+    }
+
+    for (var i = 1, l = tag.length; i < l; i++) {
+      if (text.charAt(index + i) != tag.charAt(i)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  // the tags allowed inside super templates
+  var allowedInSuper = {'_t': true, '\n': true, '$': true, '/': true};
+
+  function buildTree(tokens, kind, stack, customTags) {
+    var instructions = [],
+        opener = null,
+        tail = null,
+        token = null;
+
+    tail = stack[stack.length - 1];
+
+    while (tokens.length > 0) {
+      token = tokens.shift();
+
+      if (tail && tail.tag == '<' && !(token.tag in allowedInSuper)) {
+        throw new Error('Illegal content in < super tag.');
+      }
+
+      if (Hogan.tags[token.tag] <= Hogan.tags['$'] || isOpener(token, customTags)) {
+        stack.push(token);
+        token.nodes = buildTree(tokens, token.tag, stack, customTags);
+      } else if (token.tag == '/') {
+        if (stack.length === 0) {
+          throw new Error('Closing tag without opener: /' + token.n);
+        }
+        opener = stack.pop();
+        if (token.n != opener.n && !isCloser(token.n, opener.n, customTags)) {
+          throw new Error('Nesting error: ' + opener.n + ' vs. ' + token.n);
+        }
+        opener.end = token.i;
+        return instructions;
+      } else if (token.tag == '\n') {
+        token.last = (tokens.length == 0) || (tokens[0].tag == '\n');
+      }
+
+      instructions.push(token);
+    }
+
+    if (stack.length > 0) {
+      throw new Error('missing closing tag: ' + stack.pop().n);
+    }
+
+    return instructions;
+  }
+
+  function isOpener(token, tags) {
+    for (var i = 0, l = tags.length; i < l; i++) {
+      if (tags[i].o == token.n) {
+        token.tag = '#';
+        return true;
+      }
+    }
+  }
+
+  function isCloser(close, open, tags) {
+    for (var i = 0, l = tags.length; i < l; i++) {
+      if (tags[i].c == close && tags[i].o == open) {
+        return true;
+      }
+    }
+  }
+
+  function stringifySubstitutions(obj) {
+    var items = [];
+    for (var key in obj) {
+      items.push('"' + esc(key) + '": function(c,p,t,i) {' + obj[key] + '}');
+    }
+    return "{ " + items.join(",") + " }";
+  }
+
+  function stringifyPartials(codeObj) {
+    var partials = [];
+    for (var key in codeObj.partials) {
+      partials.push('"' + esc(key) + '":{name:"' + esc(codeObj.partials[key].name) + '", ' + stringifyPartials(codeObj.partials[key]) + "}");
+    }
+    return "partials: {" + partials.join(",") + "}, subs: " + stringifySubstitutions(codeObj.subs);
+  }
+
+  Hogan.stringify = function(codeObj, text, options) {
+    return "{code: function (c,p,i) { " + Hogan.wrapMain(codeObj.code) + " }," + stringifyPartials(codeObj) +  "}";
+  }
+
+  var serialNo = 0;
+  Hogan.generate = function(tree, text, options) {
+    serialNo = 0;
+    var context = { code: '', subs: {}, partials: {} };
+    Hogan.walk(tree, context);
+
+    if (options.asString) {
+      return this.stringify(context, text, options);
+    }
+
+    return this.makeTemplate(context, text, options);
+  }
+
+  Hogan.wrapMain = function(code) {
+    return 'var t=this;t.b(i=i||"");' + code + 'return t.fl();';
+  }
+
+  Hogan.template = Hogan.Template;
+
+  Hogan.makeTemplate = function(codeObj, text, options) {
+    var template = this.makePartials(codeObj);
+    template.code = new Function('c', 'p', 'i', this.wrapMain(codeObj.code));
+    return new this.template(template, text, this, options);
+  }
+
+  Hogan.makePartials = function(codeObj) {
+    var key, template = {subs: {}, partials: codeObj.partials, name: codeObj.name};
+    for (key in template.partials) {
+      template.partials[key] = this.makePartials(template.partials[key]);
+    }
+    for (key in codeObj.subs) {
+      template.subs[key] = new Function('c', 'p', 't', 'i', codeObj.subs[key]);
+    }
+    return template;
+  }
+
+  function esc(s) {
+    return s.replace(rSlash, '\\\\')
+            .replace(rQuot, '\\\"')
+            .replace(rNewline, '\\n')
+            .replace(rCr, '\\r');
+  }
+
+  function chooseMethod(s) {
+    return (~s.indexOf('.')) ? 'd' : 'f';
+  }
+
+  function createPartial(node, context) {
+    var prefix = "<" + (context.prefix || "");
+    var sym = prefix + node.n + serialNo++;
+    context.partials[sym] = {name: node.n, partials: {}};
+    context.code += 't.b(t.rp("' +  esc(sym) + '",c,p,"' + (node.indent || '') + '"));';
+    return sym;
+  }
+
+  Hogan.codegen = {
+    '#': function(node, context) {
+      context.code += 'if(t.s(t.' + chooseMethod(node.n) + '("' + esc(node.n) + '",c,p,1),' +
+                      'c,p,0,' + node.i + ',' + node.end + ',"' + node.otag + " " + node.ctag + '")){' +
+                      't.rs(c,p,' + 'function(c,p,t){';
+      Hogan.walk(node.nodes, context);
+      context.code += '});c.pop();}';
+    },
+
+    '^': function(node, context) {
+      context.code += 'if(!t.s(t.' + chooseMethod(node.n) + '("' + esc(node.n) + '",c,p,1),c,p,1,0,0,"")){';
+      Hogan.walk(node.nodes, context);
+      context.code += '};';
+    },
+
+    '>': createPartial,
+    '<': function(node, context) {
+      var ctx = {partials: {}, code: '', subs: {}, inPartial: true};
+      Hogan.walk(node.nodes, ctx);
+      var template = context.partials[createPartial(node, context)];
+      template.subs = ctx.subs;
+      template.partials = ctx.partials;
+    },
+
+    '$': function(node, context) {
+      var ctx = {subs: {}, code: '', partials: context.partials, prefix: node.n};
+      Hogan.walk(node.nodes, ctx);
+      context.subs[node.n] = ctx.code;
+      if (!context.inPartial) {
+        context.code += 't.sub("' + esc(node.n) + '",c,p,i);';
+      }
+    },
+
+    '\n': function(node, context) {
+      context.code += write('"\\n"' + (node.last ? '' : ' + i'));
+    },
+
+    '_v': function(node, context) {
+      context.code += 't.b(t.v(t.' + chooseMethod(node.n) + '("' + esc(node.n) + '",c,p,0)));';
+    },
+
+    '_t': function(node, context) {
+      context.code += write('"' + esc(node.text) + '"');
+    },
+
+    '{': tripleStache,
+
+    '&': tripleStache
+  }
+
+  function tripleStache(node, context) {
+    context.code += 't.b(t.t(t.' + chooseMethod(node.n) + '("' + esc(node.n) + '",c,p,0)));';
+  }
+
+  function write(s) {
+    return 't.b(' + s + ');';
+  }
+
+  Hogan.walk = function(nodelist, context) {
+    var func;
+    for (var i = 0, l = nodelist.length; i < l; i++) {
+      func = Hogan.codegen[nodelist[i].tag];
+      func && func(nodelist[i], context);
+    }
+    return context;
+  }
+
+  Hogan.parse = function(tokens, text, options) {
+    options = options || {};
+    return buildTree(tokens, '', [], options.sectionTags || []);
+  }
+
+  Hogan.cache = {};
+
+  Hogan.cacheKey = function(text, options) {
+    return [text, !!options.asString, !!options.disableLambda, options.delimiters, !!options.modelGet].join('||');
+  }
+
+  Hogan.compile = function(text, options) {
+    options = options || {};
+    var key = Hogan.cacheKey(text, options);
+    var template = this.cache[key];
+
+    if (template) {
+      var partials = template.partials;
+      for (var name in partials) {
+        delete partials[name].instance;
+      }
+      return template;
+    }
+
+    template = this.generate(this.parse(this.scan(text, options.delimiters), text, options), text, options);
+    return this.cache[key] = template;
+  }
+})(typeof exports !== 'undefined' ? exports : Hogan);
+
+},{}],13:[function(require,module,exports){
+/*
+ *  Copyright 2011 Twitter, Inc.
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+// This file is for use with Node.js. See dist/ for browser files.
+
+var Hogan = require('./compiler');
+Hogan.Template = require('./template').Template;
+Hogan.template = Hogan.Template;
+module.exports = Hogan;
+
+},{"./compiler":12,"./template":14}],14:[function(require,module,exports){
+/*
+ *  Copyright 2011 Twitter, Inc.
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+var Hogan = {};
+
+(function (Hogan) {
+  Hogan.Template = function (codeObj, text, compiler, options) {
+    codeObj = codeObj || {};
+    this.r = codeObj.code || this.r;
+    this.c = compiler;
+    this.options = options || {};
+    this.text = text || '';
+    this.partials = codeObj.partials || {};
+    this.subs = codeObj.subs || {};
+    this.buf = '';
+  }
+
+  Hogan.Template.prototype = {
+    // render: replaced by generated code.
+    r: function (context, partials, indent) { return ''; },
+
+    // variable escaping
+    v: hoganEscape,
+
+    // triple stache
+    t: coerceToString,
+
+    render: function render(context, partials, indent) {
+      return this.ri([context], partials || {}, indent);
+    },
+
+    // render internal -- a hook for overrides that catches partials too
+    ri: function (context, partials, indent) {
+      return this.r(context, partials, indent);
+    },
+
+    // ensurePartial
+    ep: function(symbol, partials) {
+      var partial = this.partials[symbol];
+
+      // check to see that if we've instantiated this partial before
+      var template = partials[partial.name];
+      if (partial.instance && partial.base == template) {
+        return partial.instance;
+      }
+
+      if (typeof template == 'string') {
+        if (!this.c) {
+          throw new Error("No compiler available.");
+        }
+        template = this.c.compile(template, this.options);
+      }
+
+      if (!template) {
+        return null;
+      }
+
+      // We use this to check whether the partials dictionary has changed
+      this.partials[symbol].base = template;
+
+      if (partial.subs) {
+        // Make sure we consider parent template now
+        if (!partials.stackText) partials.stackText = {};
+        for (key in partial.subs) {
+          if (!partials.stackText[key]) {
+            partials.stackText[key] = (this.activeSub !== undefined && partials.stackText[this.activeSub]) ? partials.stackText[this.activeSub] : this.text;
+          }
+        }
+        template = createSpecializedPartial(template, partial.subs, partial.partials,
+          this.stackSubs, this.stackPartials, partials.stackText);
+      }
+      this.partials[symbol].instance = template;
+
+      return template;
+    },
+
+    // tries to find a partial in the current scope and render it
+    rp: function(symbol, context, partials, indent) {
+      var partial = this.ep(symbol, partials);
+      if (!partial) {
+        return '';
+      }
+
+      return partial.ri(context, partials, indent);
+    },
+
+    // render a section
+    rs: function(context, partials, section) {
+      var tail = context[context.length - 1];
+
+      if (!isArray(tail)) {
+        section(context, partials, this);
+        return;
+      }
+
+      for (var i = 0; i < tail.length; i++) {
+        context.push(tail[i]);
+        section(context, partials, this);
+        context.pop();
+      }
+    },
+
+    // maybe start a section
+    s: function(val, ctx, partials, inverted, start, end, tags) {
+      var pass;
+
+      if (isArray(val) && val.length === 0) {
+        return false;
+      }
+
+      if (typeof val == 'function') {
+        val = this.ms(val, ctx, partials, inverted, start, end, tags);
+      }
+
+      pass = !!val;
+
+      if (!inverted && pass && ctx) {
+        ctx.push((typeof val == 'object') ? val : ctx[ctx.length - 1]);
+      }
+
+      return pass;
+    },
+
+    // find values with dotted names
+    d: function(key, ctx, partials, returnFound) {
+      var found,
+          names = key.split('.'),
+          val = this.f(names[0], ctx, partials, returnFound),
+          doModelGet = this.options.modelGet,
+          cx = null;
+
+      if (key === '.' && isArray(ctx[ctx.length - 2])) {
+        val = ctx[ctx.length - 1];
+      } else {
+        for (var i = 1; i < names.length; i++) {
+          found = findInScope(names[i], val, doModelGet);
+          if (found != null) {
+            cx = val;
+            val = found;
+          } else {
+            val = '';
+          }
+        }
+      }
+
+      if (returnFound && !val) {
+        return false;
+      }
+
+      if (!returnFound && typeof val == 'function') {
+        ctx.push(cx);
+        val = this.mv(val, ctx, partials);
+        ctx.pop();
+      }
+
+      return val;
+    },
+
+    // find values with normal names
+    f: function(key, ctx, partials, returnFound) {
+      var val = false,
+          v = null,
+          found = false,
+          doModelGet = this.options.modelGet;
+
+      for (var i = ctx.length - 1; i >= 0; i--) {
+        v = ctx[i];
+        val = findInScope(key, v, doModelGet);
+        if (val != null) {
+          found = true;
+          break;
+        }
+      }
+
+      if (!found) {
+        return (returnFound) ? false : "";
+      }
+
+      if (!returnFound && typeof val == 'function') {
+        val = this.mv(val, ctx, partials);
+      }
+
+      return val;
+    },
+
+    // higher order templates
+    ls: function(func, cx, partials, text, tags) {
+      var oldTags = this.options.delimiters;
+
+      this.options.delimiters = tags;
+      this.b(this.ct(coerceToString(func.call(cx, text)), cx, partials));
+      this.options.delimiters = oldTags;
+
+      return false;
+    },
+
+    // compile text
+    ct: function(text, cx, partials) {
+      if (this.options.disableLambda) {
+        throw new Error('Lambda features disabled.');
+      }
+      return this.c.compile(text, this.options).render(cx, partials);
+    },
+
+    // template result buffering
+    b: function(s) { this.buf += s; },
+
+    fl: function() { var r = this.buf; this.buf = ''; return r; },
+
+    // method replace section
+    ms: function(func, ctx, partials, inverted, start, end, tags) {
+      var textSource,
+          cx = ctx[ctx.length - 1],
+          result = func.call(cx);
+
+      if (typeof result == 'function') {
+        if (inverted) {
+          return true;
+        } else {
+          textSource = (this.activeSub && this.subsText && this.subsText[this.activeSub]) ? this.subsText[this.activeSub] : this.text;
+          return this.ls(result, cx, partials, textSource.substring(start, end), tags);
+        }
+      }
+
+      return result;
+    },
+
+    // method replace variable
+    mv: function(func, ctx, partials) {
+      var cx = ctx[ctx.length - 1];
+      var result = func.call(cx);
+
+      if (typeof result == 'function') {
+        return this.ct(coerceToString(result.call(cx)), cx, partials);
+      }
+
+      return result;
+    },
+
+    sub: function(name, context, partials, indent) {
+      var f = this.subs[name];
+      if (f) {
+        this.activeSub = name;
+        f(context, partials, this, indent);
+        this.activeSub = false;
+      }
+    }
+
+  };
+
+  //Find a key in an object
+  function findInScope(key, scope, doModelGet) {
+    var val, checkVal;
+
+    if (scope && typeof scope == 'object') {
+
+      if (scope[key] != null) {
+        val = scope[key];
+
+      // try lookup with get for backbone or similar model data
+      } else if (doModelGet && scope.get && typeof scope.get == 'function') {
+        val = scope.get(key);
+      }
+    }
+
+    return val;
+  }
+
+  function createSpecializedPartial(instance, subs, partials, stackSubs, stackPartials, stackText) {
+    function PartialTemplate() {};
+    PartialTemplate.prototype = instance;
+    function Substitutions() {};
+    Substitutions.prototype = instance.subs;
+    var key;
+    var partial = new PartialTemplate();
+    partial.subs = new Substitutions();
+    partial.subsText = {};  //hehe. substext.
+    partial.buf = '';
+
+    stackSubs = stackSubs || {};
+    partial.stackSubs = stackSubs;
+    partial.subsText = stackText;
+    for (key in subs) {
+      if (!stackSubs[key]) stackSubs[key] = subs[key];
+    }
+    for (key in stackSubs) {
+      partial.subs[key] = stackSubs[key];
+    }
+
+    stackPartials = stackPartials || {};
+    partial.stackPartials = stackPartials;
+    for (key in partials) {
+      if (!stackPartials[key]) stackPartials[key] = partials[key];
+    }
+    for (key in stackPartials) {
+      partial.partials[key] = stackPartials[key];
+    }
+
+    return partial;
+  }
+
+  var rAmp = /&/g,
+      rLt = /</g,
+      rGt = />/g,
+      rApos = /\'/g,
+      rQuot = /\"/g,
+      hChars = /[&<>\"\']/;
+
+  function coerceToString(val) {
+    return String((val === null || val === undefined) ? '' : val);
+  }
+
+  function hoganEscape(str) {
+    str = coerceToString(str);
+    return hChars.test(str) ?
+      str
+        .replace(rAmp, '&amp;')
+        .replace(rLt, '&lt;')
+        .replace(rGt, '&gt;')
+        .replace(rApos, '&#39;')
+        .replace(rQuot, '&quot;') :
+      str;
+  }
+
+  var isArray = Array.isArray || function(a) {
+    return Object.prototype.toString.call(a) === '[object Array]';
+  };
+
+})(typeof exports !== 'undefined' ? exports : Hogan);
+
+},{}]},{},[1])
