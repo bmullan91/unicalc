@@ -145,10 +145,9 @@ function getInputData() {
 }
 
 function clearYearComponents() {
-  //clear years
-  for(var i = 0, l = yearComponents.length; i < l; i++) {
-    DOM_ELEMS.yearsContainer.removeChild(yearComponents[i].getElement());
-  }
+  yearComponents.forEach(function(year) {
+    DOM_ELEMS.yearsContainer.removeChild(year.getElement());
+  });
 
   yearComponents = [];
 }
@@ -161,23 +160,6 @@ function setInputData(years) {
   yearComponents.forEach(function(year) {
     DOM_ELEMS.yearsContainer.appendChild(year.getElement());
   });
-
-
-
-  // yearComponents = years.map(function(year, i) {
-  //   if(!year) return;
-  //   var yrCmp = YearComponent.create(i+1, true);
-  //   yrCmp.setWeight(year.weight);
-
-  //   year.modules.forEach(function (mod) {
-  //     yrCmp.addModule(mod);
-  //   });
-
-  //   DOM_ELEMS.yearsContainer.appendChild(yrCmp.getElement());
-
-  //   return yrCmp;
-
-  // });
 }
 
 function clearErrors() {
@@ -194,11 +176,9 @@ function showError(errorMsg) {
 
 
 function updateScore(results) {
-  yearComponents.forEach(function (yrCmp, i) {
-    var yr = results.years[i];
-    if(yr) {
-      yrCmp.setResults(yr.average, yr.contributes);
-    }
+  results.years.forEach(function(yr, i) {
+    yearComponents[i].setResults(yr.average, yr.contributes);
   });
+
   scoreMeter.update(results.overall);
 }

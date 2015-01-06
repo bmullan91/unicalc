@@ -1,5 +1,6 @@
 //YearComponent simple factory
 var hogan = require('hogan.js');
+var simpleFactory = require('simple-factory');
 var template = hogan.compile(require('./template'));
 var ModuleComponent = require('../module');
 
@@ -108,11 +109,5 @@ function createElem(number) {
 }
 
 module.exports = {
-  create: function(config) {
-    var yearCmp = new YearComponent(config);
-    //phantomjs was playing up, delaying call until object is instantiated.
-    //TODO remove this..
-    //yearCmp.addButtonListener();
-    return yearCmp;
-  }
+  create: simpleFactory(YearComponent)
 };
