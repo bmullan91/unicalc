@@ -178,7 +178,7 @@ module.exports = {
 
     it("Should show an error when calculate is clicked before any input data", function (done) {
       DOM_ELEMS.btn.calculate.click();
-      expectError();
+      expect(getErrorCount()).to.equal(1);
       //clear error
       reloadPage(done);
 
@@ -188,9 +188,23 @@ module.exports = {
 
       inputTestData(testData.greaterThan100.years);
       DOM_ELEMS.btn.calculate.click();
-      expectError();
+      expect(getErrorCount()).to.equal(1);
       //clear error
       reloadPage(done);        
+
+    });
+
+    it("Should clear the error with valid input", function (done) {
+
+      DOM_ELEMS.btn.calculate.click();
+      expect(getErrorCount()).to.equal(1);
+
+      //input valid data
+      inputTestData(testData.simple.years);
+      DOM_ELEMS.btn.calculate.click();
+      expect(getErrorCount()).to.equal(0);
+      
+      reloadPage(done);
 
     });
 
@@ -315,8 +329,8 @@ module.exports = {
   //         Assertions            //
   ///////////////////////////////////
 
-  function expectError() {
-    expect(doc.getElementById('Errors').children.length > 0).to.be.true;
+  function getErrorCount() {
+    return doc.getElementById('Errors').children.length;
   }
 
   function expectAnimation(percentage, cb) {

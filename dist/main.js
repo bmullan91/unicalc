@@ -303,10 +303,9 @@ function getInputData() {
 }
 
 function clearYearComponents() {
-  //clear years
-  for(var i = 0, l = yearComponents.length; i < l; i++) {
-    DOM_ELEMS.yearsContainer.removeChild(yearComponents[i].getElement());
-  }
+  yearComponents.forEach(function(year) {
+    DOM_ELEMS.yearsContainer.removeChild(year.getElement());
+  });
 
   yearComponents = [];
 }
@@ -319,23 +318,6 @@ function setInputData(years) {
   yearComponents.forEach(function(year) {
     DOM_ELEMS.yearsContainer.appendChild(year.getElement());
   });
-
-
-
-  // yearComponents = years.map(function(year, i) {
-  //   if(!year) return;
-  //   var yrCmp = YearComponent.create(i+1, true);
-  //   yrCmp.setWeight(year.weight);
-
-  //   year.modules.forEach(function (mod) {
-  //     yrCmp.addModule(mod);
-  //   });
-
-  //   DOM_ELEMS.yearsContainer.appendChild(yrCmp.getElement());
-
-  //   return yrCmp;
-
-  // });
 }
 
 function clearErrors() {
@@ -352,24 +334,23 @@ function showError(errorMsg) {
 
 
 function updateScore(results) {
-  yearComponents.forEach(function (yrCmp, i) {
-    var yr = results.years[i];
-    if(yr) {
-      yrCmp.setResults(yr.average, yr.contributes);
-    }
+  results.years.forEach(function(yr, i) {
+    yearComponents[i].setResults(yr.average, yr.contributes);
   });
+
   scoreMeter.update(results.overall);
 }
 
 },{"./module":7,"./scoreMeter":9,"./year":10}],7:[function(require,module,exports){
 //ModuleComponent simple factory
-var hogan = require('hogan.js');
-var template = hogan.compile(require('./template'));
+var domify = require('domify');
+var simpleFactory = require('simple-factory');
+var template = require('./template');
 
 //the class
 function ModuleComponent(config) {
   config = config || {};
-  this.element = createElem();
+  this.element = domify(template);
   if(config.name !== undefined) this.setName(config.name);
   if(config.percentage !== undefined) this.setPercentage(config.percentage);
   if(config.weight !== undefined) this.setWeight(config.weight);
@@ -407,19 +388,9 @@ ModuleComponent.prototype.applyTooltip = function() {
   this.element.querySelector('.ratio').className += ' tooltip';
 };
 
-function createElem() {
-  var tempContainer = document.createElement('div');
-  tempContainer.innerHTML = template.render();
-  return tempContainer.firstChild;
-}
+module.exports.create = simpleFactory(ModuleComponent);
 
-module.exports = {
-  create: function(config) {
-    return new ModuleComponent(config);
-  }
-};
-
-},{"./template":8,"hogan.js":13}],8:[function(require,module,exports){
+},{"./template":8,"domify":12,"simple-factory":16}],8:[function(require,module,exports){
 module.exports = [
   "<div class='module'>",
     "<div class='name'>Name<input></div>",
@@ -437,11 +408,10 @@ module.exports = [
 var container = document.getElementById('Score');
 var marker = container.querySelector('.marker');
 var value = container.querySelector('.value');
+var cssProps = ['-webkit-transform', '-moz-transform', '-ms-transform', '-o-transform', 'transform'];
 
 function applyTransform(value) {
-  var props = ['-webkit-transform', '-moz-transform', '-ms-transform', '-o-transform', 'transform'];
-
-  props.forEach(function(prop) {
+  cssProps.forEach(function(prop) {
     marker.style[prop] = 'translateX(' + value + 'px)';
   });
 }
@@ -456,6 +426,8 @@ module.exports.update = function(score) {
 },{}],10:[function(require,module,exports){
 //YearComponent simple factory
 var hogan = require('hogan.js');
+var domify = require('domify');
+var simpleFactory = require('simple-factory');
 var template = hogan.compile(require('./template'));
 var ModuleComponent = require('../module');
 
@@ -464,7 +436,7 @@ function YearComponent(config) {
   config = config || {};
   this.number = config.number;
   this.modules = [];
-  this.element = createElem(this.number);
+  this.element = domify(template.render({year: this.number}));
 
   if(config.weight) {
     this.setWeight(config.weight);
@@ -475,7 +447,6 @@ function YearComponent(config) {
   }
 
   this.addButtonListener();
-
 }
 
 YearComponent.prototype.getElement = function() {
@@ -554,26 +525,11 @@ YearComponent.prototype.getSaveData = function() {
     weight: yearWeight,
     modules: modules
   };
-
 };
 
-function createElem(number) {
-  var tempContainer = document.createElement('div');
-  tempContainer.innerHTML = template.render({year: number});
-  return tempContainer.firstChild;
-}
+module.exports.create = simpleFactory(YearComponent);
 
-module.exports = {
-  create: function(config) {
-    var yearCmp = new YearComponent(config);
-    //phantomjs was playing up, delaying call until object is instantiated.
-    //TODO remove this..
-    //yearCmp.addButtonListener();
-    return yearCmp;
-  }
-};
-
-},{"../module":7,"./template":11,"hogan.js":13}],11:[function(require,module,exports){
+},{"../module":7,"./template":11,"domify":12,"hogan.js":14,"simple-factory":16}],11:[function(require,module,exports){
 module.exports = [
   '<div class="year card animated zoomIn">',
     '<div class="info">',
@@ -602,6 +558,115 @@ module.exports = [
   '</div>'
 ].join('');
 },{}],12:[function(require,module,exports){
+
+/**
+ * Expose `parse`.
+ */
+
+module.exports = parse;
+
+/**
+ * Tests for browser support.
+ */
+
+var div = document.createElement('div');
+// Setup
+div.innerHTML = '  <link/><table></table><a href="/a">a</a><input type="checkbox"/>';
+// Make sure that link elements get serialized correctly by innerHTML
+// This requires a wrapper element in IE
+var innerHTMLBug = !div.getElementsByTagName('link').length;
+div = undefined;
+
+/**
+ * Wrap map from jquery.
+ */
+
+var map = {
+  legend: [1, '<fieldset>', '</fieldset>'],
+  tr: [2, '<table><tbody>', '</tbody></table>'],
+  col: [2, '<table><tbody></tbody><colgroup>', '</colgroup></table>'],
+  // for script/link/style tags to work in IE6-8, you have to wrap
+  // in a div with a non-whitespace character in front, ha!
+  _default: innerHTMLBug ? [1, 'X<div>', '</div>'] : [0, '', '']
+};
+
+map.td =
+map.th = [3, '<table><tbody><tr>', '</tr></tbody></table>'];
+
+map.option =
+map.optgroup = [1, '<select multiple="multiple">', '</select>'];
+
+map.thead =
+map.tbody =
+map.colgroup =
+map.caption =
+map.tfoot = [1, '<table>', '</table>'];
+
+map.text =
+map.circle =
+map.ellipse =
+map.line =
+map.path =
+map.polygon =
+map.polyline =
+map.rect = [1, '<svg xmlns="http://www.w3.org/2000/svg" version="1.1">','</svg>'];
+
+/**
+ * Parse `html` and return a DOM Node instance, which could be a TextNode,
+ * HTML DOM Node of some kind (<div> for example), or a DocumentFragment
+ * instance, depending on the contents of the `html` string.
+ *
+ * @param {String} html - HTML string to "domify"
+ * @param {Document} doc - The `document` instance to create the Node for
+ * @return {DOMNode} the TextNode, DOM Node, or DocumentFragment instance
+ * @api private
+ */
+
+function parse(html, doc) {
+  if ('string' != typeof html) throw new TypeError('String expected');
+
+  // default to the global `document` object
+  if (!doc) doc = document;
+
+  // tag name
+  var m = /<([\w:]+)/.exec(html);
+  if (!m) return doc.createTextNode(html);
+
+  html = html.replace(/^\s+|\s+$/g, ''); // Remove leading/trailing whitespace
+
+  var tag = m[1];
+
+  // body support
+  if (tag == 'body') {
+    var el = doc.createElement('html');
+    el.innerHTML = html;
+    return el.removeChild(el.lastChild);
+  }
+
+  // wrap map
+  var wrap = map[tag] || map._default;
+  var depth = wrap[0];
+  var prefix = wrap[1];
+  var suffix = wrap[2];
+  var el = doc.createElement('div');
+  el.innerHTML = prefix + html + suffix;
+  while (depth--) el = el.lastChild;
+
+  // one element
+  if (el.firstChild == el.lastChild) {
+    return el.removeChild(el.firstChild);
+  }
+
+  // several elements
+  var fragment = doc.createDocumentFragment();
+  while (el.firstChild) {
+    fragment.appendChild(el.removeChild(el.firstChild));
+  }
+
+  return fragment;
+}
+
+},{}],13:[function(require,module,exports){
 /*
  *  Copyright 2011 Twitter, Inc.
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -1022,7 +1087,7 @@ module.exports = [
   }
 })(typeof exports !== 'undefined' ? exports : Hogan);
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 /*
  *  Copyright 2011 Twitter, Inc.
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -1045,7 +1110,7 @@ Hogan.Template = require('./template').Template;
 Hogan.template = Hogan.Template;
 module.exports = Hogan;
 
-},{"./compiler":12,"./template":14}],14:[function(require,module,exports){
+},{"./compiler":13,"./template":15}],15:[function(require,module,exports){
 /*
  *  Copyright 2011 Twitter, Inc.
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -1388,4 +1453,29 @@ var Hogan = {};
 
 })(typeof exports !== 'undefined' ? exports : Hogan);
 
+},{}],16:[function(require,module,exports){
+module.exports = function(Class, validator) {
+  if(typeof Class !== 'function') {
+    throw new Error('simple-factory takes a function as it\'s first parameter.');
+  }
+
+  if(validator && typeof validator !== 'function') {
+    throw new Error('simple-factory takes a function as it\'s second parameter');
+  }
+
+  return function() {
+    var args = Array.prototype.splice.call(arguments, 0);
+
+    //pre-bind the arguments of the class to be what was passed
+    //becuase you can't call .apply with the new keyword
+    //NOTE: the first arg needs to be the scope - this
+    var fn = Class.bind.apply(Class, [this].concat(args));
+
+    if(typeof validator === 'function') {
+      return validator.apply(this, args) ? new fn() : null;
+    } else {
+      return new fn();
+    }
+  };
+};
 },{}]},{},[1])
