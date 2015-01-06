@@ -1,5 +1,5 @@
 module.exports = [
-  '<div class="year card">',
+  '<div class="year card animated zoomIn">',
     '<div class="info">',
       '<span class="year-title">Year {{year}}</span>',
       '<span class="year-weight">Worth %<input class=""></span>',
