@@ -1,11 +1,10 @@
 var container = document.getElementById('Score');
 var marker = container.querySelector('.marker');
 var value = container.querySelector('.value');
+var cssProps = ['-webkit-transform', '-moz-transform', '-ms-transform', '-o-transform', 'transform'];
 
 function applyTransform(value) {
-  var props = ['-webkit-transform', '-moz-transform', '-ms-transform', '-o-transform', 'transform'];
-
-  props.forEach(function(prop) {
+  cssProps.forEach(function(prop) {
     marker.style[prop] = 'translateX(' + value + 'px)';
   });
 }

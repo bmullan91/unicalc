@@ -1,11 +1,12 @@
 //ModuleComponent simple factory
-var hogan = require('hogan.js');
-var template = hogan.compile(require('./template'));
+var domify = require('domify');
+var simpleFactory = require('simple-factory');
+var template = require('./template');
 
 //the class
 function ModuleComponent(config) {
   config = config || {};
-  this.element = createElem();
+  this.element = domify(template);
   if(config.name !== undefined) this.setName(config.name);
   if(config.percentage !== undefined) this.setPercentage(config.percentage);
   if(config.weight !== undefined) this.setWeight(config.weight);
@@ -43,14 +44,6 @@ ModuleComponent.prototype.applyTooltip = function() {
   this.element.querySelector('.ratio').className += ' tooltip';
 };
 
-function createElem() {
-  var tempContainer = document.createElement('div');
-  tempContainer.innerHTML = template.render();
-  return tempContainer.firstChild;
-}
-
 module.exports = {
-  create: function(config) {
-    return new ModuleComponent(config);
-  }
+  create: simpleFactory(ModuleComponent)
 };

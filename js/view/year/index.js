@@ -20,7 +20,6 @@ function YearComponent(config) {
   }
 
   this.addButtonListener();
-
 }
 
 YearComponent.prototype.getElement = function() {
@@ -99,7 +98,6 @@ YearComponent.prototype.getSaveData = function() {
     weight: yearWeight,
     modules: modules
   };
-
 };
 
 function createElem(number) {
