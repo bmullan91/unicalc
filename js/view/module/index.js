@@ -44,6 +44,4 @@ ModuleComponent.prototype.applyTooltip = function() {
   this.element.querySelector('.ratio').className += ' tooltip';
 };
 
-module.exports = {
-  create: simpleFactory(ModuleComponent)
-};
+module.exports.create = simpleFactory(ModuleComponent);

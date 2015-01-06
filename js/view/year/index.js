@@ -1,5 +1,6 @@
 //YearComponent simple factory
 var hogan = require('hogan.js');
+var domify = require('domify');
 var simpleFactory = require('simple-factory');
 var template = hogan.compile(require('./template'));
 var ModuleComponent = require('../module');
@@ -9,7 +10,7 @@ function YearComponent(config) {
   config = config || {};
   this.number = config.number;
   this.modules = [];
-  this.element = createElem(this.number);
+  this.element = domify(template.render({year: this.number}));
 
   if(config.weight) {
     this.setWeight(config.weight);
@@ -100,12 +101,4 @@ YearComponent.prototype.getSaveData = function() {
   };
 };
 
-function createElem(number) {
-  var tempContainer = document.createElement('div');
-  tempContainer.innerHTML = template.render({year: number});
-  return tempContainer.firstChild;
-}
-
-module.exports = {
-  create: simpleFactory(YearComponent)
-};
+module.exports.create = simpleFactory(YearComponent);
