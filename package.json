@@ -11,10 +11,13 @@
     "gulp-uglify": "~0.3.0",
     "gulp-minify-css": "~0.3.4",
     "gulp-concat": "~2.2.0",
-    "gulp-clean": "~0.3.0"
+    "gulp-clean": "~0.3.0",
+    "http-server": "~0.7.4",
+    "opener": "~1.4.0"
   },
   "scripts": {
-    "test": "gulp; ./node_modules/mocha-phantomjs/bin/mocha-phantomjs test/index.html"
+    "test": "./node_modules/.bin/gulp; ./node_modules/.bin/mocha-phantomjs test/index.html",
+    "debug": "./node_modules/.bin/gulp debug; ./node_modules/.bin/http-server -s -c-1 -p 8000 & ./node_modules/.bin/opener http://localhost:8000/test/ &"
   },
   "dependencies": {
     "hogan.js": "~3.0.1"
