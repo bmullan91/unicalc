@@ -75,10 +75,9 @@ function openClicked() {
 }
 
 function addYearClicked() {
-  var currentNumOfYrs = DOM_ELEMS.yearsContainer.children.length;
-  var yearComponent = YearComponent.create(currentNumOfYrs+1);
-
+  var yearComponent = YearComponent.create({ number: DOM_ELEMS.yearsContainer.children.length +1 });
   yearComponents.push(yearComponent);
+  yearComponent.addModule();
   DOM_ELEMS.yearsContainer.appendChild(yearComponent.getElement());
 }
 
@@ -126,60 +125,59 @@ function setButtonListener(button, fn) {
 }
 
 function prepForSave() {
-  var data = [];
-
-  yearComponents.forEach(function (yrCmp) {
-    var yearDetails = yrCmp.getSaveData();
-    if(yearDetails) data.push(yearDetails);
-  });
-
-  return data;
+  return yearComponents.map(function (yrCmp) {
+    return yrCmp.getSaveData();
+  }).filter(Boolean);
 }
 
 function getInputData() {
-  var data = [];
-
-  yearComponents.forEach(function (yearCmp) {
+  return yearComponents.map(function (yearCmp) {
     var avg = yearCmp.getAverage();
     var weight = yearCmp.getWeight();
 
     if(!isNaN(avg) && !isNaN(weight)) {
-      data.push({
+      return {
         average: avg,
         weight: weight
-      });
+      };
     }
-  });
-  /*
-    [{
-        average: XX%,
-        weight:   XX%
-      }]
-  */
-  return data;
+  }).filter(Boolean);
 }
 
-function setInputData(years) {
+function clearYearComponents() {
   //clear years
   for(var i = 0, l = yearComponents.length; i < l; i++) {
     DOM_ELEMS.yearsContainer.removeChild(yearComponents[i].getElement());
   }
 
   yearComponents = [];
+}
 
-  years.forEach(function(year, i) {
-    if(!year) return;
+function setInputData(years) {
+  clearYearComponents();
 
-    var yrCmp = YearComponent.create(i+1, true);
-    yearComponents.push(yrCmp);
-    yrCmp.setWeight(year.weight);
+  yearComponents = years.map(YearComponent.create);
 
-    year.modules.forEach(function (mod) {
-      yrCmp.addModule(mod);
-    });
-
-    DOM_ELEMS.yearsContainer.appendChild(yrCmp.getElement());
+  yearComponents.forEach(function(year) {
+    DOM_ELEMS.yearsContainer.appendChild(year.getElement());
   });
+
+
+
+  // yearComponents = years.map(function(year, i) {
+  //   if(!year) return;
+  //   var yrCmp = YearComponent.create(i+1, true);
+  //   yrCmp.setWeight(year.weight);
+
+  //   year.modules.forEach(function (mod) {
+  //     yrCmp.addModule(mod);
+  //   });
+
+  //   DOM_ELEMS.yearsContainer.appendChild(yrCmp.getElement());
+
+  //   return yrCmp;
+
+  // });
 }
 
 function clearErrors() {

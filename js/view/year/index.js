@@ -4,11 +4,22 @@ var template = hogan.compile(require('./template'));
 var ModuleComponent = require('../module');
 
 //the class
-function YearComponent(number, noModules) {
-  this.number = number;
-  this.element = createElem(number);
+function YearComponent(config) {
+  config = config || {};
+  this.number = config.number;
   this.modules = [];
-  if(!noModules) this.addModule();
+  this.element = createElem(this.number);
+
+  if(config.weight) {
+    this.setWeight(config.weight);
+  }
+
+  if(config.modules) {
+    config.modules.forEach(this.addModule.bind(this));
+  }
+
+  this.addButtonListener();
+
 }
 
 YearComponent.prototype.getElement = function() {
@@ -68,23 +79,22 @@ YearComponent.prototype.getSaveData = function() {
   var yearWeight = this.getWeight();
   if(isNaN(yearWeight)) return;
 
-  var modules = [];
-
-  this.getModules().forEach(function (mod) {
+  var modules = this.getModules().map(function(mod) {
     var pcent = mod.getPercentage();
     var weight = mod.getWeight();
 
     if(!isNaN(pcent) && !isNaN(weight)) {
-      modules.push({
+      return {
         name: mod.getName(),
         percentage: pcent,
         weight: weight
-      });
+      };
     }
 
   });
 
   return {
+    number: this.number,
     weight: yearWeight,
     modules: modules
   };
@@ -98,10 +108,11 @@ function createElem(number) {
 }
 
 module.exports = {
-  create: function(number, noModules) {
-    var yearCmp = new YearComponent(number, noModules);
+  create: function(config) {
+    var yearCmp = new YearComponent(config);
     //phantomjs was playing up, delaying call until object is instantiated.
-    yearCmp.addButtonListener();
+    //TODO remove this..
+    //yearCmp.addButtonListener();
     return yearCmp;
   }
 };
