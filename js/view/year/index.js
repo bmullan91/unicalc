@@ -5,7 +5,6 @@ var simpleFactory = require('simple-factory');
 var template = hogan.compile(require('./template'));
 var ModuleComponent = require('../module');
 
-//the class
 function YearComponent(config) {
   config = config || {};
   this.number = config.number;
