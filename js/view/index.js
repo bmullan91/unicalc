@@ -1,3 +1,4 @@
+var fastclick = require('fastclick');
 var YearComponent = require('./year');
 var ModuleComponent = require('./module');
 var scoreMeter = require('./scoreMeter');
@@ -21,6 +22,8 @@ var mediatorListeners = {
 };
 
 function init() {
+  //attach fastclick
+  fastclick(document.body);
   //create and insert a year component..
   addYearClicked();
   addToolTip();
@@ -169,11 +172,11 @@ function clearErrors() {
 }
 
 function showError(errorMsg) {
+  //could seperate out into a template
   var doc = document.createElement('div');
   doc.innerHTML = errorMsg;
   DOM_ELEMS.errors.appendChild(doc);
 }
-
 
 function updateScore(results) {
   results.years.forEach(function(yr, i) {

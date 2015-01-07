@@ -6,7 +6,6 @@ var validator = require('./modules/validator');
 var LS = require('./modules/localStorage');
 
 (function init() {
-
   try {
     window.ANDROID = Android;
   } catch(e) {
@@ -20,11 +19,13 @@ var LS = require('./modules/localStorage');
       view.showSaveButton();
     }
   }
+
+  view.init();
+
   //register click listeners
   view.setButtonListener('calculate', calculateClicked);
   view.setButtonListener('save', saveClicked);
   view.setButtonListener('open', openClicked);
-  view.init();
 })();
 
 function calculateClicked() {
