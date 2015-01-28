@@ -19,15 +19,15 @@ function onMobile() {
 /*
   Algebra time.
 
-  <-------------- a ------------------>
-  [==========score-meter==============]
+  <-------------- a -------------->
+  [==========score-meter==========]
 
     markerPos
-  [====|=====score-meter==============]
+  [====|=====score-meter==========]
 
 
   
-  [====|=====score-meter==============]
+  [====|=====score-meter==========]
     [value]
     <--b-->
   
@@ -37,9 +37,9 @@ function onMobile() {
   y = width overlapping the score-meter
   z = width overhanging
 
-                                    <y><z> 
-  [==========score-meter=============|]
-                                   [value]
+                                 <y><z> 
+  [==========score-meter=========|]
+                                [value]
 
   
   y = a - markerPos
