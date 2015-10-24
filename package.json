@@ -4,20 +4,23 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
-    "gulp-browserify": "~0.4.6",
-    "gulp": "~3.5.2",
-    "mocha-phantomjs": "~3.4.1",
+    "browserify": "^11.2.0",
     "chai": "~1.9.1",
-    "gulp-uglify": "~0.3.0",
-    "gulp-minify-css": "~0.3.4",
-    "gulp-concat": "~2.2.0",
-    "gulp-clean": "~0.3.0",
+    "clean-css": "^3.4.6",
     "http-server": "~0.7.4",
-    "opener": "~1.4.0"
+    "mocha-phantomjs": "~3.4.1",
+    "uglify-js": "^2.5.0"
   },
   "scripts": {
-    "test": "./node_modules/.bin/gulp; ./node_modules/.bin/mocha-phantomjs test/index.html",
-    "debug": "./node_modules/.bin/gulp debug; ./node_modules/.bin/http-server -s -c-1 -p 8000 & ./node_modules/.bin/opener http://localhost:8000/test/ &"
+    "clean": "rm -rf ./dist && mkdir dist",
+    "move-fonts": "cp -r ./css/font ./dist/",
+    "min-css": "cleancss ./css/*.css > ./dist/min.css",
+    "bundle": "browserify ./js/main.js | uglifyjs > dist/main.js",
+    "test-bundle": "browserify ./test/tests.js > ./dist/tests.js",
+    "build": "npm run clean && npm run move-fonts && npm run min-css && npm run bundle && npm run test-bundle",
+    "start": "npm run build && open ./index.html",
+    "test": "npm run build && mocha-phantomjs test/index.html",
+    "pretty-tests": "npm run build && open http://localhost:8080/test/ && http-server -s -c-1 -p 8080"
   },
   "dependencies": {
     "hogan.js": "~3.0.1",
